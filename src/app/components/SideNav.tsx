@@ -20,7 +20,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 // import { RiSpam2Fill } from "react-icons/ri";
-import Inbox from "./Inbox";
+// import Inbox from "./Inbox";
 import Spam from "./Spam";
 import Image from "next/image";
 import AppBarRight from "./AppBar";
@@ -116,7 +116,7 @@ export default function SideNav() {
   };
   return (
     <>
-      <Box sx={{ display: "flex" }}>
+      <Box>
         <CssBaseline />
         <AppBar
           position="fixed"
@@ -260,7 +260,7 @@ export default function SideNav() {
         </List> */}
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          {menuData == "Inbox" && <Inbox></Inbox>}
+          {/* {menuData == "Inbox" && <Inbox></Inbox>} */}
           {menuData == "Spam" && <Spam></Spam>}
         </Box>
       </Box>

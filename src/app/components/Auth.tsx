@@ -97,65 +97,57 @@ import { Button, Container, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 import LoginForm from "./Signin";
-
+import { useDispatch, useSelector } from "react-redux";
+import { TokenExchange } from "../reduxToolKit/userSlice";
 const Signin = () => {
+  const dispatch: any = useDispatch();
+  const { user_cred, status, error } = useSelector((state: any) => state.user);
+
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      try {
-        console.log("Google login successful", tokenResponse);
-        const { data } = await axios.post(
-          "https://oauth2.googleapis.com/token",
-          {
-            code: tokenResponse.code,
-            client_id:
-              "189496678458-fpihrhl6pae85mhtq0tsra89cpguccja.apps.googleusercontent.com",
-            client_secret: "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",
-            redirect_uri: "http://localhost:3000",
-            grant_type: "authorization_code",
-          }
-        );
-        console.log(data);
-        localStorage.setItem("my_token", JSON.stringify(data));
-      } catch (error) {
-        console.error("Error during Google login:", error);
-      }
+      console.log(tokenResponse);
+      dispatch(TokenExchange(tokenResponse));
     },
     onError: () => {
       console.error("Google login failed");
     },
     flow: "auth-code",
   });
-  const refreshAccessToken = async () => {
-    const refreshToken = JSON.parse(
-      localStorage.getItem("my_token")
-    ).refresh_token;
-    try {
-      const { data } = await axios.post("https://oauth2.googleapis.com/token", {
-        refresh_token: refreshToken,
-        client_id:
-          "189496678458-fpihrhl6pae85mhtq0tsra89cpguccja.apps.googleusercontent.com",
-        client_secret: "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",
-        grant_type: "refresh_token",
-      });
+  console.log(user_cred);
 
-      console.log(data);
+  // const refreshAccessToken = async () => {
+  //   const refreshToken = JSON.parse(
 
-      // Update the stored token data with the new access token
-      localStorage.setItem("my_token", JSON.stringify(data));
+  //     // localStorage.getItem("my_token")
+  //   ).refresh_token;
+  //   try {
+  //     const { data } = await axios.post("https://oauth2.googleapis.com/token", {
+  //       refresh_token: refreshToken,
+  //       client_id:
+  //         "189496678458-fpihrhl6pae85mhtq0tsra89cpguccja.apps.googleusercontent.com",
+  //       client_secret: "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",
+  //       grant_type: "refresh_token",
+  //     });
 
-      // Use the new access token for further API requests
-      const accessToken = data.access_token;
-      // Make API requests using the new access token...
-    } catch (error) {
-      console.error("Error refreshing access token:", error);
-    }
-  };
+  //     console.log(data);
+
+  //     // Update the stored token data with the new access token
+  //     localStorage.setItem("my_token", JSON.stringify(data));
+
+  //     // Use the new access token for further API requests
+  //     const accessToken = data.access_token;
+  //     // Make API requests using the new access token...
+  //   } catch (error) {
+  //     console.error("Error refreshing access token:", error);
+  //   }
+  // };
 
   useEffect(() => {
+    // console.log(user_cred);
     // Check for existing token on component mount
-    if (localStorage.getItem("my_token")) {
-      console.log("Token found:", localStorage.getItem("my_token"));
-    }
+    // if (localStorage.getItem("my_token")) {
+    //   console.log("Token found:", localStorage.getItem("my_token"));
+    // }
   }, []);
 
   return (
