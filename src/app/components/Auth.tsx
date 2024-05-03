@@ -101,7 +101,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { TokenExchangeAndRegisterUser } from "../reduxToolKit/userSlice";
 const Signin = () => {
   const dispatch: any = useDispatch();
-  const { user_cred, status, error } = useSelector((state: any) => state.user);
+  const { user_google_cred, user_token, status, error } = useSelector(
+    (state: any) => state.user
+  );
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -113,7 +115,8 @@ const Signin = () => {
     },
     flow: "auth-code",
   });
-  console.log(user_cred);
+  console.log(user_google_cred);
+  console.log(user_token);
 
   // const refreshAccessToken = async () => {
   //   const refreshToken = JSON.parse(
@@ -143,7 +146,7 @@ const Signin = () => {
   // };
 
   useEffect(() => {
-    // console.log(user_cred);
+    // console.log(user_google_cred);
     // Check for existing token on component mount
     // if (localStorage.getItem("my_token")) {
     //   console.log("Token found:", localStorage.getItem("my_token"));
