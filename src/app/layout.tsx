@@ -20,13 +20,14 @@
 //     </html>
 //   );
 // }
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import RouteLayoutProvider from "./provider/routLayoutProvider";
-import DefaultLayout from "./layouts/DefaultLayout";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import RouteLayoutProvider from './provider/routLayoutProvider';
+import DefaultLayout from './layouts/DefaultLayout';
+import SideNav from './components/SideNav';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -36,10 +37,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <RouteLayoutProvider>
-          <div>
-            <DefaultLayout></DefaultLayout>
-          </div>
-          <div>{children}</div>
+          <DefaultLayout>{children}</DefaultLayout>
         </RouteLayoutProvider>
       </body>
     </html>

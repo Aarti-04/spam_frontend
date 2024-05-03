@@ -12,7 +12,7 @@ const initialState = {
 export const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
   async (
-    args: any = { user_token: [], creds: [], queryLabel: "" },
+    args: any = { user_token: [], creds: [], queryLabel: "inbox" },
     thunkAPI
   ) => {
     console.log("message slice called");
