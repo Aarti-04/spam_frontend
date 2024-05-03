@@ -98,7 +98,7 @@ import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 import LoginForm from "./Signin";
 import { useDispatch, useSelector } from "react-redux";
-import { TokenExchange } from "../reduxToolKit/userSlice";
+import { TokenExchangeAndRegisterUser } from "../reduxToolKit/userSlice";
 const Signin = () => {
   const dispatch: any = useDispatch();
   const { user_cred, status, error } = useSelector((state: any) => state.user);
@@ -106,7 +106,7 @@ const Signin = () => {
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       console.log(tokenResponse);
-      dispatch(TokenExchange(tokenResponse));
+      dispatch(TokenExchangeAndRegisterUser(tokenResponse));
     },
     onError: () => {
       console.error("Google login failed");

@@ -1,22 +1,41 @@
-import { List, ListItem, Paper } from "@mui/material";
-import React from "react";
-import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
-import { Box } from "@mui/system";
+import { List, ListItem, Paper } from '@mui/material';
+import React from 'react';
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import { Box } from '@mui/system';
+import RefreshIcon from '@mui/icons-material/Refresh';
 const Middle = ({ message_data }: any) => {
   console.log(message_data);
 
   return (
     <>
-      <Box sx={{ width: "100%", maxWidth: "100vw" }}>
+      <Box>
+        <RefreshIcon
+          sx={{
+            marginTop: '1vw',
+            marginLeft: '1vw',
+            marginBottom: '1vw',
+          }}
+          onClick={()=>{}}
+        ></RefreshIcon>
         {message_data.map((message: any) => {
           return (
-            <Paper key={message.id} sx={{ border: "1px solid lightgrey" }}>
+            <Paper
+              elevation={0}
+              key={message.id}
+              sx={{
+                borderBottom: '1px solid lightgrey',
+                borderTop: '1px solid lightgrey',
+                backgroundColor: '#F8FCFF',
+              }}
+            >
               <List>
                 <ListItem>
                   <StarBorderOutlinedIcon></StarBorderOutlinedIcon>
-                  <span>
+                  <span style={{ marginLeft: '1.2vw', fontWeight: '500' }}>
                     {message.header}
-                    <span>fgbffgb</span>
+                    <span style={{ marginLeft: '12vw', fontWeight: '200' }}>
+                      fgbffgb
+                    </span>
                   </span>
                 </ListItem>
               </List>

@@ -53,23 +53,24 @@
 // //   },
 // // }));
 
-"use client";
-import React, { useEffect } from "react";
-import SideNav from "../components/SideNav";
-import Middle from "../components/Middle";
-import { AppBar, Toolbar, Typography, Container, Grid } from "@mui/material";
-import { Box } from "@mui/system";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchMessages } from "../reduxToolKit/messageSlice";
+'use client';
+import React, { useEffect } from 'react';
+import SideNav from '../components/SideNav';
+import Middle from '../components/Middle';
+import { AppBar, Toolbar, Typography, Container, Grid } from '@mui/material';
+import { Box } from '@mui/system';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchMessages } from '../reduxToolKit/messageSlice';
+import { usePathname, useRouter } from 'next/navigation';
 const appBarStyles = {
-  position: "fixed",
+  position: 'fixed',
 };
 
 const mainContainerStyles = {
-  marginTop: "75px", // Adjust this value according to your app bar height
-  display: "flex",
-  marginLeft: "0px",
-  height: "calc(100vh - 64px)", // Adjust this value according to your app bar height
+  marginTop: '75px', // Adjust this value according to your app bar height
+  display: 'flex',
+  marginLeft: '0px',
+  height: 'calc(100vh - 64px)', // Adjust this value according to your app bar height
 };
 
 const contentContainerStyles = {
@@ -87,11 +88,28 @@ const DefaultLayout: React.FC = ({ children }: any) => {
     (state: any) => state.user
   );
 
-  useEffect(() => {
-    dispatch(fetchMessages(user_cred));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchMessages({ creds: user_cred, queryLabel: 'inbox' }));
+  // }, [dispatch]);
+  const router = useRouter();
   // console.log(user_cred);
+  const renderMiddleContent = () => {
+    const pathname = usePathname();
+    console.log(pathname);
 
+    switch (pathname) {
+      case '/inbox':
+        return <Middle message_data={messages}></Middle>;
+      case '/spam':
+        return <p>spam</p>;
+      case '/allmail':
+        return <p>AllMail</p>;
+      case '/login':
+        return router.push('/auth/login');
+      default:
+        return <p>not found</p>;
+    }
+  };
   return (
     <>
       <AppBar position="fixed" sx={appBarStyles}>
@@ -110,8 +128,9 @@ const DefaultLayout: React.FC = ({ children }: any) => {
           justifyContent="center"
           sx={contentContainerStyles}
         >
-          <Grid item xs={12} sx={contentGridStyles}>
-            <Middle message_data={messages || []} />
+          <Grid item xs={12}>
+            {renderMiddleContent()}
+            {/* <Middle message_data={messages || []} /> */}
           </Grid>
         </Grid>
       </Box>
