@@ -11,40 +11,48 @@ const initialState = {
 // Define the async thunk for fetching messages
 export const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
-  async (
-    args: any = { user_token: [], creds: [], queryLabel: "inbox" },
-    thunkAPI
-  ) => {
-    console.log("message slice called");
-    let { user_token, creds, queryLabel }: any = args;
+  async (args: any, thunkAPI) => {
+    try {
+      console.log("message slice called");
 
-    const { access_token } = creds;
-    console.log(access_token);
-    const { jwt_access_token } = user_token;
-    console.log(jwt_access_token);
+      let { user_token, creds, queryLabel }: any = args;
+      console.log(user_token, creds);
 
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${jwt_access_token} `,
-    };
-    const url = "http://127.0.0.1:8000/api/mailread/";
-    queryLabel = queryLabel;
-    // const accessToken = access_token;
-    const response = await axios.get(url, {
-      params: {
-        querylable: queryLabel,
-        access_token: access_token,
-      },
-      headers,
-    });
+      const { access_token } = creds;
+      const { refresh_token } = creds;
+      console.log(refresh_token);
+      console.log(access_token);
+      const { jwt_access_token } = user_token;
+      console.log(jwt_access_token);
 
-    console.log(response);
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwt_access_token} `,
+      };
+      const url = "http://127.0.0.1:8000/api/mailread/";
+      queryLabel = queryLabel;
+      // const accessToken = access_token;
+      const response = await axios.get(url, {
+        params: {
+          querylable: queryLabel,
+          access_token: access_token,
+          refresh_token: refresh_token,
+        },
+        headers,
+      });
 
-    if (!response.statusText) {
-      throw new Error("Failed to fetch messages");
+      console.log(response);
+      console.log(typeof response.data);
+
+      if (!(typeof response.data == "object")) {
+        throw new Error("Failed to fetch messages");
+      }
+      return response.data;
+    } catch (e: any) {
+      throw new Error(`${e.message})}`);
     }
+
     // const data = await response.json();
-    return response.data;
   }
 );
 
@@ -63,10 +71,12 @@ const messageSlice = createSlice({
       .addCase(fetchMessages.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.messages = action.payload;
+        state.error = "";
       })
       .addCase(fetchMessages.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "";
+        state.messages = [];
       });
   },
 });

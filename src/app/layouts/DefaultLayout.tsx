@@ -145,17 +145,17 @@
 // };
 
 // export default DefaultLayout;
-'use client';
-import React, { useState } from 'react';
-import SideNav from '../components/SideNav';
-import { styled } from '@mui/material/styles';
+"use client";
+import React, { useState } from "react";
+import SideNav from "../components/SideNav";
+import { styled } from "@mui/material/styles";
 
 // Define the layout styles
-const MainContent = styled('div')({
+const MainContent = styled("div")({
   flexGrow: 1,
-  padding: '20px',
-  marginTop: '1rem',
-  transition: 'margin-left 0.3 ease-in-out', // Adjust padding as needed
+  padding: "20px",
+  marginTop: "1rem",
+  transition: "margin-left 0.3 ease-in-out", // Adjust padding as needed
 });
 
 const DefaultLayout = ({ children }: any) => {
@@ -163,14 +163,9 @@ const DefaultLayout = ({ children }: any) => {
 
   // Handler to toggle the drawer open/close state
   const toggleDrawer = () => {
-    console.log('called', open);
-
     setOpen(!open);
   };
-  // const MainContentStyle = open
-  //   ? { backgroundColor: 'blue', marginTop: '4.4rem', marginLeft: '10rem' }
-  //   : { backgroundColor: 'blue', marginTop: '4.4rem', marginLeft: '2px' };
-  const marginLeft = open ? '10rem' : '0.5rem';
+  const marginLeft = open ? "10rem" : "0.5rem";
   return (
     <>
       <SideNav open={open} toggleDrawer={toggleDrawer} />
