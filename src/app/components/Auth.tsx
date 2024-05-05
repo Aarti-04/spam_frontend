@@ -90,30 +90,36 @@
 // Signin.propTypes = {};
 
 // export default Signin;
-"use client";
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import { Button, Container, Grid, Typography } from "@mui/material";
-import axios from "axios";
-import { useGoogleLogin } from "@react-oauth/google";
-import LoginForm from "./Signin";
-import { useDispatch, useSelector } from "react-redux";
-import { TokenExchangeAndRegisterUser } from "../reduxToolKit/userSlice";
+'use client';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Button, Container, Grid, Typography } from '@mui/material';
+import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
+import LoginForm from './Signin';
+import { useDispatch, useSelector } from 'react-redux';
+import { TokenExchangeAndRegisterUser } from '../reduxToolKit/userSlice';
+import { useRouter } from 'next/navigation';
+// import { useCookies } from 'next-client-cookies';
+
 const Signin = () => {
   const dispatch: any = useDispatch();
   const { user_google_cred, user_token, status, error } = useSelector(
     (state: any) => state.user
   );
-
+  // const cookieStore = cookies()
+  const router = useRouter();
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       console.log(tokenResponse);
+
       dispatch(TokenExchangeAndRegisterUser(tokenResponse));
+      router.push("/")
     },
     onError: () => {
-      console.error("Google login failed");
+      console.error('Google login failed');
     },
-    flow: "auth-code",
+    flow: 'auth-code',
   });
   console.log(user_google_cred);
   console.log(user_token);
@@ -161,7 +167,7 @@ const Signin = () => {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        style={{ minHeight: "100vh" }}
+        style={{ minHeight: '100vh' }}
       >
         <Grid item xs={12}>
           <Typography variant="h4" align="center" gutterBottom>

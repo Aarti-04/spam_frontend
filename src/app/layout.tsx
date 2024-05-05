@@ -26,7 +26,10 @@ import './globals.css';
 import RouteLayoutProvider from './provider/routLayoutProvider';
 import DefaultLayout from './layouts/DefaultLayout';
 import SideNav from './components/SideNav';
-
+import { useRouter } from 'next/navigation';
+import { request } from 'http';
+import { getAuthCookies } from '../../lib/CookiStore';
+import React from 'react';
 const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({
   children,
