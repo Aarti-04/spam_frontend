@@ -15,12 +15,11 @@ export const fetchMessages = createAsyncThunk(
     try {
       console.log("message slice called");
 
-      let { user_token, creds, queryLabel }: any = args;
+      let { user_token, creds, queryLabel, page }: any = args;
       console.log(user_token, creds);
 
       const { access_token } = creds;
       const { refresh_token } = creds;
-      console.log(refresh_token);
       console.log(access_token);
       const { jwt_access_token } = user_token;
       console.log(jwt_access_token);
@@ -35,18 +34,21 @@ export const fetchMessages = createAsyncThunk(
       const response = await axios.get(url, {
         params: {
           querylable: queryLabel,
-          msglimit: 10,
+          msglimit: 30,
+          page: page,
+          page_size: 8,
         },
         headers,
       });
 
       console.log(response);
       console.log(typeof response.data);
+      console.log(response.data.results["data"]);
 
       if (!(typeof response.data == "object")) {
         throw new Error("Failed to fetch messages");
       }
-      return response.data;
+      return response.data.results["data"];
     } catch (e: any) {
       throw new Error(`${e.message})}`);
     }

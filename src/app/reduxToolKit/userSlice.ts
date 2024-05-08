@@ -7,7 +7,7 @@ import {
   setCookies,
   setRoleCookie,
 } from "../../../lib/CookiStore";
-
+import { UserFormLogin } from "./USER-THUNK/userslicethunk";
 interface UserStateType {
   isAuthenticated: boolean;
   user_google_cred: any[]; // Adjust this type according to your data structure
@@ -45,32 +45,50 @@ export const TokenExchangeAndRegisterUser = createAsyncThunk(
   "user/RegisterUser",
   async (tokenResponse: any) => {
     // const payload={}
-    const { data } = await axios.post<any>(
-      "https://oauth2.googleapis.com/token",
-      {
-        code: tokenResponse.code,
-        client_id:
-          "189496678458-fpihrhl6pae85mhtq0tsra89cpguccja.apps.googleusercontent.com",
-        client_secret: "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",
-        redirect_uri: "http://localhost:3000",
-        grant_type: "authorization_code",
-      }
-    );
-    console.log(data);
+    try {
+      const { data } = await axios.post<any>(
+        "https://oauth2.googleapis.com/token",
+        {
+          code: tokenResponse.code,
+          client_id:
+            "189496678458-fpihrhl6pae85mhtq0tsra89cpguccja.apps.googleusercontent.com",
+          client_secret: "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",
+          redirect_uri: "http://localhost:3000",
+          grant_type: "authorization_code",
+        }
+      );
+      console.log(data);
 
-    const response = await axios.post(
-      "http://localhost:8000/api/googleregister/",
-      data
-    );
-    console.log(response);
-    console.log(response.data);
-    // return;
-    // console.log(Object.entries(data));
-    // console.log("type of", Object.entries(data));
-    return [data, response.data];
+      const response = await axios.post(
+        "http://localhost:8000/api/googleregister/",
+        data
+      );
+      console.log(response);
+      console.log(response.data);
+
+      return [data, response.data];
+    } catch (e: any) {
+      return console.log(e.message);
+    }
   }
 );
-
+// export const UserFormLogin = createAsyncThunk(
+//   "user/loginform",
+//   async (userLoginData: any, thunkAPI) => {
+//     const { email, password } = userLoginData;
+//     const response = await axios.post(
+//       "http://127.0.0.1:8000/api/googlelogin/",
+//       {
+//         email: email,
+//         password: password,
+//       }
+//     );
+//     console.log(response);
+//     if (response.status == 200 || response.statusText == "OK") {
+//       return response.data;
+//     }
+//   }
+// );
 export const GetAccessTokenUsingRefreshToken = createAsyncThunk(
   "user/accessToken",
   async (refreshToken: string) => {
@@ -87,7 +105,6 @@ export const GetAccessTokenUsingRefreshToken = createAsyncThunk(
       );
       const accessToken = response.data.access_token;
       console.log(accessToken);
-
       return accessToken;
     } catch (error: any) {
       console.error("Error refreshing access token:", error.response.data);
@@ -118,6 +135,18 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(UserFormLogin.fulfilled, (state: any, action: any) => {
+        // state.isAuthenticated = false;
+        console.log("UserFormLogin", action.payload["access_token"]);
+
+        state.user_token = {
+          jwt_access_token: action.payload["access_token"],
+          jwt_refresh_token: action.payload["refresh_token"],
+        };
+        setCookies("isAuthenticated", "true");
+        console.log("set cookie");
+        setCookies("isAuthenticated", "false");
+      })
       .addCase(logoutUser.fulfilled, (state) => {
         state.isAuthenticated = false;
         state.user_google_cred = [];
@@ -132,6 +161,11 @@ const userSlice = createSlice({
         (state: any, action: any) => {
           state.isAuthenticated = true;
           state.user_google_cred = action.payload[0];
+          console.log(
+            "TokenExchangeAndRegisterUser",
+            action.payload[1]["access_token"]["access_token"]
+          );
+
           state.user_token = {
             jwt_access_token: action.payload[1]["access_token"],
             jwt_refresh_token: action.payload[1]["refresh_token"],

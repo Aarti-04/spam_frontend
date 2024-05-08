@@ -1,15 +1,21 @@
 import React, { useState } from "react";
 import { TextField, Button, Grid, Typography } from "@mui/material";
+import { UserFormLogin } from "../reduxToolKit/userSlice";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleSubmit = (e: any) => {
+  const dispatch: any = useDispatch();
+  const router = useRouter();
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     // Handle form submission (e.g., login logic)
     console.log("Email:", email);
     console.log("Password:", password);
+    await dispatch(UserFormLogin({ email: email, password: password }));
+    router.push("/pages/inbox");
   };
 
   return (
