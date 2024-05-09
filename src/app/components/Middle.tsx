@@ -149,17 +149,24 @@ import EmailMessage from "../emailmessage/page";
 import Loader from "./Loader";
 import AlertButton from "./Alert";
 import Pagination from "@mui/material/Pagination";
+import MiddlePagination from "./MiddlePagination";
+import { useRouter } from "next/navigation";
 
 const Middle = ({ message_data }: any) => {
   const [loaderOpen, setLoaderOpen] = useState<boolean>(true);
   const [alertOpen, setAlterOpen] = useState<boolean>(true);
   const dispatch: any = useDispatch();
+  const router = useRouter();
+  const [paginationPage, setPage] = React.useState(2);
+  const [mailBodyVisible, setMailBodVisivible] = useState(false);
   const { messages, status, error } = useSelector(
     (state: any) => state.message
   );
   const { user_google_cred, user_token, userStatus, userError } = useSelector(
     (state: any) => state.user
   );
+  const pages = Math.ceil(30 / 8);
+  console.log(pages);
 
   const getdata = async () => {
     await dispatch(
@@ -228,10 +235,10 @@ const Middle = ({ message_data }: any) => {
               <List>
                 <ListItem>
                   <StarBorderOutlinedIcon></StarBorderOutlinedIcon>
-                  <span style={{ marginLeft: "1.2vw", fontWeight: "500" }}>
-                    {message.header}
-                    <EmailMessage messageBody={message.sender}></EmailMessage>
-                  </span>
+                  <span
+                    onClick={() => setMailBodVisivible(true)}
+                    style={{ marginLeft: "1.2vw", fontWeight: "500" }}
+                  ></span>
                 </ListItem>
               </List>
             </Paper>
@@ -240,9 +247,15 @@ const Middle = ({ message_data }: any) => {
 
       {/* Pagination */}
       <Pagination
-        count={10} // Set the total number of pages
+        count={pages} // Set the total number of pages
         onChange={handlePageChange} // Handle page change event
       />
+      {/* <Box sx={{ marginTop: 0, paddingTop: 0 }}>
+        <MiddlePagination
+          page={paginationPage}
+          setPage={setPage}
+        ></MiddlePagination>
+      </Box> */}
     </>
   );
 };

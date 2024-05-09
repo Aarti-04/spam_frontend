@@ -18,8 +18,9 @@ const Page = () => {
       sx={{
         backgroundColor: "gray",
         marginLeft: "4.2rem",
-        marginTop: "2rem",
+        marginTop: "1rem",
         width: "100%",
+        height: "",
 
         // Responsive styles
         "@media (max-width: 600px)": {
