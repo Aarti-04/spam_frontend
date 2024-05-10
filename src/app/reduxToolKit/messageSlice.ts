@@ -4,6 +4,7 @@ import axios from "axios";
 // Define the initial state for message slice
 const initialState = {
   messages: [],
+  messageCount: 0,
   status: "idle",
   error: "",
 };
@@ -36,13 +37,13 @@ export const fetchMessages = createAsyncThunk(
           querylable: queryLabel,
           msglimit: 30,
           page: page,
-          page_size: 8,
+          page_size: 10,
         },
         headers,
       });
 
       console.log(response);
-      console.log(typeof response.data);
+      console.log("", response.data.count);
       console.log(response.data.results["data"]);
 
       if (!(typeof response.data == "object")) {

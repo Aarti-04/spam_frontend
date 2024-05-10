@@ -151,6 +151,8 @@ import AlertButton from "./Alert";
 import Pagination from "@mui/material/Pagination";
 import MiddlePagination from "./MiddlePagination";
 import { useRouter } from "next/navigation";
+import MailBody1 from "./MailBody1";
+import Link from "next/link";
 
 const Middle = ({ message_data }: any) => {
   const [loaderOpen, setLoaderOpen] = useState<boolean>(true);
@@ -158,7 +160,6 @@ const Middle = ({ message_data }: any) => {
   const dispatch: any = useDispatch();
   const router = useRouter();
   const [paginationPage, setPage] = React.useState(2);
-  const [mailBodyVisible, setMailBodVisivible] = useState(false);
   const { messages, status, error } = useSelector(
     (state: any) => state.message
   );
@@ -180,7 +181,7 @@ const Middle = ({ message_data }: any) => {
 
   useEffect(() => {
     getdata();
-  }, [message_data]);
+  }, []);
 
   const handlePageChange: any = (
     event: React.ChangeEvent<unknown>,
@@ -233,13 +234,12 @@ const Middle = ({ message_data }: any) => {
               }}
             >
               <List>
-                <ListItem>
-                  <StarBorderOutlinedIcon></StarBorderOutlinedIcon>
-                  <span
-                    onClick={() => setMailBodVisivible(true)}
-                    style={{ marginLeft: "1.2vw", fontWeight: "500" }}
-                  ></span>
-                </ListItem>
+                <Link href={`/msgbody/${message.message_id}`}>
+                  <ListItem>
+                    <StarBorderOutlinedIcon></StarBorderOutlinedIcon>
+                    <span>{message.header}</span>
+                  </ListItem>
+                </Link>
               </List>
             </Paper>
           ))}
