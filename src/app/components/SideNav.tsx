@@ -168,7 +168,7 @@ export default function SideNav({ open, toggleDrawer }: any) {
           </DrawerHeader>
           <Divider />
           <List>
-            {["Inbox", "Sent", "All Mail", "Spam", "login"].map((setting) => {
+            {["inbox", "sent", "All Mail", "spam", "login"].map((setting) => {
               return (
                 <Link style={{ display: "block" }} href={`/pages/${setting}`}>
                   <ListItemButton

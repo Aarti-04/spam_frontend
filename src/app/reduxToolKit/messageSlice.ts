@@ -29,27 +29,28 @@ export const fetchMessages = createAsyncThunk(
         "Content-Type": "application/json",
         Authorization: `Bearer ${jwt_access_token} `,
       };
-      const url = "http://127.0.0.1:8000/api/mailread/";
+      const url = "http://127.0.0.1:8000/api/mailreadfromdb/";
       queryLabel = queryLabel;
+      
       // const accessToken = access_token;
       const response = await axios.get(url, {
         params: {
-          querylable: queryLabel,
-          msglimit: 30,
+          query_type: queryLabel,
+          // msglimit: 30,
           page: page,
-          page_size: 10,
+          page_size: 15,
         },
         headers,
       });
 
       console.log(response);
-      console.log("", response.data.count);
-      console.log(response.data.results["data"]);
+      console.log(response.data.count);
+      console.log(response.data.results);
 
       if (!(typeof response.data == "object")) {
         throw new Error("Failed to fetch messages");
       }
-      return response.data.results["data"];
+      return [response.data.results, response.data.count];
     } catch (e: any) {
       throw new Error(`${e.message})}`);
     }
@@ -74,8 +75,8 @@ const messageSlice = createSlice({
         state.status = "succeeded";
         console.log(action.payload);
 
-        state.messages = action.payload;
-
+        state.messages = action.payload[0];
+        state.messageCount = action.payload[1];
         state.error = "";
       })
       .addCase(fetchMessages.rejected, (state, action) => {

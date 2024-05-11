@@ -19,8 +19,8 @@ const Page = () => {
         backgroundColor: "gray",
         marginLeft: "4.2rem",
         marginTop: "1rem",
-        width: "100%",
-        height: "",
+        // width: "100%",
+        // height: "",
 
         // Responsive styles
         "@media (max-width: 600px)": {
@@ -36,7 +36,7 @@ const Page = () => {
           marginTop: "1rem",
         },
       }}
-      position="fixed"
+      // position="fixed"
     >
       <Middle message_data={pageToCall}></Middle>
     </Box>

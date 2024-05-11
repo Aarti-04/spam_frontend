@@ -17,6 +17,7 @@
     "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^2.2.3",
     "axios": "^1.6.8",
+    "dompurify": "^3.1.2",
     "he": "^1.2.0",
     "js-cookie": "^3.0.5",
     "next": "14.2.3",
@@ -26,6 +27,7 @@
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.5",
     "@types/he": "^1.2.3",
     "@types/node": "^20",
     "@types/react": "^18",

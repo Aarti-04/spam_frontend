@@ -145,19 +145,20 @@
 // };
 
 // export default DefaultLayout;
-'use client';
-import React, { useState } from 'react';
-import SideNav from '../components/SideNav';
-import { styled } from '@mui/material/styles';
-import { useRouter } from 'next/navigation';
-import { getAuthCookies } from '../../../lib/CookiStore';
+"use client";
+import React, { useState } from "react";
+import SideNav from "../components/SideNav";
+import { styled } from "@mui/material/styles";
+import { useRouter } from "next/navigation";
+import { getAuthCookies } from "../../../lib/CookiStore";
+import MyWebSocketComponent from "../components/WebsocketComponant";
 
 // Define the layout styles
-const MainContent = styled('div')({
+const MainContent = styled("div")({
   flexGrow: 1,
-  padding: '20px',
-  marginTop: '1rem',
-  transition: 'margin-left 0.3 ease-in-out', // Adjust padding as needed
+  padding: "20px",
+  marginTop: "1rem",
+  transition: "margin-left 0.3 ease-in-out", // Adjust padding as needed
 });
 
 const DefaultLayout = ({ children }: any) => {
@@ -168,23 +169,24 @@ const DefaultLayout = ({ children }: any) => {
     setOpen(!open);
   };
   const router = useRouter();
-  let isAuthenticated = '';
+  let isAuthenticated = "";
   const auth = async () => {
-    isAuthenticated = await getAuthCookies('isAuthenticated');
+    isAuthenticated = await getAuthCookies("isAuthenticated");
     console.log(isAuthenticated);
-    console.log('isAuthenticated', isAuthenticated);
-    if (isAuthenticated == 'false' || !isAuthenticated) {
-      router.push('/pages/login');
+    console.log("isAuthenticated", isAuthenticated);
+    if (isAuthenticated == "false" || !isAuthenticated) {
+      router.push("/pages/login");
     }
   };
   React.useEffect(() => {
     auth();
   }, [isAuthenticated]);
 
-  const marginLeft = open ? '10rem' : '0.5rem';
+  const marginLeft = open ? "10rem" : "0.5rem";
   return (
     <>
       <SideNav open={open} toggleDrawer={toggleDrawer} />
+      {/* <MyWebSocketComponent></MyWebSocketComponent> */}
       <MainContent style={{ marginLeft }}>
         {/* Render children components */}
         {children}

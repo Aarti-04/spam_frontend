@@ -160,14 +160,16 @@ const Middle = ({ message_data }: any) => {
   const dispatch: any = useDispatch();
   const router = useRouter();
   const [paginationPage, setPage] = React.useState(2);
-  const { messages, status, error } = useSelector(
+  const { messages, status, error, messageCount } = useSelector(
     (state: any) => state.message
   );
   const { user_google_cred, user_token, userStatus, userError } = useSelector(
     (state: any) => state.user
   );
-  const pages = Math.ceil(30 / 8);
+  const pages = Math.ceil(messageCount / 10);
   console.log(pages);
+
+  console.log(messageCount);
 
   const getdata = async () => {
     await dispatch(
@@ -181,7 +183,7 @@ const Middle = ({ message_data }: any) => {
 
   useEffect(() => {
     getdata();
-  }, []);
+  }, [message_data]);
 
   const handlePageChange: any = (
     event: React.ChangeEvent<unknown>,
@@ -202,9 +204,9 @@ const Middle = ({ message_data }: any) => {
   return (
     <>
       {/* Loader */}
-      {status === "loading" && status !== "succeeded" && (
+      {/* {status === "loading" && status !== "succeeded" && (
         <Loader open={loaderOpen} loaderOpen={setLoaderOpen}></Loader>
-      )}
+      )} */}
       {/* Error alert */}
       {status === "failed" && status !== "succeeded" && (
         <AlertButton open={alertOpen} setOpen={setAlterOpen}></AlertButton>
@@ -243,13 +245,18 @@ const Middle = ({ message_data }: any) => {
               </List>
             </Paper>
           ))}
+        <Pagination
+          count={pages} // Set the total number of pages
+          onChange={handlePageChange} // Handle page change event
+          sx={{ marginTop: "1rem" }} // Ensure pagination stays below messages
+        />
       </Box>
 
       {/* Pagination */}
-      <Pagination
+      {/* <Pagination
         count={pages} // Set the total number of pages
         onChange={handlePageChange} // Handle page change event
-      />
+      /> */}
       {/* <Box sx={{ marginTop: 0, paddingTop: 0 }}>
         <MiddlePagination
           page={paginationPage}
