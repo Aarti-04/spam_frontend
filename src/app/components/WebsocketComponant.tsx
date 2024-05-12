@@ -1,9 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 function MyWebSocketComponent() {
   const [socket, setSocket]: any = useState(null);
 
   useEffect(() => {
+    const newSocket: any = new WebSocket('ws://localhost:8000/practice/');
+    newSocket.onopen = () => {
+      console.log('WebSocket connection established.');
+      setSocket(newSocket); // Store the socket object in state
+    };
+    console.log(newSocket);
     // Establish WebSocket connection
     // const newSocket: any = new WebSocket("ws://localhost:8000/ws/chat/");
     // // WebSocket event listeners
@@ -27,9 +33,9 @@ function MyWebSocketComponent() {
   }, []);
   const handleSocket = (e: any) => {
     e.preventDefault();
-    const newSocket: any = new WebSocket("ws://localhost:8000/practice/");
+    const newSocket: any = new WebSocket('ws://localhost:8000/practice/');
     newSocket.onopen = () => {
-      console.log("WebSocket connection established.");
+      console.log('WebSocket connection established.');
       setSocket(newSocket); // Store the socket object in state
     };
     console.log(newSocket);
@@ -40,7 +46,7 @@ function MyWebSocketComponent() {
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(message);
     } else {
-      console.error("WebSocket connection not established yet.");
+      console.error('WebSocket connection not established yet.');
     }
   };
 
@@ -48,7 +54,7 @@ function MyWebSocketComponent() {
 
   return (
     <div>
-      <button onClick={(e) => handleSocket(e)}>Button click</button>
+      {/* <button onClick={(e) => handleSocket(e)}>Button click</button> */}
     </div>
   );
 }
