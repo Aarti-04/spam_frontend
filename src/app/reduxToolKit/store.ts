@@ -15,7 +15,9 @@ const persistConfigMessage = {
   storage,
   // You can add additional configuration options if needed
 };
-
+const EmailSocket = {
+  key: "emailSocket",
+};
 const rootReducer = {
   user: persistReducer(persistConfigUser, userReducer),
   message: persistReducer(persistConfigMessage, messageReducer), // Include the message reducer in rootReducer

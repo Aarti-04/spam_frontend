@@ -139,6 +139,7 @@
 // };
 
 // export default Middle;
+"use client";
 import { Box, Paper, List, ListItem } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
@@ -166,6 +167,7 @@ const Middle = ({ message_data }: any) => {
   const { user_google_cred, user_token, userStatus, userError } = useSelector(
     (state: any) => state.user
   );
+  // console.log(user_google_cred);
   const pages = Math.ceil(messageCount / 10);
   console.log(pages);
 
