@@ -20,17 +20,17 @@
 //     </html>
 //   );
 // }
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import RouteLayoutProvider from './provider/routLayoutProvider';
-import DefaultLayout from './layouts/DefaultLayout';
-import SideNav from './components/SideNav';
-import { useRouter } from 'next/navigation';
-import { request } from 'http';
-import { getAuthCookies } from '../../lib/CookiStore';
-import React from 'react';
-const inter = Inter({ subsets: ['latin'] });
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import RouteLayoutProvider from "./provider/routLayoutProvider";
+import DefaultLayout from "./layouts/DefaultLayout";
+import SideNav from "./components/SideNav";
+import { useRouter } from "next/navigation";
+import { request } from "http";
+import { getAuthCookies } from "../../lib/CookiStore";
+import React from "react";
+const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,6 +38,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <title>Spam detector</title>
+      </head>
       <body className={inter.className}>
         <RouteLayoutProvider>
           <DefaultLayout>{children}</DefaultLayout>

@@ -56,7 +56,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchBar({ open, toggleDrawer }: any) {
+export default function SearchBar({ toggleDrawer }: any) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -65,6 +65,8 @@ export default function SearchBar({ open, toggleDrawer }: any) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    console.log("68", event.currentTarget);
+
     setAnchorEl(event.currentTarget);
   };
 
@@ -181,7 +183,7 @@ export default function SearchBar({ open, toggleDrawer }: any) {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            MUI
+            GMAIL
           </Typography>
           <Search>
             <SearchIconWrapper>

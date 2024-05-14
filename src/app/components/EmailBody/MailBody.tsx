@@ -8,14 +8,24 @@
 import React from "react";
 import he from "he"; // Import the he library
 import { Box } from "@mui/system";
-import { Paper, Typography } from "@mui/material";
-import sanitizeHtml from "../../../lib/dompurify";
-const MailBody1 = ({ encodedHtml, snnipet }: any) => {
+import { ListItem, Paper, Toolbar, Typography } from "@mui/material";
+import sanitizeHtml from "../../../../lib/dompurify";
+import BodyUpperSection from "./BodyUpperSection";
+
+interface propsTypeInterface {
+  encodedHtml: string;
+  snnipet: string;
+  message_id: string;
+}
+const MailBody = ({ encodedHtml, snnipet, message_id }: propsTypeInterface) => {
   // Decode the HTML entities
   // const decodedHtml = he.decode(encodedHtml);
   const sanitizedHtml = sanitizeHtml(encodedHtml);
   return (
-    <Box sx={{ marginTop: "1.5rem", marginLeft: "1.5rem", overflow: "auto" }}>
+    <Box sx={{ marginTop: "2rem", marginLeft: "1.5rem", overflow: "auto" }}>
+      <Paper>
+        <BodyUpperSection message_id={message_id}></BodyUpperSection>
+      </Paper>
       <Paper elevation={2}>
         <Typography>{snnipet}</Typography>
         <Typography>
@@ -29,4 +39,4 @@ const MailBody1 = ({ encodedHtml, snnipet }: any) => {
   );
 };
 
-export default MailBody1;
+export default MailBody;

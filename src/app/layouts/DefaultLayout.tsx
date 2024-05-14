@@ -146,7 +146,7 @@
 
 // export default DefaultLayout;
 "use client";
-import React, { useState } from "react";
+import React, { createContext, useState } from "react";
 import SideNav from "../components/SideNav";
 import { styled } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
@@ -154,22 +154,33 @@ import { getAuthCookies } from "../../../lib/CookiStore";
 import MyWebSocketComponent from "../components/WebsocketComponant";
 import SearchBar from "../components/SearchBar";
 import SideBar from "../components/SideBar";
+import GmailComponent from "../components/GmailComponant";
+import { Box } from "@mui/system";
+import { Provider } from "react-redux";
+import { Paper } from "@mui/material";
+// import {makeStyles} from "@mui/styles"
 
 // Define the layout styles
 const MainContent = styled("div")({
-  flexGrow: 1,
-  padding: "20px",
-  marginTop: "1rem",
-  transition: "margin-left 0.3 ease-in-out", // Adjust padding as needed
+  flex: 1,
+
+  // transition: "margin-left 0.3 ease-in-out", // Adjust padding as needed
 });
 
+const containerStyle = {
+  transition: "margin-left 0.3s ease",
+  backgroundColor: "#faf9f5",
+};
 const DefaultLayout = ({ children }: any) => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(true);
 
   // Handler to toggle the drawer open/close state
   const toggleDrawer = () => {
+    console.log("called from search bar");
+
     setOpen(!open);
   };
+
   const router = useRouter();
   let isAuthenticated = "";
   const auth = async () => {
@@ -182,21 +193,19 @@ const DefaultLayout = ({ children }: any) => {
   };
   React.useEffect(() => {
     auth();
-  }, [isAuthenticated]);
-
-  const marginLeft = open ? "10rem" : "0.5rem";
+  }, [isAuthenticated]); // const marginLeft = open ? "10rem" : "0.5rem";
   return (
     <>
-      <SearchBar open={open} toggleDrawer={toggleDrawer}></SearchBar>
       {/* <SideBar open={open}></SideBar> */}
-      <SideNav open={open} toggleDrawer={toggleDrawer} />
-      <MainContent style={{ marginLeft }}>
-        {/* Render children components */}
-        {children}
-        <MyWebSocketComponent></MyWebSocketComponent>
 
-        {/* {!isAuthenticated && `${console.log('bencho')}`} */}
-      </MainContent>
+      <SearchBar open={open} toggleDrawer={toggleDrawer}></SearchBar>
+      <Box display="flex">
+        <SideNav open={open} />
+        <Box flexGrow={1} sx={containerStyle} ml={open ? 2 : 0}>
+          {children}
+          {/* <MyWebSocketComponent></MyWebSocketComponent> */}
+        </Box>
+      </Box>
     </>
   );
 };

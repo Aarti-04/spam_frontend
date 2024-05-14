@@ -1,9 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { mailArchived } from "./MESSAGE-THUNK/messageslicethunk";
+// import { ArchivedMail } from "../../../lib/all-api/all_api";
 
 // Define the initial state for message slice
-const initialState = {
+interface initialStateType {
+  messages: Array<object>;
+  isArchived: boolean;
+  messageCount: number;
+  status: string;
+  error: string;
+}
+const initialState: initialStateType = {
   messages: [],
+  isArchived: false,
   messageCount: 0,
   status: "idle",
   error: "",
@@ -31,7 +41,7 @@ export const fetchMessages = createAsyncThunk(
       };
       const url = "http://127.0.0.1:8000/api/mailreadfromdb/";
       queryLabel = queryLabel;
-      
+
       // const accessToken = access_token;
       const response = await axios.get(url, {
         params: {
@@ -78,6 +88,9 @@ const messageSlice = createSlice({
         state.messages = action.payload[0];
         state.messageCount = action.payload[1];
         state.error = "";
+      })
+      .addCase(mailArchived.fulfilled, (state, action: any) => {
+        state.isArchived = action.payload;
       })
       .addCase(fetchMessages.rejected, (state, action) => {
         state.status = "failed";

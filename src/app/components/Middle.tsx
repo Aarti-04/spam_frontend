@@ -152,7 +152,7 @@ import AlertButton from "./Alert";
 import Pagination from "@mui/material/Pagination";
 import MiddlePagination from "./MiddlePagination";
 import { useRouter } from "next/navigation";
-import MailBody1 from "./MailBody1";
+import MailBody1 from "./EmailBody/MailBody";
 import Link from "next/link";
 
 const Middle = ({ message_data }: any) => {
@@ -238,7 +238,7 @@ const Middle = ({ message_data }: any) => {
               }}
             >
               <List>
-                <Link href={`/msgbody/${message.message_id}`}>
+                <Link href={`/mail/msgbody/${message.message_id}`}>
                   <ListItem>
                     <StarBorderOutlinedIcon></StarBorderOutlinedIcon>
                     <span>{message.header}</span>

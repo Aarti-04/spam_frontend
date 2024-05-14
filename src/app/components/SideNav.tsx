@@ -28,6 +28,7 @@ import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
 import LoginIcon from "@mui/icons-material/Login";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Icon } from "@mui/material";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -99,7 +100,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function SideNav({ open, toggleDrawer }: any) {
+export default function SideNav({ open }: any) {
   const theme = useTheme();
   const router = useRouter();
   // const [open, setOpen] = useState(false);
@@ -121,97 +122,53 @@ export default function SideNav({ open, toggleDrawer }: any) {
   };
   return (
     <>
-      <Box>
-        <CssBaseline />
-        <AppBar
-          position="fixed"
-          elevation={4}
-          sx={{
-            backgroundColor: "#ffffff",
-            color: "#2f2f2f",
-            paddingRight: "1rem",
-          }}
-        >
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              edge="start"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              {/* <Image
-                src={'/spam_frontend/public/icon/gmail.png'}
-                alt="gmail icon"
-                width="50"
-                height="50"
-              ></Image> */}
-              <img src="/spam_frontend/public/icon/gmail.png" height="40"></img>
-              Gmail
-            </Typography>
-            <div style={{ marginLeft: "auto" }}>
-              <AppBarRight></AppBarRight>
-            </div>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <DrawerHeader>
-            <IconButton>
-              {theme.direction === "rtl" ? (
-                <ChevronRightIcon />
-              ) : (
-                <ChevronLeftIcon />
-              )}
-            </IconButton>
-          </DrawerHeader>
-          <Divider />
-          <List>
-            {["inbox", "sent", "All Mail", "spam", "login"].map((setting) => {
-              return (
-                <Link style={{ display: "block" }} href={`/pages/${setting}`}>
-                  <ListItemButton
+      <Box sx={{ marginTop: "1%" }}>
+        <List>
+          {["inbox", "sent", "starred"].map((setting) => {
+            return (
+              <Link style={{ display: "block" }} href={`/mail/${setting}`}>
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
                     sx={{
-                      minHeight: 48,
-                      justifyContent: open ? "initial" : "center",
-                      px: 2.5,
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
                     }}
                   >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <MailIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={setting}
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                  </ListItemButton>
-                </Link>
-              );
-            })}
-          </List>
-          <Divider />
-          {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                    <MailIcon sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={setting}
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </Link>
+            );
+          })}
+        </List>
+        <Divider />
+
+        <List>
+          {["All mail", "Archived", "Spam", "login"].map((text, index) => (
+            <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
+                  justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
               >
                 <ListItemIcon
                   sx={{
                     minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
                   }}
                 >
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -220,8 +177,7 @@ export default function SideNav({ open, toggleDrawer }: any) {
               </ListItemButton>
             </ListItem>
           ))}
-        </List> */}
-        </Drawer>
+        </List>
         {/* <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           {/* {menuData == "Inbox" && <Inbox></Inbox>} */}
         {/* {menuData == 'Spam' && <Spam></Spam>} */}

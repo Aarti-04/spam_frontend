@@ -13,13 +13,11 @@ const Page = () => {
     messagePage.split("/")[2] == "All%20Mail"
       ? "All Mail"
       : messagePage.split("/")[2];
+  console.log("pageToCall", pageToCall);
+
   return (
     <Box
       sx={{
-        backgroundColor: "gray",
-        marginLeft: "4.2rem",
-        marginTop: "1rem",
-        // width: "100%",
         // height: "",
 
         // Responsive styles
