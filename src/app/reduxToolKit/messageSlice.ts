@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { mailArchived } from "./MESSAGE-THUNK/messageslicethunk";
+import { access } from "fs";
 // import { ArchivedMail } from "../../../lib/all-api/all_api";
 
 // Define the initial state for message slice
@@ -90,7 +91,9 @@ const messageSlice = createSlice({
         state.error = "";
       })
       .addCase(mailArchived.fulfilled, (state, action: any) => {
-        state.isArchived = action.payload;
+        console.log(action.payload);
+
+        state.isArchived = true;
       })
       .addCase(fetchMessages.rejected, (state, action) => {
         state.status = "failed";
