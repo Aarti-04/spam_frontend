@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/mail/inbox", request.url));
   }
   if (isAuthenticated == "false" || !isAuthenticated) {
-    return NextResponse.redirect(new URL("/mail/login", request.url));
+    return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
   // const isauth:any = store.getState().user.isAuthenticated; | request.cookies.get('')

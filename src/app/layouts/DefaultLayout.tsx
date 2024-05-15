@@ -145,50 +145,50 @@
 // };
 
 // export default DefaultLayout;
-"use client";
-import React, { createContext, useState } from "react";
-import SideNav from "../components/SideNav";
-import { styled } from "@mui/material/styles";
-import { useRouter } from "next/navigation";
-import { getAuthCookies } from "../../../lib/CookiStore";
-import MyWebSocketComponent from "../components/WebsocketComponant";
-import SearchBar from "../components/SearchBar";
-import SideBar from "../components/SideBar";
-import GmailComponent from "../components/GmailComponant";
-import { Box } from "@mui/system";
-import { Provider } from "react-redux";
-import { Paper } from "@mui/material";
+'use client';
+import React, { createContext, useState } from 'react';
+import SideNav from '../components/SideNav';
+import { styled } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
+import { getAuthCookies } from '../../../lib/CookiStore';
+import MyWebSocketComponent from '../components/WebsocketComponant';
+import SearchBar from '../components/SearchBar';
+import SideBar from '../components/SideBar';
+import GmailComponent from '../components/GmailComponant';
+import { Box } from '@mui/system';
+import { Provider } from 'react-redux';
+import { Paper } from '@mui/material';
 // import {makeStyles} from "@mui/styles"
 
 // Define the layout styles
-const MainContent = styled("div")({
+const MainContent = styled('div')({
   flex: 1,
 
   // transition: "margin-left 0.3 ease-in-out", // Adjust padding as needed
 });
 
 const containerStyle = {
-  transition: "margin-left 0.3s ease",
-  backgroundColor: "#faf9f5",
+  transition: 'margin-left 0.3s ease',
+  backgroundColor: '#faf9f5',
 };
 const DefaultLayout = ({ children }: any) => {
   const [open, setOpen] = useState<boolean>(true);
 
   // Handler to toggle the drawer open/close state
   const toggleDrawer = () => {
-    console.log("called from search bar");
+    console.log('called from search bar');
 
     setOpen(!open);
   };
 
   const router = useRouter();
-  let isAuthenticated = "";
+  let isAuthenticated = '';
   const auth = async () => {
-    isAuthenticated = await getAuthCookies("isAuthenticated");
+    isAuthenticated = await getAuthCookies('isAuthenticated');
     console.log(isAuthenticated);
-    console.log("isAuthenticated", isAuthenticated);
-    if (isAuthenticated == "false" || !isAuthenticated) {
-      router.push("/pages/login");
+    console.log('isAuthenticated', isAuthenticated);
+    if (isAuthenticated == 'false' || !isAuthenticated) {
+      router.push('/pages/login');
     }
   };
   React.useEffect(() => {
@@ -202,8 +202,9 @@ const DefaultLayout = ({ children }: any) => {
       <Box display="flex">
         <SideNav open={open} />
         <Box flexGrow={1} sx={containerStyle} ml={open ? 2 : 0}>
+          <MyWebSocketComponent></MyWebSocketComponent>
+
           {children}
-          {/* <MyWebSocketComponent></MyWebSocketComponent> */}
         </Box>
       </Box>
     </>
