@@ -1,4 +1,4 @@
-import Signin from "@/app/components/Auth";
+import Signin from "@/app/components/Login/Auth";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import React from "react";
 

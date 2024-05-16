@@ -1,24 +1,24 @@
-"use client";
-import MailBody from "@/app/components/EmailBody/MailBody";
-import { AppBar, List, ListItem, Toolbar, Typography } from "@mui/material";
-import { Box } from "@mui/system";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import React from "react";
-import { useSelector } from "react-redux";
+'use client';
+import MailBody from '@/app/components/EmailBody/MailBody';
+import { AppBar, List, ListItem, Toolbar, Typography } from '@mui/material';
+import { Box } from '@mui/system';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 function page() {
   const router = useRouter();
   const messageIdData = usePathname();
   console.log(messageIdData);
-  const message_id = messageIdData.split("/")[3];
+  const message_id = messageIdData.split('/')[3];
   console.log(message_id);
 
   const { messages, status, error } = useSelector(
     (state: any) => state.message
   );
-  let mbody = "";
-  let mSnnipet = "";
+  let mbody = '';
+  let mSnnipet = '';
   const message_body = messages.find(
     (obj: any) => obj.message_id === message_id
   );
@@ -35,8 +35,8 @@ function page() {
       <List>
         <ListItem>
           <MailBody
-            encodedHtml={mbody}
-            snnipet={mSnnipet}
+            encodedHtml={message_body.body}
+            snnipet={message_body.snnipet}
             message_id={message_body.id}
           ></MailBody>
         </ListItem>

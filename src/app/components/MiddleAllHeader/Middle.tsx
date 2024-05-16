@@ -144,15 +144,15 @@ import { Box, Paper, List, ListItem } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { fetchMessages } from "../reduxToolKit/messageSlice";
+import { fetchMessages } from "../../reduxToolKit/messageSlice";
 import { useDispatch, useSelector } from "react-redux";
-import EmailMessage from "../emailmessage/page";
-import Loader from "./Loader";
-import AlertButton from "./Alert";
+import EmailMessage from "../../emailmessage/page";
+import Loader from "../Loader";
+import AlertButton from "../Alert";
 import Pagination from "@mui/material/Pagination";
 import MiddlePagination from "./MiddlePagination";
 import { useRouter } from "next/navigation";
-import MailBody1 from "./EmailBody/MailBody";
+import MailBody1 from "../EmailBody/MailBody";
 import Link from "next/link";
 
 const Middle = ({ message_data }: any) => {
@@ -172,6 +172,8 @@ const Middle = ({ message_data }: any) => {
   console.log(pages);
 
   console.log(messageCount);
+  console.log(message_data);
+  // console.log(messages.data);
 
   const getdata = async () => {
     await dispatch(
@@ -184,6 +186,8 @@ const Middle = ({ message_data }: any) => {
   };
 
   useEffect(() => {
+    // console.log("called");
+
     getdata();
   }, [message_data]);
 
@@ -193,6 +197,8 @@ const Middle = ({ message_data }: any) => {
   ) => {
     // Fetch data for the selected page
     // You might need to modify your Redux action to pass the page number as well
+    console.log("page value", value);
+
     dispatch(
       fetchMessages({
         creds: user_google_cred,

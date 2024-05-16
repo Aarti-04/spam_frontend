@@ -15,6 +15,8 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { LogoutOutlined } from "@mui/icons-material";
+import Link from "next/link";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -102,6 +104,9 @@ export default function SearchBar({ toggleDrawer }: any) {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <Link href={"/auth/logout"}>
+        <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      </Link>
     </Menu>
   );
 

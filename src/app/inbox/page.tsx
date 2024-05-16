@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchMessages } from "../reduxToolKit/messageSlice";
-import Middle from "../components/Middle";
+// import { fetchMessages } from "../reduxToolKit/messageSlice";
+// import Middle from "../components/MiddleAllHeader/Middle";
 
 const page = () => {
   const dispatch: any = useDispatch();

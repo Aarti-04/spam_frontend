@@ -1,5 +1,5 @@
 "use client";
-import Middle from "@/app/components/Middle";
+import Middle from "@/app/components/MiddleAllHeader/Middle";
 import { Box } from "@mui/system";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";

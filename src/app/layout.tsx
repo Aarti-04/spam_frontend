@@ -25,7 +25,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import RouteLayoutProvider from "./provider/routLayoutProvider";
 import DefaultLayout from "./layouts/DefaultLayout";
-import SideNav from "./components/SideNav";
+import SideNav from "./components/SideAndTopBar/SideNav";
 import { useRouter } from "next/navigation";
 import { request } from "http";
 import { getAuthCookies } from "../../lib/CookiStore";
