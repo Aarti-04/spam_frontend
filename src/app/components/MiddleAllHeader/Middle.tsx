@@ -144,7 +144,7 @@ import { Box, Paper, List, ListItem } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { fetchMessages } from "../../reduxToolKit/messageSlice";
+import { fetchMessages } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
 import { useDispatch, useSelector } from "react-redux";
 import EmailMessage from "../../emailmessage/page";
 import Loader from "../Loader";
@@ -154,25 +154,29 @@ import MiddlePagination from "./MiddlePagination";
 import { useRouter } from "next/navigation";
 import MailBody1 from "../EmailBody/MailBody";
 import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
 
 const Middle = ({ message_data }: any) => {
   const [loaderOpen, setLoaderOpen] = useState<boolean>(true);
   const [alertOpen, setAlterOpen] = useState<boolean>(true);
-  const dispatch: any = useDispatch();
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [paginationPage, setPage] = React.useState(2);
-  const { messages, status, error, messageCount } = useSelector(
-    (state: any) => state.message
-  );
-  const { user_google_cred, user_token, userStatus, userError } = useSelector(
-    (state: any) => state.user
-  );
-  // console.log(user_google_cred);
-  const pages = Math.ceil(messageCount / 10);
-  console.log(pages);
+  // const msg = useSelector((state: any) => state);
+  // console.log("msg selector", msg.message);
 
-  console.log(messageCount);
+  const { user_google_cred, user_token, userStatus, userError } =
+    useAppSelector((state) => state.user);
+  const { messages, messageCount, messageStatus, messageError } =
+    useAppSelector((state) => state.message);
+  console.log(user_google_cred);
+  console.log(user_token);
   console.log(message_data);
+
+  const pages = Math.ceil(messageCount / 10);
+
+  console.log(messages);
+  console.log(messageCount);
   // console.log(messages.data);
 
   const getdata = async () => {
@@ -187,7 +191,6 @@ const Middle = ({ message_data }: any) => {
 
   useEffect(() => {
     // console.log("called");
-
     getdata();
   }, [message_data]);
 
@@ -212,12 +215,13 @@ const Middle = ({ message_data }: any) => {
   return (
     <>
       {/* Loader */}
-      {/* {status === "loading" && status !== "succeeded" && (
-        <Loader open={loaderOpen} loaderOpen={setLoaderOpen}></Loader>
-      )} */}
+      {messageStatus === "loading" && <Loader open={loaderOpen}></Loader>}
       {/* Error alert */}
-      {status === "failed" && status !== "succeeded" && (
-        <AlertButton open={alertOpen} setOpen={setAlterOpen}></AlertButton>
+      {messageStatus === "failed" && (
+        <AlertButton
+          open={alertOpen}
+          setOpen={() => setAlterOpen(!alertOpen)}
+        ></AlertButton>
       )}
 
       {/* Refresh icon */}
@@ -232,7 +236,7 @@ const Middle = ({ message_data }: any) => {
 
       {/* Render messages */}
       <Box>
-        {messages.length > 0 &&
+        {messages?.length > 0 &&
           messages.map((message: any) => (
             <Paper
               elevation={0}

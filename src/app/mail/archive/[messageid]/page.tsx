@@ -1,5 +1,5 @@
 "use client";
-import { mailArchived } from "@/app/reduxToolKit/MESSAGE-THUNK/messageslicethunk";
+import { mailArchived } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,7 +19,7 @@ const page = () => {
     res = dispatch(mailArchived(message_id));
   }, []);
   if (isArchived) {
-    router.back();
+    router.push("/mail/inbox");
   }
   console.log(res);
 

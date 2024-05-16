@@ -70,7 +70,7 @@ const BodyUpperSection = ({ message_id }: propsType) => {
                   </Tooltip>
                 </IconButton>
               </Link>
-              <Link href={"/mail/delete"}>
+              <Link href={`/mail/delete/${message_id}`}>
                 <IconButton
                   size="large"
                   edge="end"
@@ -86,18 +86,19 @@ const BodyUpperSection = ({ message_id }: propsType) => {
                 </IconButton>
               </Link>
             </Box>
-
-            <Box sx={{ display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="show more"
-                aria-controls={""}
-                aria-haspopup="true"
-                color="inherit"
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Box>
+            <Link href={`/mail/delete/${message_id}`}>
+              <Box sx={{ display: { xs: "flex", md: "none" } }}>
+                <IconButton
+                  size="large"
+                  aria-label="show more"
+                  aria-controls={""}
+                  aria-haspopup="true"
+                  color="inherit"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            </Link>
           </Box>
         </Toolbar>
       </AppBar>

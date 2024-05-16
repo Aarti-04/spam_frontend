@@ -1,12 +1,12 @@
-'use client';
-import React, { useEffect } from 'react';
-import { UseDispatch, useDispatch, useSelector } from 'react-redux';
+"use client";
+import React, { useEffect } from "react";
+import { UseDispatch, useDispatch, useSelector } from "react-redux";
 import {
   GetAccessTokenUsingRefreshToken,
   logoutUser,
-} from '../../reduxToolKit/userSlice';
-import logout from '../../reduxToolKit/userSlice';
-import { useRouter } from 'next/navigation';
+} from "../../redux/SLICE/UserSlice/userSlice";
+import logout from "../../redux/SLICE/UserSlice/userSlice";
+import { useRouter } from "next/navigation";
 const Logout = () => {
   // const dispatch = useDispatch();
   // const { user_google_cred, status, error } = useSelector((state: any) => state.user);
@@ -27,7 +27,7 @@ const Logout = () => {
 
   useEffect(() => {
     dispatch(logoutUser(user_token));
-    router.push('/');
+    router.push("/");
   }, []);
   console.log(messages);
   return <div>page</div>;

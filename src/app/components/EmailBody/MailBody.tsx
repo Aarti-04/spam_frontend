@@ -20,13 +20,35 @@ interface propsTypeInterface {
 const MailBody = ({ encodedHtml, snnipet, message_id }: propsTypeInterface) => {
   // Decode the HTML entities
   // const decodedHtml = he.decode(encodedHtml);
+
   const sanitizedHtml = sanitizeHtml(encodedHtml);
   return (
-    <Box sx={{ marginTop: "2rem", marginLeft: "1.5rem", overflow: "auto" }}>
+    // <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80vh overflow-y-auto bg-white p-8 rounded-lg shadow-md">
+    <Box
+      sx={{
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: "80%", // Adjust width as needed
+        maxHeight: "80vh", // Adjust max height as needed
+        overflowY: "auto",
+        backgroundColor: "white", // Set background color
+        padding: "20px", // Add padding
+        borderRadius: "8px", // Add border radius
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Add box shadow
+      }}
+    >
       <Paper>
         <BodyUpperSection message_id={message_id}></BodyUpperSection>
       </Paper>
-      <Paper elevation={2}>
+      <Paper
+        elevation={2}
+        sx={{
+          overflow: "auto",
+          maxHeight: "calc(100vh - 300px)",
+        }}
+      >
         <Typography>{snnipet}</Typography>
         <Typography>
           <div
@@ -36,6 +58,7 @@ const MailBody = ({ encodedHtml, snnipet, message_id }: propsTypeInterface) => {
         </Typography>
       </Paper>
     </Box>
+    // </div>
   );
 };
 

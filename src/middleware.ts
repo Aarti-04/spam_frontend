@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import store from "./app/reduxToolKit/store";
+import store from "./app/redux/STORE/store";
 import { useSelector } from "react-redux";
 import { getAuthCookies } from "../lib/CookiStore";
 

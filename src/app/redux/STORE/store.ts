@@ -2,25 +2,31 @@ import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage
-import userReducer from "./userSlice";
-import messageReducer from "./messageSlice"; // Import the message slice
+import userReducer from "../SLICE/UserSlice/userSlice";
+import messageReducer from "../SLICE/MessageSlice/messageSlice"; // Import the message slice
+import socketReducer from "../SLICE/SocketSlice/socketSlice";
 import thunk from "redux-thunk";
 const persistConfigUser = {
   key: "user",
   storage,
+  // blacklist: ["userStatus", "userError", "user_google_cred"],
 };
 
 const persistConfigMessage = {
   key: "message",
   storage,
-  // You can add additional configuration options if needed
 };
+
 const EmailSocket = {
   key: "emailSocket",
 };
+// console.log();
+
 const rootReducer = {
   user: persistReducer(persistConfigUser, userReducer),
-  message: persistReducer(persistConfigMessage, messageReducer), // Include the message reducer in rootReducer
+  message: persistReducer(persistConfigMessage, messageReducer),
+  socket: socketReducer, // Include the message reducer in rootReducer
+
   // Add other reducers here if needed
 };
 

@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
-import store, { persistor } from "../reduxToolKit/store";
+import store, { persistor } from "../redux/STORE/store";
 // import Login from "../components/login";
 function RouteLayoutProvider({ children }: any) {
   return (
