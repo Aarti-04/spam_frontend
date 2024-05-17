@@ -139,22 +139,22 @@
 // };
 
 // export default Middle;
-"use client";
-import { Box, Paper, List, ListItem } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { fetchMessages } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
-import { useDispatch, useSelector } from "react-redux";
-import EmailMessage from "../../emailmessage/page";
-import Loader from "../Loader";
-import AlertButton from "../Alert";
-import Pagination from "@mui/material/Pagination";
-import MiddlePagination from "./MiddlePagination";
-import { useRouter } from "next/navigation";
-import MailBody1 from "../EmailBody/MailBody";
-import Link from "next/link";
-import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
+'use client';
+import { Box, Paper, List, ListItem, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { fetchMessages } from '@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk';
+import { useDispatch, useSelector } from 'react-redux';
+import EmailMessage from '../../emailmessage/page';
+import Loader from '../Loader';
+import AlertButton from '../Alert';
+import Pagination from '@mui/material/Pagination';
+import MiddlePagination from './MiddlePagination';
+import { useRouter } from 'next/navigation';
+import MailBody1 from '../EmailBody/MailBody';
+import Link from 'next/link';
+import { useAppDispatch, useAppSelector } from '@/app/redux/STORE/store';
 
 const Middle = ({ message_data }: any) => {
   const [loaderOpen, setLoaderOpen] = useState<boolean>(true);
@@ -200,7 +200,7 @@ const Middle = ({ message_data }: any) => {
   ) => {
     // Fetch data for the selected page
     // You might need to modify your Redux action to pass the page number as well
-    console.log("page value", value);
+    console.log('page value', value);
 
     dispatch(
       fetchMessages({
@@ -211,13 +211,22 @@ const Middle = ({ message_data }: any) => {
       })
     );
   };
-
+  const get_date_and_month = (date: any) => {
+    const dt = new Date(date);
+    // Format the date as "day month"
+    const options = {
+      day: '2-digit',
+      month: 'long',
+    } as Intl.DateTimeFormatOptions;
+    const formattedDate = dt.toLocaleDateString('en-US', options);
+    return formattedDate;
+  };
   return (
     <>
       {/* Loader */}
-      {messageStatus === "loading" && <Loader open={loaderOpen}></Loader>}
+      {messageStatus === 'loading' && <Loader open={loaderOpen}></Loader>}
       {/* Error alert */}
-      {messageStatus === "failed" && (
+      {messageStatus === 'failed' && (
         <AlertButton
           open={alertOpen}
           setOpen={() => setAlterOpen(!alertOpen)}
@@ -227,9 +236,9 @@ const Middle = ({ message_data }: any) => {
       {/* Refresh icon */}
       <RefreshIcon
         sx={{
-          marginTop: "1vw",
-          marginLeft: "1vw",
-          marginBottom: "1vw",
+          marginTop: '1vw',
+          marginLeft: '1vw',
+          marginBottom: '1vw',
         }}
         onClick={() => getdata()}
       ></RefreshIcon>
@@ -242,16 +251,46 @@ const Middle = ({ message_data }: any) => {
               elevation={0}
               key={message.id}
               sx={{
-                borderBottom: "1px solid lightgrey",
-                borderTop: "1px solid lightgrey",
-                backgroundColor: "#F8FCFF",
+                borderBottom: '1px solid lightgrey',
+                borderTop: '1px solid lightgrey',
+                backgroundColor: '#F8FCFF',
               }}
             >
-              <List>
+              <List
+                sx={{
+                  padding: '8px 16px', // Add padding
+                }}
+              >
                 <Link href={`/mail/msgbody/${message.message_id}`}>
                   <ListItem>
                     <StarBorderOutlinedIcon></StarBorderOutlinedIcon>
-                    <span>{message.header}</span>
+                    <Box display="flex" justifyContent="space-between">
+                      <Typography
+                        variant="body1"
+                        color="textPrimary"
+                        sx={{ whiteSpace: 'nowrap' }}
+                      >
+                        {message.header}
+                      </Typography>
+                      <Box
+                        sx={{
+                          width: '100%',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        <Typography variant="body1" color="textSecondary">
+                          {message.snippet}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ width: '33%', textAlign: 'right' }}>
+                        <Typography variant="body1">
+                          {get_date_and_month(message.date)}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    {/* Align date to the right on larger screens */}
                   </ListItem>
                 </Link>
               </List>
@@ -260,7 +299,7 @@ const Middle = ({ message_data }: any) => {
         <Pagination
           count={pages} // Set the total number of pages
           onChange={handlePageChange} // Handle page change event
-          sx={{ marginTop: "1rem" }} // Ensure pagination stays below messages
+          sx={{ marginTop: '1rem' }} // Ensure pagination stays below messages
         />
       </Box>
 
