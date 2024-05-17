@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import {
+  ComposeMail,
   fetchMessages,
   mailArchived,
 } from "../../THUNK/MESSAGE-THUNK/messageslicethunk";
@@ -14,6 +15,7 @@ interface initialStateType {
   messageCount: number;
   messageStatus: string;
   messageError: string;
+  emailSend: boolean;
 }
 const initialState: initialStateType = {
   messages: [],
@@ -21,6 +23,7 @@ const initialState: initialStateType = {
   messageCount: 0,
   messageStatus: "idle",
   messageError: "",
+  emailSend: false,
 };
 
 // Create the message slice
@@ -49,6 +52,10 @@ const messageSlice = createSlice({
         console.log(state.messages);
       })
       .addCase(mailArchived.fulfilled, (state, action: any) => {
+        console.log(action.payload);
+        state.emailSend = true;
+      })
+      .addCase(ComposeMail.fulfilled, (state, action: any) => {
         console.log(action.payload);
 
         state.isArchived = true;

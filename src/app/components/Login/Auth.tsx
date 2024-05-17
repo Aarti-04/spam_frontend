@@ -123,6 +123,7 @@ const Signin = () => {
       console.error("Google login failed");
     },
     flow: "auth-code",
+    // scope: "https://www.googleapis.com/auth/gmail.send",
   });
   console.log(user_google_cred);
   console.log(user_token);

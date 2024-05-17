@@ -86,3 +86,49 @@ export const mailDelete = createAsyncThunk(
     return response;
   }
 );
+export const ComposeMail: any = createAsyncThunk(
+  "messages/composeMail",
+  async (args: any, thunkAPI) => {
+    // console.log("slice called");
+
+    // const { user_token } = useAppSelector((state) => state.user);
+    // console.log(user_token);
+    let user_cred: any = localStorage.getItem("persist:user");
+    user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
+    console.log(user_cred["jwt_access_token"]);
+    // const object1: any = new Object(user_cred);
+    // console.log(object1["jwt_access_token"]);
+
+    try {
+      // let { user_token, creds, queryLabel, page }: any = args;
+      // const { jwt_access_token } = user_token;
+      let { header, recipient, body } = args;
+      console.log(args);
+      const mailData = JSON.stringify(args);
+      // queryLabel = queryLabel.replace(/%20/g, " ");
+      // console.log(user_token, creds);
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user_cred["jwt_access_token"]} `,
+      };
+      const url = "http://127.0.0.1:8000/api/composemail/";
+      const response = await axios.post(url, mailData, {
+        headers,
+      });
+      // const url = "http://127.0.0.1:8000/api/mailread/";
+      // const response = await axios.get(url, {
+      //   headers,
+      // });
+
+      console.log(response);
+      console.log(response.status);
+      // console.log(response.data.results);
+      if (response.status == 200) {
+        // return [response.data.results, response.data.count];
+      }
+    } catch (e: any) {
+      throw new Error(`${e.message})}`);
+    }
+  }
+);

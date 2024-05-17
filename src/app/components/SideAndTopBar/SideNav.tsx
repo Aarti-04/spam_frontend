@@ -33,6 +33,7 @@ import AllInboxIcon from "@mui/icons-material/AllInbox";
 import ReportIcon from "@mui/icons-material/Report";
 import ArchiveIcon from "@mui/icons-material/Archive";
 import Tooltip from "@mui/material/Tooltip";
+import ComposeButton from "../ComposeMail/ComposeButton";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -128,6 +129,7 @@ export default function SideNav({ open }: any) {
     <>
       <Box sx={{ marginTop: "1%" }}>
         <List>
+          <ComposeButton></ComposeButton>
           {["inbox", "sent", "starred"].map((setting) => {
             return (
               <Link style={{ display: "block" }} href={`/mail/${setting}`}>

@@ -25,31 +25,31 @@ export const TokenExchangeAndRegisterUser = createAsyncThunk(
   "user/RegisterUser",
   async (tokenResponse: any) => {
     // const payload={}
-    try {
-      const { data } = await axios.post<any>(
-        "https://oauth2.googleapis.com/token",
-        {
-          code: tokenResponse.code,
-          client_id:
-            "189496678458-fpihrhl6pae85mhtq0tsra89cpguccja.apps.googleusercontent.com",
-          client_secret: "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",
-          redirect_uri: "http://localhost:3000",
-          grant_type: "authorization_code",
-        }
-      );
-      console.log(data);
+    // try {
+    const { data } = await axios.post<any>(
+      "https://oauth2.googleapis.com/token",
+      {
+        code: tokenResponse.code,
+        client_id:
+          "189496678458-fpihrhl6pae85mhtq0tsra89cpguccja.apps.googleusercontent.com",
+        client_secret: "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",
+        redirect_uri: "http://localhost:3000",
+        grant_type: "authorization_code",
+      }
+    );
+    console.log(data);
 
-      const response = await axios.post(
-        "http://localhost:8000/api/googleregister/",
-        data
-      );
-      console.log(response);
-      console.log(response.data);
+    const response = await axios.post(
+      "http://localhost:8000/api/googleregister/",
+      data
+    );
+    console.log(response);
+    console.log(response.data);
 
-      return [data, response.data];
-    } catch (e: any) {
-      return console.log(e.message);
-    }
+    return [data, response.data];
+    // } catch (e: any) {
+    //   return console.log(e.message);
+    // }
   }
 );
 
