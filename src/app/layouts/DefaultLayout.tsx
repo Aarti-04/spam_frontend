@@ -158,6 +158,7 @@ import GmailComponent from "../components/GmailComponant";
 import { Box } from "@mui/system";
 import { Provider } from "react-redux";
 import { Paper } from "@mui/material";
+import UnAuthenticateLayout from "./UnAuthenticatLayout";
 // import {makeStyles} from "@mui/styles"
 
 // Define the layout styles
@@ -177,36 +178,38 @@ const DefaultLayout = ({ children }: any) => {
   // Handler to toggle the drawer open/close state
   const toggleDrawer = () => {
     console.log("called from search bar");
-
     setOpen(!open);
   };
 
   const router = useRouter();
-  let isAuthenticated = "";
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
   const auth = async () => {
-    isAuthenticated = await getAuthCookies("isAuthenticated");
-    console.log(isAuthenticated);
-    console.log("isAuthenticated", isAuthenticated);
-    if (isAuthenticated == "false" || !isAuthenticated) {
-      router.push("/auth/login");
-    }
+    const authentication = await getAuthCookies("isAuthenticated");
+    setIsAuthenticated(authentication);
   };
   React.useEffect(() => {
+    console.log("isAuthenticated", isAuthenticated);
     auth();
-  }, [isAuthenticated]); // const marginLeft = open ? "10rem" : "0.5rem";
+  });
+
+  // const marginLeft = open ? "10rem" : "0.5rem";
   return (
     <>
-      {/* <SideBar open={open}></SideBar> */}
+      {!isAuthenticated ? (
+        <UnAuthenticateLayout></UnAuthenticateLayout>
+      ) : (
+        <>
+          <SearchBar open={open} toggleDrawer={toggleDrawer}></SearchBar>
+          <Box display="flex">
+            <SideNav open={open} />
+            <Box flexGrow={1} sx={containerStyle} ml={open ? 2 : 0}>
+              <MyWebSocketComponent></MyWebSocketComponent>
 
-      <SearchBar open={open} toggleDrawer={toggleDrawer}></SearchBar>
-      <Box display="flex">
-        <SideNav open={open} />
-        <Box flexGrow={1} sx={containerStyle} ml={open ? 2 : 0}>
-          <MyWebSocketComponent></MyWebSocketComponent>
-
-          {children}
-        </Box>
-      </Box>
+              {children}
+            </Box>
+          </Box>
+        </>
+      )}
     </>
   );
 };

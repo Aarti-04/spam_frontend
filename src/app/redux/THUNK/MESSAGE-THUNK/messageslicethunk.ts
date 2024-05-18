@@ -121,7 +121,7 @@ export const ComposeMail: any = createAsyncThunk(
       //   headers,
       // });
 
-      console.log(response);
+      console.log("response", response);
       console.log(response.status);
       // console.log(response.data.results);
       if (response.status == 200) {

@@ -95,20 +95,21 @@ export const GetAccessTokenUsingRefreshToken = createAsyncThunk(
     }
   }
 );
-export const logoutUser = createAsyncThunk(
-  "user/logout",
-  async (user_token: any) => {
-    const { jwt_access_token } = user_token;
-    console.log(jwt_access_token);
+export const logoutUser = createAsyncThunk("user/logout", async () => {
+  // const { jwt_access_token } = user_token;
+  // console.log(jwt_access_token);
+  let user_cred: any = localStorage.getItem("persist:user");
+  user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
 
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${jwt_access_token} `,
-    };
-    const response = await axios.delete("http://localhost:8000/api/logout/", {
-      headers,
-    });
-    console.log(response);
-    return;
-  }
-);
+  console.log(user_cred["jwt_access_token"]);
+
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${user_cred["jwt_access_token"]} `,
+  };
+  const response = await axios.delete("http://localhost:8000/api/logout/", {
+    headers,
+  });
+  console.log(response);
+  return;
+});

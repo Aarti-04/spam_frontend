@@ -101,15 +101,16 @@ import { useDispatch, useSelector } from "react-redux";
 // import {  } from "../../redux/SLICE/UserSlice/userSlice";
 import { useRouter } from "next/navigation";
 import { TokenExchangeAndRegisterUser } from "@/app/redux/THUNK/USER-THUNK/userslicethunk";
+import { useAppSelector } from "@/app/redux/STORE/store";
+import Loader from "../Loader";
 // import { useCookies } from 'next-client-cookies';
 
 const Signin = () => {
   console.log("Signin called");
 
   const dispatch: any = useDispatch();
-  const { user_google_cred, user_token, status, error } = useSelector(
-    (state: any) => state.user
-  );
+  const { user_google_cred, user_token, userStatus, userError } =
+    useAppSelector((state: any) => state.user);
   // const cookieStore = cookies()
   const router = useRouter();
   const googleLogin = useGoogleLogin({
@@ -164,34 +165,41 @@ const Signin = () => {
   }, []);
 
   return (
-    <Container maxWidth="sm">
-      <Grid
-        container
-        spacing={2}
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        style={{ minHeight: "100vh" }}
-      >
-        <Grid item xs={12}>
-          <Typography variant="h4" align="center" gutterBottom>
-            Login To Spam detector
-          </Typography>
-          <LoginForm />
-          <Typography variant="body1" align="center" gutterBottom>
-            Or sign in with
-          </Typography>
-          <Button
-            onClick={() => googleLogin()}
-            variant="contained"
-            color="primary"
-            fullWidth
-          >
-            Sign in with Google
-          </Button>
+    <>
+      {userStatus == "loading" && (
+        <>
+          <Loader open={true}></Loader>
+        </>
+      )}
+      <Container maxWidth="sm">
+        <Grid
+          container
+          spacing={2}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          style={{ minHeight: "100vh" }}
+        >
+          <Grid item xs={12}>
+            <Typography variant="h4" align="center" gutterBottom>
+              Login To Spam detector
+            </Typography>
+            <LoginForm />
+            <Typography variant="body1" align="center" gutterBottom>
+              Or sign in with
+            </Typography>
+            <Button
+              onClick={() => googleLogin()}
+              variant="contained"
+              color="primary"
+              fullWidth
+            >
+              Sign in with Google
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+    </>
   );
 };
 

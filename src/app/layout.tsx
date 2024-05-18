@@ -20,6 +20,7 @@
 //     </html>
 //   );
 // }
+"use client";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -29,13 +30,23 @@ import SideNav from "./components/SideAndTopBar/SideNav";
 import { useRouter } from "next/navigation";
 import { request } from "http";
 import { getAuthCookies } from "../../lib/CookiStore";
-import React from "react";
+import React, { useEffect } from "react";
+import UnAuthenticateLayout from "./layouts/UnAuthenticatLayout";
 const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let isAuthenticated = false;
+  const auth = async () => {
+    isAuthenticated = await getAuthCookies("isAuthenticated");
+    console.log("isAuthenticated", isAuthenticated);
+  };
+  useEffect(() => {
+    auth();
+  });
+
   return (
     <html lang="en">
       <head>

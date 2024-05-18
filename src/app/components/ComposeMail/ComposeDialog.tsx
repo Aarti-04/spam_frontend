@@ -2,17 +2,18 @@ import React from "react";
 import { Modal, Box, TextField, Button } from "@mui/material";
 import { ComposeMail } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
 import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: 500,
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
+  p: 5,
 };
 
 const ComposeDialog = ({ open, handleClose }: any) => {
@@ -30,6 +31,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
     await dispatch(ComposeMail(data));
     //handleClose();
   };
+  const notify = () => toast.error("System has detected as spam mail");
   return (
     <Modal
       open={open}
@@ -38,7 +40,9 @@ const ComposeDialog = ({ open, handleClose }: any) => {
       aria-describedby="compose-dialog-description"
     >
       <Box sx={style}>
-        <h2 id="compose-dialog-title">New Message</h2>
+        <h2 className="mb-5" id="compose-dialog-title">
+          New Message
+        </h2>
         <form onSubmit={handleEmailFormSubmit}>
           <div className="mb-4">
             <TextField
@@ -70,8 +74,10 @@ const ComposeDialog = ({ open, handleClose }: any) => {
             <Button type="submit" variant="contained" color="primary">
               Send
             </Button>
+            <button onClick={notify}>Notify !</button>
           </div>
         </form>
+        <ToastContainer />
       </Box>
     </Modal>
   );

@@ -72,7 +72,6 @@ const userSlice = createSlice({
       .addCase(UserFormLogin.fulfilled, (state: any, action: any) => {
         // state.isAuthenticated = false;
         console.log("UserFormLogin", action.payload["access_token"]);
-
         state.user_token = {
           jwt_access_token: action.payload["access_token"],
           jwt_refresh_token: action.payload["refresh_token"],
