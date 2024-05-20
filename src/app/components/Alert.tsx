@@ -7,11 +7,9 @@ import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
 
-export default function AlertButton({ open, setOpen }: any) {
-  //   const [open, setOpen] = React.useState(true);
-  const { messages, status, error } = useSelector(
-    (state: any) => state.message
-  );
+export default function AlertButton({ open, setOpen, errorMessage }: any) {
+  console.log("alert called");
+
   return (
     <Box sx={{ width: "50%", marginTop: "1rem" }}>
       <Collapse in={open}>
@@ -28,7 +26,7 @@ export default function AlertButton({ open, setOpen }: any) {
           }
           sx={{ mb: 2 }}
         >
-          Something went wrong try again {error}
+          {errorMessage}
         </Alert>
       </Collapse>
     </Box>

@@ -15,6 +15,7 @@ const persistConfigUser = {
 const persistConfigMessage = {
   key: "message",
   storage,
+  blacklist: ["mailComposedOrNot", "ComposeMailStatus"],
 };
 
 const EmailSocket = {

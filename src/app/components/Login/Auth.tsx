@@ -103,6 +103,7 @@ import { useRouter } from "next/navigation";
 import { TokenExchangeAndRegisterUser } from "@/app/redux/THUNK/USER-THUNK/userslicethunk";
 import { useAppSelector } from "@/app/redux/STORE/store";
 import Loader from "../Loader";
+import Image from "next/image";
 // import { useCookies } from 'next-client-cookies';
 
 const Signin = () => {
@@ -181,9 +182,18 @@ const Signin = () => {
           style={{ minHeight: "100vh" }}
         >
           <Grid item xs={12}>
+            {/* <Typography variant="h4" align="center" gutterBottom>
+              <Image
+                src="/scam1_icon.webp"
+                alt="icon"
+                width={100}
+                height={100}
+              ></Image>
+            </Typography> */}
             <Typography variant="h4" align="center" gutterBottom>
               Login To Spam detector
             </Typography>
+
             <LoginForm />
             <Typography variant="body1" align="center" gutterBottom>
               Or sign in with
