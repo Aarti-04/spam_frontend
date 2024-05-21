@@ -1,6 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
-import { persistStore, persistReducer } from "redux-persist";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  REGISTER,
+  PURGE,
+} from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage
 import userReducer from "../SLICE/UserSlice/userSlice";
 import messageReducer from "../SLICE/MessageSlice/messageSlice"; // Import the message slice
@@ -33,7 +42,12 @@ const rootReducer = {
 
 const store = configureStore({
   reducer: rootReducer,
-  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

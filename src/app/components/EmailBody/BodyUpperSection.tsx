@@ -55,7 +55,7 @@ const BodyUpperSection = ({ message_id }: propsType) => {
                   </Tooltip>
                 </IconButton>
               </Link>
-              <Link href={"/mail/reportspam"}>
+              <Link href={`/mail/reportspam/${message_id}`}>
                 <IconButton
                   size="large"
                   edge="end"

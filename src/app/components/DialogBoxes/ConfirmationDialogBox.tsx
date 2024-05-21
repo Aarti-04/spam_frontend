@@ -8,7 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
-export default function DeleteConfirmationBox({ open, setOpen }: any) {
+export default function ConfirmationDialogBox({ open, setOpen, message }: any) {
   //   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -30,16 +30,16 @@ export default function DeleteConfirmationBox({ open, setOpen }: any) {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          {"Delete Mail Confirmation ?"}
+          {"Mail Confirmation ?"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>Really want to delete mail</DialogContentText>
+          <DialogContentText>{message}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={() => setOpen(false, false)}>
+          <Button autoFocus onClick={() => setOpen(false)}>
             Disagree
           </Button>
-          <Button onClick={() => setOpen(false, true)} autoFocus>
+          <Button onClick={() => setOpen(true)} autoFocus>
             Agree
           </Button>
         </DialogActions>

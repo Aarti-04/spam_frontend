@@ -1,5 +1,5 @@
 "use client";
-import DeleteConfirmationBox from "@/app/components/DialogBoxes/DeleteConfirmationBox";
+import ConfirmationDialogBox from "@/app/components/DialogBoxes/ConfirmationDialogBox";
 import { useAppDispatch } from "@/app/redux/STORE/store";
 import { mailDelete } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
 import { usePathname, useRouter } from "next/navigation";
@@ -12,11 +12,8 @@ const page = () => {
   const router = useRouter();
   const message_id = pathname.split("/")[3];
   console.log(message_id);
-  const confirmDeleteHandler = async (
-    openValue: boolean,
-    confirmDelete: boolean
-  ) => {
-    setOPen(openValue);
+  const confirmDeleteHandler = async (confirmDelete: boolean) => {
+    setOPen(!open);
     if (confirmDelete) {
       const res = await dispatch(mailDelete(message_id));
       if (res) {
@@ -28,10 +25,11 @@ const page = () => {
   };
 
   return (
-    <DeleteConfirmationBox
+    <ConfirmationDialogBox
       open={open}
       setOpen={confirmDeleteHandler}
-    ></DeleteConfirmationBox>
+      message="Really want to delete message"
+    ></ConfirmationDialogBox>
   );
 };
 

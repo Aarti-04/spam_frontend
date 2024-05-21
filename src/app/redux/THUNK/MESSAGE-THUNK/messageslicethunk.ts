@@ -184,3 +184,24 @@ export const predictMail: any = createAsyncThunk(
     }
   }
 );
+export const reportSpam: any = createAsyncThunk(
+  "messages/reportMail",
+  async (args: any, thunkAPI) => {
+    const { message_id, spam_label } = args;
+    console.log(message_id);
+    console.log("spam_label", spam_label);
+
+    const headers = get_user_credentials_in_axios_header();
+    const url = "http://127.0.0.1:8000/model/feedback/";
+    try {
+      const response = await axios.post(
+        url,
+        { message_id, spam_label },
+        { headers }
+      );
+      console.log(response);
+    } catch (error: any) {
+      console.log(error.response.status);
+    }
+  }
+);

@@ -23,6 +23,7 @@ interface initialStateType {
   predictedEmailStatus: string;
   predictedEmailError: string;
   predictedEmailIsSpamOrNot: boolean | string;
+  spamMailFeedBack: string;
 }
 const initialState: initialStateType = {
   messages: [],
@@ -38,6 +39,7 @@ const initialState: initialStateType = {
   predictedEmailStatus: "",
   predictedEmailError: "",
   predictedEmailIsSpamOrNot: "",
+  spamMailFeedBack: "",
 };
 
 // Create the message slice
@@ -45,6 +47,11 @@ const messageSlice = createSlice({
   name: "messages",
   initialState,
   reducers: {
+    reportMail(state, action) {
+      if (action.payload) state.spamMailFeedBack = "spam";
+      else state.spamMailFeedBack = "ham";
+    },
+
     // Add any additional reducers if needed
   },
   extraReducers: (builder) => {
@@ -140,5 +147,6 @@ const messageSlice = createSlice({
 // Export actions and reducer
 export const {
   /* any additional reducers */
+  reportMail,
 } = messageSlice.actions;
 export default messageSlice.reducer;

@@ -50,6 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="/scam1_icon.webp"></link>
         <title>Spam detector</title>
       </head>
       <body className={inter.className}>
