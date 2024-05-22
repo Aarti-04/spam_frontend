@@ -21,23 +21,25 @@ export const fetchMessages: any = createAsyncThunk(
 
     // const { user_token } = useAppSelector((state) => state.user);
     // console.log(user_token);
-    let user_cred: any = localStorage.getItem("persist:user");
-    user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
-    console.log(user_cred["jwt_access_token"]);
+    // let user_cred: any = localStorage.getItem("persist:user");
+    // user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
+    // console.log(user_cred["jwt_access_token"]);
     // const object1: any = new Object(user_cred);
     // console.log(object1["jwt_access_token"]);
 
     try {
-      let { user_token, creds, queryLabel, page }: any = args;
-      const { jwt_access_token } = user_token;
+      let { queryLabel, page }: any = args;
+      // const { jwt_access_token } = user_token;
 
       queryLabel = queryLabel.replace(/%20/g, " ");
-      console.log(user_token, creds);
+      // console.log(user_token, creds);
+      const headers = get_user_credentials_in_axios_header();
+      // const headers = {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${jwt_access_token} `,
+      // };
+      console.log(headers);
 
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${jwt_access_token} `,
-      };
       const url = "http://127.0.0.1:8000/api/mailreadfromdb/";
       const response = await axios.get(url, {
         params: {
@@ -52,6 +54,9 @@ export const fetchMessages: any = createAsyncThunk(
         return [response.data.results, response.data.count];
       }
     } catch (e: any) {
+      console.log(e.response.status);
+
+      return e.response;
       throw new Error(`${e.message})}`);
     }
   }
@@ -162,7 +167,7 @@ export const predictMail: any = createAsyncThunk(
       //   Authorization: `Bearer ${user_cred["jwt_access_token"]} `,
       // };
       const headers = get_user_credentials_in_axios_header();
-      const url = "http://127.0.0.1:8000/api/predict/";
+      const url = "http://127.0.0.1:8000/model/predict/";
       const response = await axios.post(url, mailBody, {
         headers,
       });

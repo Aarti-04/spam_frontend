@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { userloginapi } from "../../../../../lib/all-api/all_api";
+import { get_user_credentials_in_axios_header } from "../MESSAGE-THUNK/messageslicethunk";
 
 interface tokenResponseType {
   authuser: string;
@@ -96,20 +97,16 @@ export const GetAccessTokenUsingRefreshToken = createAsyncThunk(
   }
 );
 export const logoutUser = createAsyncThunk("user/logout", async () => {
-  // const { jwt_access_token } = user_token;
-  // console.log(jwt_access_token);
-  let user_cred: any = localStorage.getItem("persist:user");
-  user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
+  const headers = get_user_credentials_in_axios_header();
+  console.log(headers);
 
-  console.log(user_cred["jwt_access_token"]);
-
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${user_cred["jwt_access_token"]} `,
-  };
-  const response = await axios.delete("http://localhost:8000/api/logout/", {
-    headers,
-  });
-  console.log(response);
-  return;
+  try {
+    const response = await axios.delete("http://localhost:8000/api/logout/", {
+      headers,
+    });
+    console.log(response);
+    return response.status;
+  } catch (error: any) {
+    return error.response;
+  }
 });

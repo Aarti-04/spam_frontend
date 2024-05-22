@@ -10,11 +10,50 @@ import {
   REGISTER,
   PURGE,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage
+// import storage from "redux-persist/lib/storage";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+import { WebStorage } from "redux-persist/lib/types"; // defaults to localStorage
 import userReducer from "../SLICE/UserSlice/userSlice";
 import messageReducer from "../SLICE/MessageSlice/messageSlice"; // Import the message slice
 import socketReducer from "../SLICE/SocketSlice/socketSlice";
 import thunk from "redux-thunk";
+// const createNoopStorage = () => {
+//   return {
+//     getItem(_key) {
+//       return Promise.resolve(null);
+//     },
+//     setItem(_key, value) {
+//       return Promise.resolve(value);
+//     },
+//     removeItem(_key) {
+//       return Promise.resolve();
+//     },
+//   };
+// };
+export function createPersistStorage(): WebStorage {
+  const isServer = typeof window === "undefined";
+
+  // Returns noop (dummy) storage.
+  if (isServer) {
+    return {
+      getItem() {
+        return Promise.resolve(null);
+      },
+      setItem() {
+        return Promise.resolve();
+      },
+      removeItem() {
+        return Promise.resolve();
+      },
+    };
+  }
+
+  return createWebStorage("local");
+}
+const storage = createPersistStorage();
+// typeof window !== "undefined"
+//   ? createWebStorage("local")
+//   : createNoopStorage();
 const persistConfigUser = {
   key: "user",
   storage,
@@ -24,7 +63,13 @@ const persistConfigUser = {
 const persistConfigMessage = {
   key: "message",
   storage,
-  blacklist: ["mailComposedOrNot", "ComposeMailStatus"],
+  blacklist: [
+    "mailComposedOrNot",
+    "ComposeMailStatus",
+    "ComposeMailError",
+    "emailBodyValidation",
+  ],
+  whitelist: ["messages"],
 };
 
 const EmailSocket = {

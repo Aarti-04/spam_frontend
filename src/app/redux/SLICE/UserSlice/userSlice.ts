@@ -80,7 +80,10 @@ const userSlice = createSlice({
         console.log("set cookie");
         setCookies("isAuthenticated", "false");
       })
-      .addCase(logoutUser.fulfilled, (state) => {
+      .addCase(logoutUser.fulfilled, (state, action) => {
+        if (action.payload.status != 200) {
+          state.userError = action.payload.data.detail;
+        }
         state.isAuthenticated = false;
         state.user_google_cred = [];
         state.user_token = [];

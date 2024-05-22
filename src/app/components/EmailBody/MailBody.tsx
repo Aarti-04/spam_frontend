@@ -18,12 +18,14 @@ interface propsTypeInterface {
   header: string;
   message_id: string;
   sender: string;
+  spamOrNot: boolean;
 }
 const MailBody = ({
   encodedHtml,
   header,
   message_id,
   sender,
+  spamOrNot,
 }: propsTypeInterface) => {
   // Decode the HTML entities
   // const decodedHtml = he.decode(encodedHtml);
@@ -54,6 +56,7 @@ const MailBody = ({
           {header}
         </Typography>
         <Typography>{sender}</Typography>
+        <Paper></Paper>
         {/* {typeof encodedHtml == 'string' && encodedHtml.startsWith('<') ? ( */}
         {/* <Typography> */}
         <div

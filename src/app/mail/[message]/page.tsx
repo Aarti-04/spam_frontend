@@ -36,7 +36,7 @@ const Page = () => {
       }}
       // position="fixed"
     >
-      <Middle message_data={pageToCall}></Middle>
+      <Middle mailSectionLabel={pageToCall}></Middle>
     </Box>
   );
 };

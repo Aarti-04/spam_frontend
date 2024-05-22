@@ -51,6 +51,12 @@ const messageSlice = createSlice({
       if (action.payload) state.spamMailFeedBack = "spam";
       else state.spamMailFeedBack = "ham";
     },
+    setPredictedStateToInitial(state) {
+      state.predictedEmailStatus = "";
+      state.predictedEmailIsSpamOrNot = "";
+      state.predictedEmailError = "";
+      console.log("set all to initial");
+    },
 
     // Add any additional reducers if needed
   },
@@ -63,8 +69,8 @@ const messageSlice = createSlice({
         state.ComposeMailError = "";
       })
       .addCase(ComposeMail.fulfilled, (state, action: any) => {
-        // console.log(action.payload);
-        // console.log(action.payload.status);
+        console.log(action.payload);
+        console.log(action.payload.status);
         if (action.payload.status == 200) {
           state.ComposeMailStatus = "success";
           state.mailComposedOrNot = true;
@@ -74,6 +80,7 @@ const messageSlice = createSlice({
           state.mailComposedOrNot = false;
           state.ComposeMailError = action.payload.data.error;
         }
+        console.log(state.ComposeMailStatus);
       })
       .addCase(ComposeMail.rejected, (state, action: any) => {
         state.ComposeMailStatus = "rejected";
@@ -86,17 +93,24 @@ const messageSlice = createSlice({
         state.messageStatus = "loading";
       })
       .addCase(fetchMessages.fulfilled, (state, action) => {
-        console.log("fulfilled state", state);
+        console.log("fulfilled state", action.payload);
+        if (action.payload.status == 401) {
+          state.messageError = "Not Authenticated please login";
+          state.messageStatus = "failed";
+          state.messages = [];
+        } else {
+          state.messageStatus = "succeeded";
+          console.log(action.payload[0]);
 
-        state.messageStatus = "succeeded";
-        console.log(action.payload[0]);
-
-        state.messages = action.payload[0];
-        state.messageCount = action.payload[1];
-        state.messageError = "";
-        console.log(state.messages);
+          state.messages = action.payload[0];
+          state.messageCount = action.payload[1];
+          state.messageError = "";
+          console.log(state.messages);
+        }
       })
       .addCase(fetchMessages.rejected, (state, action) => {
+        console.log("failed");
+
         state.messageStatus = "failed";
         state.messageError = action.error.message || "";
         state.messages = [];
@@ -130,10 +144,13 @@ const messageSlice = createSlice({
           state.predictedEmailIsSpamOrNot = action.payload.data.is_spam;
           state.predictedEmailError = "";
           state.predictedEmailStatus = "success";
+          state.spamMailFeedBack = "spam";
         } else {
           state.predictedEmailStatus = "successwithError";
           state.predictedEmailError = action.payload.data.error;
         }
+        console.log(state.predictedEmailStatus);
+        console.log(state.predictedEmailIsSpamOrNot);
       })
       .addCase(predictMail.rejected, (state, action: any) => {
         console.log(action.payload);
@@ -148,5 +165,6 @@ const messageSlice = createSlice({
 export const {
   /* any additional reducers */
   reportMail,
+  setPredictedStateToInitial,
 } = messageSlice.actions;
 export default messageSlice.reducer;

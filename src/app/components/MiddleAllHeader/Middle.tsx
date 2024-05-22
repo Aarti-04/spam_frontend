@@ -139,39 +139,38 @@
 // };
 
 // export default Middle;
-'use client';
-import { Box, Paper, List, ListItem, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import { fetchMessages } from '@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk';
-import { useDispatch, useSelector } from 'react-redux';
-import EmailMessage from '../../emailmessage/page';
-import Loader from '../Loader';
-import AlertButton from '../Alert';
-import Pagination from '@mui/material/Pagination';
-import MiddlePagination from './MiddlePagination';
-import { useRouter } from 'next/navigation';
-import MailBody1 from '../EmailBody/MailBody';
-import Link from 'next/link';
-import { useAppDispatch, useAppSelector } from '@/app/redux/STORE/store';
-
-const Middle = ({ message_data }: any) => {
+"use client";
+import { Box, Paper, List, ListItem, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { fetchMessages } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
+import { useDispatch, useSelector } from "react-redux";
+import EmailMessage from "../../emailmessage/page";
+import Loader from "../Loader";
+import AlertButton from "../Alert";
+import Pagination from "@mui/material/Pagination";
+import MiddlePagination from "./MiddlePagination";
+import { useRouter } from "next/navigation";
+import MailBody1 from "../EmailBody/MailBody";
+import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
+import { type } from "os";
+interface mailSectionLabelType {
+  mailSectionLabel: string;
+}
+const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
   const [loaderOpen, setLoaderOpen] = useState<boolean>(true);
   const [alertOpen, setAlterOpen] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [paginationPage, setPage] = React.useState(2);
+  // const [paginationPage, setPage] = React.useState(2);
   // const msg = useSelector((state: any) => state);
   // console.log("msg selector", msg.message);
-
-  const { user_google_cred, user_token, userStatus, userError } =
-    useAppSelector((state) => state.user);
   const { messages, messageCount, messageStatus, messageError } =
     useAppSelector((state) => state.message);
-  console.log(user_google_cred);
-  console.log(user_token);
-  console.log(message_data);
+  // console.log(user_token);
+  console.log(mailSectionLabel);
 
   const pages = Math.ceil(messageCount / 10);
 
@@ -179,20 +178,17 @@ const Middle = ({ message_data }: any) => {
   console.log(messageCount);
   // console.log(messages.data);
 
-  const getdata = async () => {
+  const getMessageData = async () => {
     await dispatch(
       fetchMessages({
-        creds: user_google_cred,
-        user_token: user_token,
-        queryLabel: message_data,
+        queryLabel: mailSectionLabel,
       })
     );
   };
 
   useEffect(() => {
-    // console.log("called");
-    getdata();
-  }, [message_data]);
+    getMessageData();
+  }, [mailSectionLabel]);
 
   const handlePageChange: any = (
     event: React.ChangeEvent<unknown>,
@@ -200,13 +196,11 @@ const Middle = ({ message_data }: any) => {
   ) => {
     // Fetch data for the selected page
     // You might need to modify your Redux action to pass the page number as well
-    console.log('page value', value);
+    console.log("page value", value);
 
     dispatch(
       fetchMessages({
-        creds: user_google_cred,
-        user_token: user_token,
-        queryLabel: message_data,
+        queryLabel: mailSectionLabel,
         page: value,
       })
     );
@@ -215,32 +209,33 @@ const Middle = ({ message_data }: any) => {
     const dt = new Date(date);
     // Format the date as "day month"
     const options = {
-      day: '2-digit',
-      month: 'long',
+      day: "2-digit",
+      month: "long",
     } as Intl.DateTimeFormatOptions;
-    const formattedDate = dt.toLocaleDateString('en-US', options);
+    const formattedDate = dt.toLocaleDateString("en-US", options);
     return formattedDate;
   };
   return (
     <>
       {/* Loader */}
-      {messageStatus === 'loading' && <Loader open={loaderOpen}></Loader>}
+      {messageStatus === "loading" && <Loader open={loaderOpen}></Loader>}
       {/* Error alert */}
-      {messageStatus === 'failed' && (
+      {messageStatus === "failed" && (
         <AlertButton
           open={alertOpen}
           setOpen={() => setAlterOpen(!alertOpen)}
+          errorMessage={messageError}
         ></AlertButton>
       )}
 
       {/* Refresh icon */}
       <RefreshIcon
         sx={{
-          marginTop: '1vw',
-          marginLeft: '1vw',
-          marginBottom: '1vw',
+          marginTop: "1vw",
+          marginLeft: "1vw",
+          marginBottom: "1vw",
         }}
-        onClick={() => getdata()}
+        onClick={() => getMessageData()}
       ></RefreshIcon>
 
       {/* Render messages */}
@@ -251,46 +246,49 @@ const Middle = ({ message_data }: any) => {
               elevation={0}
               key={message.id}
               sx={{
-                borderBottom: '1px solid lightgrey',
-                borderTop: '1px solid lightgrey',
-                backgroundColor: '#F8FCFF',
+                borderBottom: "1px solid lightgrey",
+                borderTop: "1px solid lightgrey",
+                backgroundColor: "#F8FCFF",
               }}
             >
               <List
                 sx={{
-                  padding: '8px 16px', // Add padding
+                  padding: "8px 16px", // Add padding
                 }}
               >
                 <Link href={`/mail/msgbody/${message.message_id}`}>
                   <ListItem>
                     <StarBorderOutlinedIcon></StarBorderOutlinedIcon>
+
                     <Box display="flex" justifyContent="space-between">
                       <Typography
                         variant="body1"
                         color="textPrimary"
-                        sx={{ whiteSpace: 'nowrap' }}
+                        sx={{ whiteSpace: "nowrap" }}
                       >
                         {message.header}
                       </Typography>
+                      {/* <Typography variant="body1" color="textPrimary">
+                        {message.sender}
+                      </Typography> */}
                       <Box
                         sx={{
-                          width: '100%',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
+                          width: "100%",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
                         }}
                       >
                         <Typography variant="body1" color="textSecondary">
                           {message.snippet}
                         </Typography>
                       </Box>
-                      <Box sx={{ width: '33%', textAlign: 'right' }}>
+                      <Box sx={{ width: "33%", textAlign: "right" }}>
                         <Typography variant="body1">
                           {get_date_and_month(message.date)}
                         </Typography>
                       </Box>
                     </Box>
-                    {/* Align date to the right on larger screens */}
                   </ListItem>
                 </Link>
               </List>
@@ -299,7 +297,7 @@ const Middle = ({ message_data }: any) => {
         <Pagination
           count={pages} // Set the total number of pages
           onChange={handlePageChange} // Handle page change event
-          sx={{ marginTop: '1rem' }} // Ensure pagination stays below messages
+          sx={{ marginTop: "1rem" }} // Ensure pagination stays below messages
         />
       </Box>
 

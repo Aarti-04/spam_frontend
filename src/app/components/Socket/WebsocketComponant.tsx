@@ -1,4 +1,3 @@
-"use client";
 import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
 import { MailReadingService } from "@/app/redux/THUNK/SOCKET-EMAIL-THUNK/scoket";
 import { useEffect, useState } from "react";
@@ -7,26 +6,13 @@ import { useSelector } from "react-redux";
 function MyWebSocketComponent() {
   // const [socket, setSocket]: any = useState(null);
   const dispatch = useAppDispatch();
-  const { user_google_cred, user_token, userStatus, userError } =
-    useAppSelector((state: any) => state.user);
-
-  console.log(user_token);
   const { socket, socketStatus, socketError } = useAppSelector(
     (state) => state.socket
   );
   console.log("socket", socket);
 
   useEffect(() => {
-    dispatch(MailReadingService(user_token["jwt_access_token"]));
-    // const url=
-    // const newSocket: any = new WebSocket(
-    //   `ws://localhost:8000/mailread/?access_token=${user_token["jwt_access_token"]}`
-    // );
-    // newSocket.onopen = () => {
-    //     console.log("WebSocket connection established.");
-    //     setSocket(newSocket); // Store the socket object in state
-    //   };
-    //   console.log(newSocket);
+    dispatch(MailReadingService());
   }, []);
   const handleSocket = (e: any) => {
     e.preventDefault();
