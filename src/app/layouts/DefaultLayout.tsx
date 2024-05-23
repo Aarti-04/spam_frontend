@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import SideNav from "../components/SideAndTopBar/SideNav";
 import { styled } from "@mui/material/styles";
 import { useRouter } from "next/navigation";
@@ -31,13 +31,13 @@ const DefaultLayout = ({ children }: any) => {
     const authentication = await getAuthCookies("isAuthenticated");
     setIsAuthenticated(authentication);
   };
-  React.useEffect(() => {
+  useEffect(() => {
     console.log("isAuthenticated", isAuthenticated);
     auth();
   });
   return (
     <>
-      {!isAuthenticated ? (
+      {isAuthenticated == false ? (
         <UnAuthenticateLayout></UnAuthenticateLayout>
       ) : (
         <>

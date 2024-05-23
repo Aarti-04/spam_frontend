@@ -118,13 +118,6 @@ export default function SideNav({ open }: any) {
   // const handleDrawerClose = () => {
   //   setOpen(false);
   // };
-  const handleSettingClick = (navigateTo: string) => {
-    navigateTo = navigateTo.toLowerCase();
-    if (navigateTo == "login") {
-      return router.push("/auth/login");
-    }
-    router.push(`/${navigateTo}`);
-  };
   return (
     <>
       <Box sx={{ marginTop: "1%" }}>
@@ -190,7 +183,6 @@ export default function SideNav({ open }: any) {
               </ListItemButton>
             </Link>
             <Link href={"/mail/spam"}>
-              {" "}
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -206,7 +198,7 @@ export default function SideNav({ open }: any) {
                   }}
                 >
                   {" "}
-                  <Tooltip title="All">
+                  <Tooltip title="spam">
                     <ReportIcon sx={{ opacity: open ? 1 : 0 }} />
                   </Tooltip>
                 </ListItemIcon>
@@ -215,7 +207,6 @@ export default function SideNav({ open }: any) {
               </ListItemButton>
             </Link>
             <Link href={"/mail/archive"}>
-              {" "}
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -237,28 +228,6 @@ export default function SideNav({ open }: any) {
                   primary="Archived"
                   sx={{ opacity: open ? 1 : 0 }}
                 />
-              </ListItemButton>
-            </Link>
-            <Link href={"/auth/login"}>
-              {" "}
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <InboxIcon sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemIcon>
-
-                <ListItemText primary="Login" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </Link>
           </ListItem>

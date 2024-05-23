@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { userloginapi } from "../../../../../lib/all-api/all_api";
 import { get_user_credentials_in_axios_header } from "../MESSAGE-THUNK/messageslicethunk";
+import { setCookies } from "../../../../../lib/CookiStore";
 
 interface tokenResponseType {
   authuser: string;
@@ -105,8 +106,12 @@ export const logoutUser = createAsyncThunk("user/logout", async () => {
       headers,
     });
     console.log(response);
+    if (response.status == 200) await setCookies("isAuthenticated", "false");
+
     return response.status;
   } catch (error: any) {
+    console.log(error.response);
+
     return error.response;
   }
 });

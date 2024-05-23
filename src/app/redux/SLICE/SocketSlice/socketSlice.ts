@@ -2,10 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { MailReadingService } from "../../THUNK/SOCKET-EMAIL-THUNK/scoket";
 
 // Define the initial state for message slice
+interface SocketStateType {
+  new_mail_count: number;
+}
 const initialState = {
-  socket: "",
-  socketStatus: "idle",
-  socketError: "",
+  new_mail_count: 0,
 };
 
 // Create the message slice
@@ -16,21 +17,10 @@ const socketSlice = createSlice({
     // Add any additional reducers if needed
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(MailReadingService.pending, (state) => {
-        state.socketStatus = "loading";
-      })
-      .addCase(MailReadingService.fulfilled, (state, action) => {
-        console.log(action.payload);
-        state.socket = action.payload;
-        state.socketStatus = "success";
-        state.socketError = "";
-      })
-      .addCase(MailReadingService.rejected, (state, action) => {
-        state.socketStatus = "failed";
-        state.socketError = action.error.message || "";
-        state.socket = "";
-      });
+    builder.addCase(MailReadingService.fulfilled, (state, action: any) => {
+      console.log(action.payload);
+      state.new_mail_count = action.payload;
+    });
   },
 });
 

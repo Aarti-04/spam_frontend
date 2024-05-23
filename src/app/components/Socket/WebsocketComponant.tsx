@@ -6,23 +6,12 @@ import { useSelector } from "react-redux";
 function MyWebSocketComponent() {
   // const [socket, setSocket]: any = useState(null);
   const dispatch = useAppDispatch();
-  const { socket, socketStatus, socketError } = useAppSelector(
-    (state) => state.socket
-  );
-  console.log("socket", socket);
+  const { new_mail_count } = useAppSelector((state) => state.socket);
+  console.log("socket", new_mail_count);
 
   useEffect(() => {
     dispatch(MailReadingService());
   }, []);
-  const handleSocket = (e: any) => {
-    e.preventDefault();
-    const newSocket: any = new WebSocket("ws://localhost:8000/practice/");
-    newSocket.onopen = () => {
-      console.log("WebSocket connection established.");
-      // setSocket(newSocket); // Store the socket object in state
-    };
-    console.log(newSocket);
-  };
 
   // Function to send message through WebSocket
   // const sendMessage: any = (message: any) => {

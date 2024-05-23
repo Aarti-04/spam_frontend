@@ -24,7 +24,7 @@ const page = () => {
 
     if (spamConfirmation) {
       dispatch(reportMail(spamConfirmation));
-      await dispatch(reportSpam({ message_id, spam_label: spamMailFeedBack }));
+      await dispatch(reportSpam({ message_id, spamMailFeedBack }));
     }
     router.back();
   };

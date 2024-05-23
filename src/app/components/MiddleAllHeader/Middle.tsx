@@ -140,13 +140,19 @@
 
 // export default Middle;
 "use client";
-import { Box, Paper, List, ListItem, Typography } from "@mui/material";
+import {
+  Box,
+  Paper,
+  List,
+  ListItem,
+  Typography,
+  Checkbox,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { fetchMessages } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
 import { useDispatch, useSelector } from "react-redux";
-import EmailMessage from "../../emailmessage/page";
 import Loader from "../Loader";
 import AlertButton from "../Alert";
 import Pagination from "@mui/material/Pagination";
@@ -162,6 +168,7 @@ interface mailSectionLabelType {
 const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
   const [loaderOpen, setLoaderOpen] = useState<boolean>(true);
   const [alertOpen, setAlterOpen] = useState<boolean>(true);
+  const [checked, setChecked] = React.useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
   // const [paginationPage, setPage] = React.useState(2);
@@ -169,6 +176,7 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
   // console.log("msg selector", msg.message);
   const { messages, messageCount, messageStatus, messageError } =
     useAppSelector((state) => state.message);
+  const { userError } = useAppSelector((state) => state.user);
   // console.log(user_token);
   console.log(mailSectionLabel);
 
@@ -227,6 +235,13 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
           errorMessage={messageError}
         ></AlertButton>
       )}
+      {/* {userError  && (
+        <AlertButton
+          open={alertOpen}
+          setOpen={() => setAlterOpen(!alertOpen)}
+          errorMessage={userError}
+        ></AlertButton>
+      )} */}
 
       {/* Refresh icon */}
       <RefreshIcon
@@ -245,52 +260,56 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
             <Paper
               elevation={0}
               key={message.id}
-              sx={{
-                borderBottom: "1px solid lightgrey",
-                borderTop: "1px solid lightgrey",
-                backgroundColor: "#F8FCFF",
-              }}
+              // sx={{
+              //   borderBottom: "1px solid lightgrey",
+              //   borderTop: "1px solid lightgrey",
+              //   backgroundColor: "#F8FCFF",
+              // }}
+              className="border-b border-t border-gray-200 bg-blue-50"
             >
-              <List
-                sx={{
-                  padding: "8px 16px", // Add padding
-                }}
-              >
-                <Link href={`/mail/msgbody/${message.message_id}`}>
-                  <ListItem>
-                    <StarBorderOutlinedIcon></StarBorderOutlinedIcon>
-
-                    <Box display="flex" justifyContent="space-between">
-                      <Typography
-                        variant="body1"
-                        color="textPrimary"
-                        sx={{ whiteSpace: "nowrap" }}
-                      >
-                        {message.header}
-                      </Typography>
-                      {/* <Typography variant="body1" color="textPrimary">
-                        {message.sender}
-                      </Typography> */}
-                      <Box
-                        sx={{
-                          width: "100%",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        <Typography variant="body1" color="textSecondary">
-                          {message.snippet}
+              <List className="p-2">
+                <div className="flex flex-col md:flex-row items-center md:items-start md:space-x-2">
+                  <StarBorderOutlinedIcon className="mb-2 md:mb-0 md:mr-2" />
+                  <Checkbox
+                    checked={checked}
+                    onChange={(event) => setChecked(event.target.checked)}
+                    inputProps={{ "aria-label": "controlled" }}
+                    className="mb-2 md:mb-0 md:mr-2"
+                  />
+                  <Link
+                    href={`/mail/msgbody/${message.message_id}`}
+                    className="flex-1 w-full md:w-auto"
+                  >
+                    <ListItem className="w-full">
+                      <div className="flex flex-col md:flex-row justify-between w-full space-y-2 md:space-y-0">
+                        <Typography
+                          variant="body1"
+                          color="textPrimary"
+                          className="whitespace-nowrap"
+                        >
+                          To:{message?.sender}
                         </Typography>
-                      </Box>
-                      <Box sx={{ width: "33%", textAlign: "right" }}>
-                        <Typography variant="body1">
-                          {get_date_and_month(message.date)}
+                        <Typography
+                          variant="body1"
+                          color="textPrimary"
+                          className="whitespace-nowrap"
+                        >
+                          {message.header ? message.header : "(No Subject)"}
                         </Typography>
-                      </Box>
-                    </Box>
-                  </ListItem>
-                </Link>
+                        <div className="w-full md:w-auto overflow-hidden text-ellipsis whitespace-nowrap">
+                          <Typography variant="body1" color="textSecondary">
+                            {message.snippet}
+                          </Typography>
+                        </div>
+                        <div className="w-full md:w-1/3 text-right">
+                          <Typography variant="body1">
+                            {get_date_and_month(message.date)}
+                          </Typography>
+                        </div>
+                      </div>
+                    </ListItem>
+                  </Link>
+                </div>
               </List>
             </Paper>
           ))}

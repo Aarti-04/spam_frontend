@@ -81,13 +81,15 @@ const userSlice = createSlice({
         setCookies("isAuthenticated", "false");
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
-        if (action.payload.status != 200) {
-          state.userError = action.payload.data.detail;
+        console.log(action.payload);
+
+        if (action.payload.status !== 200) {
+          state.userError = action.payload.data?.detail;
         }
         state.isAuthenticated = false;
+        state.userStatus = "idle";
         state.user_google_cred = [];
         state.user_token = [];
-        setCookies("isAuthenticated", "false");
       })
       .addCase(TokenExchangeAndRegisterUser.pending, (state) => {
         state.userStatus = "loading";

@@ -120,23 +120,14 @@ export const ComposeMail: any = createAsyncThunk(
       console.log(args);
       const mailData = JSON.stringify(args);
       console.log("mailData", mailData);
-
-      // const headers = {
-      //   "Content-Type": "application/json",
-      //   Authorization: `Bearer ${user_cred["jwt_access_token"]} `,
-      // };
       const headers = get_user_credentials_in_axios_header();
       const url = "http://127.0.0.1:8000/api/composemail/";
       const response = await axios.post(url, mailData, {
         headers,
       });
-
       // console.log("response", response.data);
       console.log(response);
-      // const res =
-      //   response.status == 200 && "error" in response.data ? false : true;
-      // return res;
-      return response.data;
+      return response;
     } catch (e: any) {
       // console.log(e.message);
       console.log(e.response);
@@ -192,18 +183,22 @@ export const predictMail: any = createAsyncThunk(
 export const reportSpam: any = createAsyncThunk(
   "messages/reportMail",
   async (args: any, thunkAPI) => {
-    const { message_id, spam_label } = args;
+    const { message_id, spamMailFeedBack, message_body } = args;
     console.log(message_id);
-    console.log("spam_label", spam_label);
+    console.log("spam_label", spamMailFeedBack);
+    console.log("message_body", message_body);
+
+    // return 0;
 
     const headers = get_user_credentials_in_axios_header();
     const url = "http://127.0.0.1:8000/model/feedback/";
+    const spamDataToPost = {
+      message_id: message_id,
+      spam_label: spamMailFeedBack,
+      message_body: message_body,
+    };
     try {
-      const response = await axios.post(
-        url,
-        { message_id, spam_label },
-        { headers }
-      );
+      const response = await axios.post(url, spamDataToPost, { headers });
       console.log(response);
     } catch (error: any) {
       console.log(error.response.status);

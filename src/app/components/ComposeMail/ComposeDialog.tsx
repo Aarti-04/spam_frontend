@@ -1,5 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Modal, Box, TextField, Button, TextareaAutosize } from "@mui/material";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  Modal,
+  Box,
+  TextField,
+  Button,
+  TextareaAutosize,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import {
   ComposeMail,
   predictMail,
@@ -13,6 +21,8 @@ import Image from "next/image";
 import { setPredictedStateToInitial } from "@/app/redux/SLICE/MessageSlice/messageSlice";
 import CloseIcon from "@mui/icons-material/Close";
 import ConfirmationDialogBox from "../DialogBoxes/ConfirmationDialogBox";
+import SpamMailConfirmationDialog from "./SpamMailConfirmationDialog";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 const style = {
   position: "absolute",
   top: "50%",
@@ -36,46 +46,58 @@ const ComposeDialog = ({ open, handleClose }: any) => {
   const [body, setBody] = useState<any>({ "": "" });
   const [composeData, setComposeData] = useState<any>();
   const [userWantToReportMail, setWantToReportMail] = useState<boolean>(false);
+  const [spamConfirmationOpen, setSpamConfirmationOpen] = useState(true);
+  const [attachment, setAttachment] = useState(null);
   const { ComposeMailError, ComposeMailStatus, mailComposedOrNot } =
     useAppSelector((state) => state.message);
 
   const dispatch = useAppDispatch();
+  const fileInputRef = useRef(null);
   const {
     predictedEmailStatus,
     predictedEmailError,
     predictedEmailIsSpamOrNot,
+    spamMailFeedBack,
   } = useAppSelector((state) => state.message);
+  const SpamConfirmationHandler = () => {
+    setSpamConfirmationOpen(!spamConfirmationOpen);
+  };
+  const handleFileChange = (e: any) => {
+    setAttachment(e.target.files[0]);
+  };
   const handleEmailFormSubmit = async (e: any) => {
     e.preventDefault();
-    // console.log("body..", body);
+    setSpamConfirmationOpen(true);
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    console.log(data["header"]);
     setComposeData(data);
-
     console.log("predictedEmailStatus", predictedEmailStatus);
     console.log("predictedEmailError", predictedEmailError);
     console.log("predictedEmailIsSpamOrNot", predictedEmailIsSpamOrNot);
-
+    console.log(data);
     if (data["body"] !== "") {
       const res = await dispatch(
         predictMail({ body: data["body"] ? data["body"] : data["header"] })
       );
       console.log(res);
+      console.log(predictedEmailIsSpamOrNot);
+      console.log(predictedEmailIsSpamOrNot);
+
+      if (predictedEmailStatus == "success" && spamMailFeedBack == "spam") {
+        console.log(data);
+
+        dispatch(ComposeMail(data));
+      }
     } else {
+      alert("You are sending mail without header and body");
       await dispatch(ComposeMail(data));
     }
   };
-  // console.log(alertOpen);
 
-  // const notify = (str: string | boolean) => toast.error(str);
-  const sendAnywayHandler = async () => {
-    await dispatch(ComposeMail(composeData));
-    console.log(ComposeMailStatus);
-    console.log(ComposeMailError);
-  };
   const alertHandler = (confirmationAlertResponse = "") => {
+    console.log("confirmationAlertResponse", confirmationAlertResponse);
+
     setAlertOpen(false);
     // setTimeout(() => {
     if (confirmationAlertResponse) {
@@ -88,6 +110,9 @@ const ComposeDialog = ({ open, handleClose }: any) => {
     //   console.log("called....");
     // }, 4000);
   };
+  const feedbackHandler = () => {
+    console.log("hello");
+  };
   return (
     <>
       <Modal
@@ -98,7 +123,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
       >
         <Box sx={style}>
           <CloseIcon
-            sx={{ alignItems: "right" }}
+            sx={{ alignItems: "right", marginLeft: "100%", marginTop: "0" }}
             onClick={() => {
               dispatch(setPredictedStateToInitial());
               handleClose();
@@ -143,38 +168,49 @@ const ComposeDialog = ({ open, handleClose }: any) => {
                 cols={38}
                 onChange={(e) => setBody({ [e.target.name]: e.target.value })}
               />
-            </div>
-            <div className="flex justify-end">
               <Button type="submit" variant="contained" color="primary">
                 Send
               </Button>
-              {userWantToReportMail && (
-                <Button type="button">Teach System it's not a spam</Button>
-              )}
-              {/* <button onClick={notify}>Notify</button> */}
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                onChange={handleFileChange}
+              />
+
+              <IconButton
+                color="primary"
+                aria-label="attach file"
+                component="span"
+                onClick={() => fileInputRef.current.click()}
+              >
+                <Tooltip title="Attachment File">
+                  <AttachFileIcon />
+                </Tooltip>
+              </IconButton>
             </div>
-            {/* <div>
-                  {predictedEmailStatus == "success" &&
-                    toast.warning(predictedEmailIsSpamOrNot)}
-                  {predictedEmailStatus == "successwithError" &&
-                    toast.error(predictedEmailError)}
-                </div> */}
+            <div className="flex justify-end">
+              {userWantToReportMail && (
+                <Button type="button" onClick={() => feedbackHandler()}>
+                  Teach System it's not a spam
+                </Button>
+              )}
+            </div>
           </form>
           <Box>
             {predictedEmailStatus == "success" && predictedEmailIsSpamOrNot && (
-              // <AlertButton
+              // <ConfirmationDialogBox
               //   open={alertOpen}
               //   setOpen={() => alertHandler()}
-              //   errorMessage={`System has detected this mail as not a Spam `}
-              // ></AlertButton>
-              // <p>spam mail</p>
-              <ConfirmationDialogBox
-                open={alertOpen}
-                setOpen={() => alertHandler()}
-                message={
-                  "System has detected this mail as Spam Mail \n Are you agree with system?? "
-                }
-              ></ConfirmationDialogBox>
+              //   message={
+              //     "System has detected this mail as Spam Mail \n  ? "
+              //   }
+              // ></ConfirmationDialogBox>
+              <SpamMailConfirmationDialog
+                open={spamConfirmationOpen}
+                setOpen={() => SpamConfirmationHandler()}
+                emailData={composeData}
+              ></SpamMailConfirmationDialog>
             )}
             {predictedEmailStatus == "successwithError" && (
               <AlertButton
@@ -183,6 +219,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
                 errorMessage={` ${predictedEmailError}`}
               ></AlertButton>
             )}
+            {mailComposedOrNot && toast.success("Mail sent successfully")}
           </Box>
           <ToastContainer />
         </Box>

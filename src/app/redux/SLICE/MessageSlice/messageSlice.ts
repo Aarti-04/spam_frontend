@@ -50,6 +50,7 @@ const messageSlice = createSlice({
     reportMail(state, action) {
       if (action.payload) state.spamMailFeedBack = "spam";
       else state.spamMailFeedBack = "ham";
+      console.log(state.spamMailFeedBack);
     },
     setPredictedStateToInitial(state) {
       state.predictedEmailStatus = "";
@@ -94,8 +95,11 @@ const messageSlice = createSlice({
       })
       .addCase(fetchMessages.fulfilled, (state, action) => {
         console.log("fulfilled state", action.payload);
-        if (action.payload.status == 401) {
-          state.messageError = "Not Authenticated please login";
+        if (action.payload.status == 401 || action.payload.status == 400) {
+          state.messageError =
+            action.payload.status == 400
+              ? "Something went wrong"
+              : "Not Authenticated please login";
           state.messageStatus = "failed";
           state.messages = [];
         } else {

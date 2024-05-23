@@ -156,15 +156,6 @@ const Signin = () => {
   //     console.error("Error refreshing access token:", error);
   //   }
   // };
-
-  useEffect(() => {
-    // console.log(user_google_cred);
-    // Check for existing token on component mount
-    // if (localStorage.getItem("my_token")) {
-    //   console.log("Token found:", localStorage.getItem("my_token"));
-    // }
-  }, []);
-
   return (
     <>
       {userStatus == "loading" && (
@@ -182,14 +173,6 @@ const Signin = () => {
           style={{ minHeight: "100vh" }}
         >
           <Grid item xs={12}>
-            {/* <Typography variant="h4" align="center" gutterBottom>
-              <Image
-                src="/scam1_icon.webp"
-                alt="icon"
-                width={100}
-                height={100}
-              ></Image>
-            </Typography> */}
             <Typography variant="h4" align="center" gutterBottom>
               Login To Spam detector
             </Typography>
