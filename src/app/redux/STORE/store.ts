@@ -1,5 +1,5 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
 import {
   persistStore,
   persistReducer,
@@ -9,14 +9,14 @@ import {
   PERSIST,
   REGISTER,
   PURGE,
-} from "redux-persist";
+} from 'redux-persist';
 // import storage from "redux-persist/lib/storage";
-import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-import { WebStorage } from "redux-persist/lib/types"; // defaults to localStorage
-import userReducer from "../SLICE/UserSlice/userSlice";
-import messageReducer from "../SLICE/MessageSlice/messageSlice"; // Import the message slice
-import socketReducer from "../SLICE/SocketSlice/socketSlice";
-import thunk from "redux-thunk";
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
+import { WebStorage } from 'redux-persist/lib/types'; // defaults to localStorage
+import userReducer from '../SLICE/UserSlice/userSlice';
+import messageReducer from '../SLICE/MessageSlice/messageSlice'; // Import the message slice
+import socketReducer from '../SLICE/SocketSlice/socketSlice';
+import thunk from 'redux-thunk';
 // const createNoopStorage = () => {
 //   return {
 //     getItem(_key) {
@@ -31,7 +31,7 @@ import thunk from "redux-thunk";
 //   };
 // };
 export function createPersistStorage(): WebStorage {
-  const isServer = typeof window === "undefined";
+  const isServer = typeof window === 'undefined';
 
   // Returns noop (dummy) storage.
   if (isServer) {
@@ -48,32 +48,33 @@ export function createPersistStorage(): WebStorage {
     };
   }
 
-  return createWebStorage("local");
+  return createWebStorage('local');
 }
 const storage = createPersistStorage();
 // typeof window !== "undefined"
 //   ? createWebStorage("local")
 //   : createNoopStorage();
 const persistConfigUser = {
-  key: "user",
+  key: 'user',
   storage,
   // blacklist: ["userStatus", "userError", "user_google_cred"],
 };
 
 const persistConfigMessage = {
-  key: "message",
+  key: 'message',
   storage,
   blacklist: [
-    "mailComposedOrNot",
-    "ComposeMailStatus",
-    "ComposeMailError",
-    "emailBodyValidation",
+    'mailComposedOrNot',
+    'ComposeMailStatus',
+    'ComposeMailError',
+    'emailBodyValidation',
+    '',
   ],
-  whitelist: ["messages"],
+  whitelist: ['messages', 'predictedEmailIsSpamOrNot'],
 };
 
 const EmailSocket = {
-  key: "emailSocket",
+  key: 'emailSocket',
 };
 // console.log();
 

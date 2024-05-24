@@ -1,21 +1,21 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ArchivedMail } from "../../../../../lib/all-api/all_api";
-import axios from "axios";
-import { useAppSelector } from "../../STORE/store";
-import { json } from "stream/consumers";
-import { headers } from "next/headers";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { ArchivedMail } from '../../../../../lib/all-api/all_api';
+import axios from 'axios';
+import { useAppSelector } from '../../STORE/store';
+import { json } from 'stream/consumers';
+import { headers } from 'next/headers';
 export const get_user_credentials_in_axios_header = () => {
-  let user_cred: any = localStorage.getItem("persist:user");
-  user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
-  console.log(user_cred["jwt_access_token"]);
+  let user_cred: any = localStorage.getItem('persist:user');
+  user_cred = JSON.parse(JSON.parse(user_cred || '')['user_token']);
+  console.log(user_cred['jwt_access_token']);
   const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${user_cred["jwt_access_token"]} `,
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${user_cred['jwt_access_token']} `,
   };
   return headers;
 };
 export const fetchMessages: any = createAsyncThunk(
-  "messages/fetchMessages",
+  'messages/fetchMessages',
   async (args: any, thunkAPI) => {
     // console.log("slice called");
 
@@ -31,7 +31,7 @@ export const fetchMessages: any = createAsyncThunk(
       let { queryLabel, page }: any = args;
       // const { jwt_access_token } = user_token;
 
-      queryLabel = queryLabel.replace(/%20/g, " ");
+      queryLabel = queryLabel.replace(/%20/g, ' ');
       // console.log(user_token, creds);
       const headers = get_user_credentials_in_axios_header();
       // const headers = {
@@ -40,7 +40,7 @@ export const fetchMessages: any = createAsyncThunk(
       // };
       console.log(headers);
 
-      const url = "http://127.0.0.1:8000/api/mailreadfromdb/";
+      const url = 'http://127.0.0.1:8000/api/mailreadfromdb/';
       const response = await axios.get(url, {
         params: {
           query_type: queryLabel,
@@ -63,7 +63,7 @@ export const fetchMessages: any = createAsyncThunk(
 );
 
 export const mailArchived = createAsyncThunk(
-  "messages/mailarchive",
+  'messages/mailarchive',
   async (message_id: string) => {
     // const res = await ArchivedMail(message_id);
     // console.log(res);
@@ -75,7 +75,7 @@ export const mailArchived = createAsyncThunk(
       console.log(res.data);
       console.log(res.status);
 
-      console.log("archived....");
+      console.log('archived....');
 
       return res.status;
     } catch (error: any) {
@@ -87,7 +87,7 @@ export const mailArchived = createAsyncThunk(
   }
 );
 export const mailDelete = createAsyncThunk(
-  "messages/mailDelete",
+  'messages/mailDelete',
   async (message_id: string) => {
     // let user_cred: any = localStorage.getItem("persist:user");
     // user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
@@ -97,7 +97,7 @@ export const mailDelete = createAsyncThunk(
     //   Authorization: `Bearer ${user_cred["jwt_access_token"]} `,
     // };
     const headers = get_user_credentials_in_axios_header();
-    const url = "http://127.0.0.1:8000/api/maildelete/";
+    const url = 'http://127.0.0.1:8000/api/maildelete/';
     const response = await axios.delete(url, {
       params: {
         message_id: message_id,
@@ -110,18 +110,18 @@ export const mailDelete = createAsyncThunk(
   }
 );
 export const ComposeMail: any = createAsyncThunk(
-  "messages/composeMail",
+  'messages/composeMail',
   async (args: any, thunkAPI) => {
-    console.log("slice called");
+    console.log('slice called');
     // let user_cred: any = localStorage.getItem("persist:user");
     // user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
     // console.log(user_cred["jwt_access_token"]);
     try {
       console.log(args);
       const mailData = JSON.stringify(args);
-      console.log("mailData", mailData);
+      console.log('mailData', mailData);
       const headers = get_user_credentials_in_axios_header();
-      const url = "http://127.0.0.1:8000/api/composemail/";
+      const url = 'http://127.0.0.1:8000/api/composemail/';
       const response = await axios.post(url, mailData, {
         headers,
       });
@@ -132,7 +132,7 @@ export const ComposeMail: any = createAsyncThunk(
       // console.log(e.message);
       console.log(e.response);
       console.log(e.response);
-      return e.response;
+      return e.response.status;
 
       // console.log(e.message.code);
       // console.log(e.message.response);
@@ -142,7 +142,7 @@ export const ComposeMail: any = createAsyncThunk(
   }
 );
 export const predictMail: any = createAsyncThunk(
-  "messages/predictMail",
+  'messages/predictMail',
   async (args: any, thunkAPI) => {
     // console.log("slice called");
     // let user_cred: any = localStorage.getItem("persist:user");
@@ -151,19 +151,19 @@ export const predictMail: any = createAsyncThunk(
     try {
       // console.log(args);
       const mailBody = JSON.stringify(args);
-      console.log("mailData", mailBody);
+      console.log('mailData', mailBody);
 
       // const headers = {
       //   "Content-Type": "application/json",
       //   Authorization: `Bearer ${user_cred["jwt_access_token"]} `,
       // };
       const headers = get_user_credentials_in_axios_header();
-      const url = "http://127.0.0.1:8000/model/predict/";
+      const url = 'http://127.0.0.1:8000/model/predict/';
       const response = await axios.post(url, mailBody, {
         headers,
       });
-      console.log("main response", response);
-      console.log("response", response.data);
+      console.log('main response', response);
+      console.log('response', response.data);
       console.log(response.status);
       return response;
       // const res =
@@ -181,17 +181,17 @@ export const predictMail: any = createAsyncThunk(
   }
 );
 export const reportSpam: any = createAsyncThunk(
-  "messages/reportMail",
+  'messages/reportMail',
   async (args: any, thunkAPI) => {
     const { message_id, spamMailFeedBack, message_body } = args;
     console.log(message_id);
-    console.log("spam_label", spamMailFeedBack);
-    console.log("message_body", message_body);
+    console.log('spam_label', spamMailFeedBack);
+    console.log('message_body', message_body);
 
     // return 0;
 
     const headers = get_user_credentials_in_axios_header();
-    const url = "http://127.0.0.1:8000/model/feedback/";
+    const url = 'http://127.0.0.1:8000/model/feedback/';
     const spamDataToPost = {
       message_id: message_id,
       spam_label: spamMailFeedBack,
@@ -200,8 +200,9 @@ export const reportSpam: any = createAsyncThunk(
     try {
       const response = await axios.post(url, spamDataToPost, { headers });
       console.log(response);
+      return response;
     } catch (error: any) {
-      console.log(error.response.status);
+      return error.response.status;
     }
   }
 );

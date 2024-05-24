@@ -139,7 +139,7 @@
 // };
 
 // export default Middle;
-"use client";
+'use client';
 import {
   Box,
   Paper,
@@ -147,21 +147,21 @@ import {
   ListItem,
   Typography,
   Checkbox,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { fetchMessages } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../Loader";
-import AlertButton from "../Alert";
-import Pagination from "@mui/material/Pagination";
-import MiddlePagination from "./MiddlePagination";
-import { useRouter } from "next/navigation";
-import MailBody1 from "../EmailBody/MailBody";
-import Link from "next/link";
-import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
-import { type } from "os";
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { fetchMessages } from '@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../Loader';
+import AlertButton from '../Alert';
+import Pagination from '@mui/material/Pagination';
+import MiddlePagination from './MiddlePagination';
+import { useRouter } from 'next/navigation';
+import MailBody1 from '../EmailBody/MailBody';
+import Link from 'next/link';
+import { useAppDispatch, useAppSelector } from '@/app/redux/STORE/store';
+import { type } from 'os';
 interface mailSectionLabelType {
   mailSectionLabel: string;
 }
@@ -204,7 +204,7 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
   ) => {
     // Fetch data for the selected page
     // You might need to modify your Redux action to pass the page number as well
-    console.log("page value", value);
+    console.log('page value', value);
 
     dispatch(
       fetchMessages({
@@ -217,18 +217,18 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
     const dt = new Date(date);
     // Format the date as "day month"
     const options = {
-      day: "2-digit",
-      month: "long",
+      day: '2-digit',
+      month: 'long',
     } as Intl.DateTimeFormatOptions;
-    const formattedDate = dt.toLocaleDateString("en-US", options);
+    const formattedDate = dt.toLocaleDateString('en-US', options);
     return formattedDate;
   };
   return (
     <>
       {/* Loader */}
-      {messageStatus === "loading" && <Loader open={loaderOpen}></Loader>}
+      {messageStatus === 'loading' && <Loader open={loaderOpen}></Loader>}
       {/* Error alert */}
-      {messageStatus === "failed" && (
+      {messageStatus === 'failed' && (
         <AlertButton
           open={alertOpen}
           setOpen={() => setAlterOpen(!alertOpen)}
@@ -246,9 +246,9 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
       {/* Refresh icon */}
       <RefreshIcon
         sx={{
-          marginTop: "1vw",
-          marginLeft: "1vw",
-          marginBottom: "1vw",
+          marginTop: '1vw',
+          marginLeft: '1vw',
+          marginBottom: '1vw',
         }}
         onClick={() => getMessageData()}
       ></RefreshIcon>
@@ -273,7 +273,7 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
                   <Checkbox
                     checked={checked}
                     onChange={(event) => setChecked(event.target.checked)}
-                    inputProps={{ "aria-label": "controlled" }}
+                    inputProps={{ 'aria-label': 'controlled' }}
                     className="mb-2 md:mb-0 md:mr-2"
                   />
                   <Link
@@ -287,14 +287,15 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
                           color="textPrimary"
                           className="whitespace-nowrap"
                         >
-                          To:{message?.sender}
+                          {/* {mailSectionLabel == 'sent' ? `To:${message?.sender}`:mess} */}
+                          {message?.sender}
                         </Typography>
                         <Typography
                           variant="body1"
                           color="textPrimary"
                           className="whitespace-nowrap"
                         >
-                          {message.header ? message.header : "(No Subject)"}
+                          {message.header ? message.header : '(No Subject)'}
                         </Typography>
                         <div className="w-full md:w-auto overflow-hidden text-ellipsis whitespace-nowrap">
                           <Typography variant="body1" color="textSecondary">
@@ -316,7 +317,8 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
         <Pagination
           count={pages} // Set the total number of pages
           onChange={handlePageChange} // Handle page change event
-          sx={{ marginTop: "1rem" }} // Ensure pagination stays below messages
+          sx={{ marginTop: '1rem' }}
+          page={Math.ceil(messageCount / 10)} // Ensure pagination stays below messages
         />
       </Box>
 

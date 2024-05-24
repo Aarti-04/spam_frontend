@@ -1,24 +1,27 @@
-import React, { useState } from "react";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
-import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
-import { ComposeMail } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
-import { ToastContainer, toast } from "react-toastify";
-import Loader from "../Loader";
-import { useRouter } from "next/navigation";
+import React, { useState } from 'react';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
+import { useAppDispatch, useAppSelector } from '@/app/redux/STORE/store';
+import {
+  ComposeMail,
+  reportSpam,
+} from '@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk';
+import { ToastContainer, toast } from 'react-toastify';
+import Loader from '../Loader';
+import { useRouter } from 'next/navigation';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
+  '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
   },
-  "& .MuiDialogActions-root": {
+  '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
   },
 }));
@@ -30,21 +33,28 @@ export default function SpamMailConfirmationDialog({
 }: any) {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { ComposeMailStatus, ComposeMailError } = useAppSelector(
-    (state) => state.message
-  );
-  const teachSystemHandler = () => {
-    alert("Teach system");
+  const { ComposeMailStatus, ComposeMailError, spamReportStatus } =
+    useAppSelector((state) => state.message);
+  const teachSystemHandler = async () => {
+    await dispatch(
+      reportSpam({ spamMailFeedBack: 'ham', message_body: emailData.body })
+    );
+    if (spamReportStatus == 'success') {
+      await dispatch(ComposeMail(emailData));
+    }
+    // alert('Teach system');
   };
   const MailSendHandler = async () => {
-    emailData["detected_as_spam"] = "true";
+    emailData['detected_as_spam'] = 'true';
     await dispatch(ComposeMail(emailData));
   };
   return (
     <>
-      {ComposeMailStatus == "loading" && <Loader></Loader>}
-      {ComposeMailStatus == "success" &&
-        toast.success("Email send Successfully")}
+      {ComposeMailStatus == 'loading' && <Loader></Loader>}
+      {ComposeMailStatus == 'success' &&
+        toast.success('Email send Successfully')}
+      {ComposeMailError && toast.error(ComposeMailError)}
+      {spamReportStatus == 'success' && toast.success('Thank you for feedback')}
       <ToastContainer />
       <BootstrapDialog
         onClose={setOpen}
@@ -58,7 +68,7 @@ export default function SpamMailConfirmationDialog({
           aria-label="close"
           onClick={setOpen}
           sx={{
-            position: "absolute",
+            position: 'absolute',
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
@@ -68,11 +78,11 @@ export default function SpamMailConfirmationDialog({
         </IconButton>
         <DialogContent dividers>
           <Typography gutterBottom>
-            System has detected this mail as{" "}
+            System has detected this mail as{' '}
             <span className="text-red-700 font-bold">Spam Mail.</span>
           </Typography>
           <Typography gutterBottom>
-            If you click on <span className="text-blue-500">Send Anyway</span>{" "}
+            If you click on <span className="text-blue-500">Send Anyway</span>{' '}
             This mail will be send as spam mail or you want to modify your
             content then click on cancel
           </Typography>

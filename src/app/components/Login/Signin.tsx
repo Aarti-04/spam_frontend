@@ -43,7 +43,7 @@
 //       console.error("Google login failed");
 //       // Handle login errors here
 //     },
-//     flow: "auth-code", // Use 'auth-code' for the authorization code flow
+//     flow: "auth-code", // Use 'auth-code' htmlFor the authorization code flow
 //   });
 //   const getdata = async () => {
 //     if (localStorage.getItem("my_token")) {
@@ -90,24 +90,24 @@
 // Signin.propTypes = {};
 
 // export default Signin;
-"use client";
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
-import { Button, Container, Grid, Typography } from "@mui/material";
-import axios from "axios";
-import { useGoogleLogin } from "@react-oauth/google";
-import LoginForm from "./LoginForm";
-import { useDispatch, useSelector } from "react-redux";
+'use client';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Button, Container, Grid, Typography } from '@mui/material';
+import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
+import LoginForm from './LoginForm';
+import { useDispatch, useSelector } from 'react-redux';
 // import {  } from "../../redux/SLICE/UserSlice/userSlice";
-import { useRouter } from "next/navigation";
-import { TokenExchangeAndRegisterUser } from "@/app/redux/THUNK/USER-THUNK/userslicethunk";
-import { useAppSelector } from "@/app/redux/STORE/store";
-import Loader from "../Loader";
-import Image from "next/image";
+import { useRouter } from 'next/navigation';
+import { TokenExchangeAndRegisterUser } from '@/app/redux/THUNK/USER-THUNK/userslicethunk';
+import { useAppSelector } from '@/app/redux/STORE/store';
+import Loader from '../Loader';
+import Image from 'next/image';
 // import { useCookies } from 'next-client-cookies';
 
 const Signin = () => {
-  console.log("Signin called");
+  console.log('Signin called');
 
   const dispatch: any = useDispatch();
   const { user_google_cred, user_token, userStatus, userError } =
@@ -119,12 +119,12 @@ const Signin = () => {
       console.log(tokenResponse);
 
       await dispatch(TokenExchangeAndRegisterUser(tokenResponse));
-      router.push("/mail/inbox");
+      router.push('/mail/inbox');
     },
     onError: () => {
-      console.error("Google login failed");
+      console.error('Google login failed');
     },
-    flow: "auth-code",
+    flow: 'auth-code',
     // scope: "https://www.googleapis.com/auth/gmail.send",
   });
   console.log(user_google_cred);
@@ -149,7 +149,7 @@ const Signin = () => {
   //     // Update the stored token data with the new access token
   //     localStorage.setItem("my_token", JSON.stringify(data));
 
-  //     // Use the new access token for further API requests
+  //     // Use the new access token htmlFor further API requests
   //     const accessToken = data.access_token;
   //     // Make API requests using the new access token...
   //   } catch (error) {
@@ -158,12 +158,12 @@ const Signin = () => {
   // };
   return (
     <>
-      {userStatus == "loading" && (
+      {userStatus == 'loading' && (
         <>
           <Loader open={true}></Loader>
         </>
       )}
-      <Container maxWidth="sm">
+      {/* <Container maxWidth="sm">
         <Grid
           container
           spacing={2}
@@ -191,7 +191,65 @@ const Signin = () => {
             </Button>
           </Grid>
         </Grid>
-      </Container>
+      </Container> */}
+      <div className="h-screen flex items-center justify-center bg-gray-100">
+        <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-3xl font-bold mb-4">Login</h2>
+          <form className="space-y-4">
+            <div className="flex flex-wrap -mx-3">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  htmlFor="email"
+                >
+                  Email
+                </label>
+                <input
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                  id="email"
+                  type="email"
+                  placeholder="example@example.com"
+                />
+              </div>
+              <div className="w-full md:w-1/2 px-3">
+                <label
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <input
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
+                  id="password"
+                  type="password"
+                  placeholder="●●●●●●●●●●"
+                />
+              </div>
+            </div>
+            <button
+              className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded"
+              type="submit"
+            >
+              Login
+            </button>
+            <div className="flex items-center justify-center mt-4">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                type="button"
+                onClick={() => googleLogin()}
+              >
+                <i className="fab fa-google mr-2"></i> Login with Google
+              </button>
+            </div>
+          </form>
+          <p className="text-sm text-gray-600 mt-4">
+            Don't have an account?{' '}
+            <a className="text-orange-500 hover:text-orange-700" href="#">
+              Sign up
+            </a>
+          </p>
+        </div>
+      </div>
     </>
   );
 };
