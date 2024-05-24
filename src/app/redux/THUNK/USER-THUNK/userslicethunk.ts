@@ -98,12 +98,12 @@ export const GetAccessTokenUsingRefreshToken = createAsyncThunk(
   }
 );
 export const logoutUser = createAsyncThunk("user/logout", async () => {
-  const headers = get_user_credentials_in_axios_header();
-  console.log(headers);
+  // const headers = get_user_credentials_in_axios_header();
+  // console.log(headers);
 
   try {
     const response = await axios.delete("http://localhost:8000/api/logout/", {
-      headers,
+      // headers,
     });
     console.log(response);
     if (response.status == 200) await setCookies("isAuthenticated", "false");

@@ -12,6 +12,7 @@ import { Box } from "@mui/system";
 import { Provider } from "react-redux";
 import { Paper } from "@mui/material";
 import UnAuthenticateLayout from "./UnAuthenticatLayout";
+import Loader from "../components/Loader";
 
 // Define the layout styles
 const containerStyle = {
@@ -20,21 +21,30 @@ const containerStyle = {
 };
 const DefaultLayout = ({ children }: any) => {
   const [open, setOpen] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Handler to toggle the drawer open/close state
   const toggleDrawer = () => {
     console.log("called from search bar");
     setOpen(!open);
   };
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const auth = async () => {
     const authentication = await getAuthCookies("isAuthenticated");
     setIsAuthenticated(authentication);
+    setLoading(false);
   };
   useEffect(() => {
     console.log("isAuthenticated", isAuthenticated);
     auth();
   });
+  if (loading) {
+    return (
+      <div>
+        <Loader></Loader>
+      </div>
+    );
+  }
   return (
     <>
       {isAuthenticated == false ? (

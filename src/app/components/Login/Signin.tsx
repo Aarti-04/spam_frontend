@@ -90,24 +90,24 @@
 // Signin.propTypes = {};
 
 // export default Signin;
-'use client';
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { Button, Container, Grid, Typography } from '@mui/material';
-import axios from 'axios';
-import { useGoogleLogin } from '@react-oauth/google';
-import LoginForm from './LoginForm';
-import { useDispatch, useSelector } from 'react-redux';
+"use client";
+import React, { useEffect } from "react";
+import PropTypes from "prop-types";
+import { Button, Container, Grid, Typography } from "@mui/material";
+import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
+import LoginForm from "./LoginForm";
+import { useDispatch, useSelector } from "react-redux";
 // import {  } from "../../redux/SLICE/UserSlice/userSlice";
-import { useRouter } from 'next/navigation';
-import { TokenExchangeAndRegisterUser } from '@/app/redux/THUNK/USER-THUNK/userslicethunk';
-import { useAppSelector } from '@/app/redux/STORE/store';
-import Loader from '../Loader';
-import Image from 'next/image';
+import { useRouter } from "next/navigation";
+import { TokenExchangeAndRegisterUser } from "@/app/redux/THUNK/USER-THUNK/userslicethunk";
+import { useAppSelector } from "@/app/redux/STORE/store";
+import Loader from "../Loader";
+import Image from "next/image";
 // import { useCookies } from 'next-client-cookies';
 
 const Signin = () => {
-  console.log('Signin called');
+  console.log("Signin called");
 
   const dispatch: any = useDispatch();
   const { user_google_cred, user_token, userStatus, userError } =
@@ -119,12 +119,12 @@ const Signin = () => {
       console.log(tokenResponse);
 
       await dispatch(TokenExchangeAndRegisterUser(tokenResponse));
-      router.push('/mail/inbox');
+      router.push("/mail/inbox");
     },
     onError: () => {
-      console.error('Google login failed');
+      console.error("Google login failed");
     },
-    flow: 'auth-code',
+    flow: "auth-code",
     // scope: "https://www.googleapis.com/auth/gmail.send",
   });
   console.log(user_google_cred);
@@ -158,7 +158,7 @@ const Signin = () => {
   // };
   return (
     <>
-      {userStatus == 'loading' && (
+      {userStatus == "loading" && (
         <>
           <Loader open={true}></Loader>
         </>
@@ -242,12 +242,6 @@ const Signin = () => {
               </button>
             </div>
           </form>
-          <p className="text-sm text-gray-600 mt-4">
-            Don't have an account?{' '}
-            <a className="text-orange-500 hover:text-orange-700" href="#">
-              Sign up
-            </a>
-          </p>
         </div>
       </div>
     </>

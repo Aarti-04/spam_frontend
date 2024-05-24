@@ -5,7 +5,8 @@ import { reportMail } from "@/app/redux/SLICE/MessageSlice/messageSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
 import { reportSpam } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const page = () => {
   const reportSpamPath = usePathname();
@@ -13,27 +14,41 @@ const page = () => {
 
   const message_id = reportSpamPath.split("/")[3];
   console.log(message_id);
-  const { spamMailFeedBack } = useAppSelector((state) => state.message);
+  const { spamMailFeedBack, spamReportStatus } = useAppSelector(
+    (state) => state.message
+  );
   const [openSpamConfirmation, setOpenSpamConfirmation] =
     useState<boolean>(true);
+  // const [spamMailFeedBack,setSpamFeedBack] = useState<string>("");
   const dispatch = useAppDispatch();
   const router = useRouter();
+  console.log("spamReportStatus", spamReportStatus);
+
   const SpamConfirmationHandler = async (spamConfirmation: boolean) => {
     setOpenSpamConfirmation(!openSpamConfirmation);
     console.log(spamConfirmation);
 
     if (spamConfirmation) {
       dispatch(reportMail(spamConfirmation));
-      await dispatch(reportSpam({ message_id, spamMailFeedBack }));
     }
     router.back();
   };
+  useEffect(() => {
+    (async () => {
+      if (spamMailFeedBack !== "") {
+        await dispatch(reportSpam({ message_id, spamMailFeedBack }));
+      }
+    })();
+  }, [spamMailFeedBack]);
   return (
-    <ConfirmationDialogBox
-      open={openSpamConfirmation}
-      setOpen={SpamConfirmationHandler}
-      message="Really want to report a mail as Spam Mail"
-    ></ConfirmationDialogBox>
+    <>
+      <ConfirmationDialogBox
+        open={openSpamConfirmation}
+        setOpen={SpamConfirmationHandler}
+        message="Really want to report a mail as Spam Mail"
+      ></ConfirmationDialogBox>
+      <ToastContainer />
+    </>
   );
 };
 

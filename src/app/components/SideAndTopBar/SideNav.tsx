@@ -19,11 +19,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-// import { RiSpam2Fill } from "react-icons/ri";
-// import Inbox from "./Inbox";
-import Spam from "../Spam";
-import Image from "next/image";
-import AppBarRight from "../AppBar";
 import ReportGmailerrorredIcon from "@mui/icons-material/ReportGmailerrorred";
 import LoginIcon from "@mui/icons-material/Login";
 import { useRouter } from "next/navigation";
@@ -109,15 +104,6 @@ export default function SideNav({ open }: any) {
   const theme = useTheme();
   const router = useRouter();
   // const [open, setOpen] = useState(false);
-  const [menuData, setMenuData] = useState("inbox");
-
-  // const handleDrawerOpen = () => {
-  //   setOpen(true);
-  // };
-
-  // const handleDrawerClose = () => {
-  //   setOpen(false);
-  // };
   return (
     <>
       <Box sx={{ marginTop: "1%" }}>
@@ -232,10 +218,6 @@ export default function SideNav({ open }: any) {
             </Link>
           </ListItem>
         </List>
-        {/* <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-          {/* {menuData == "Inbox" && <Inbox></Inbox>} */}
-        {/* {menuData == 'Spam' && <Spam></Spam>} */}
-        {/* </Box> */}
       </Box>
     </>
   );
