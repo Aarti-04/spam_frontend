@@ -4,11 +4,13 @@ import { getAuthCookies } from "../lib/CookiStore";
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
-  console.log("hello");
+  console.log("middlware called");
+
+  // console.log("hello");
   const isAuthenticated = request.cookies.get("isAuthenticated")?.value;
-  console.log("access token from middleware", isAuthenticated);
+  // console.log("access token from middleware", isAuthenticated);
   if (isAuthenticated) {
-    console.log("true true");
+    // console.log("true true");
 
     return NextResponse.redirect(new URL("/mail/inbox", request.url));
   }
@@ -19,5 +21,5 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/"],
+  matcher: ["/", "/mail"],
 };

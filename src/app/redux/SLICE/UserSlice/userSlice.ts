@@ -71,17 +71,17 @@ const userSlice = createSlice({
     builder
       .addCase(UserFormLogin.fulfilled, (state: any, action: any) => {
         // state.isAuthenticated = false;
-        console.log("UserFormLogin", action.payload["access_token"]);
+        // console.log("UserFormLogin", action.payload["access_token"]);
         state.user_token = {
           jwt_access_token: action.payload["access_token"],
           jwt_refresh_token: action.payload["refresh_token"],
         };
         setCookies("isAuthenticated", "true");
-        console.log("set cookie");
+        // console.log("set cookie");
         setCookies("isAuthenticated", "false");
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
-        console.log(action.payload);
+        // console.log(action.payload);
 
         if (action.payload.status !== 200) {
           state.userError = action.payload.data?.detail;
@@ -99,16 +99,16 @@ const userSlice = createSlice({
         (state: any, action: any) => {
           state.isAuthenticated = true;
           state.user_google_cred = action.payload[0];
-          console.log(
-            "TokenExchangeAndRegisterUser",
-            action.payload[1]["access_token"]["access_token"]
-          );
+          // console.log(
+          //   "TokenExchangeAndRegisterUser",
+          //   action.payload[1]["access_token"]["access_token"]
+          // );
           state.user_token = {
             jwt_access_token: action.payload[1]["access_token"],
             jwt_refresh_token: action.payload[1]["refresh_token"],
           };
           setCookies("isAuthenticated", "true");
-          console.log("set cookie");
+          // console.log("set cookie");
           state.userStatus = "success";
         }
       )

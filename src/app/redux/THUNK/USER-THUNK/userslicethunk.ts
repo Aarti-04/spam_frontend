@@ -28,25 +28,22 @@ export const TokenExchangeAndRegisterUser = createAsyncThunk(
   async (tokenResponse: any) => {
     // const payload={}
     // try {
-    const { data } = await axios.post<any>(
-      "https://oauth2.googleapis.com/token",
-      {
-        code: tokenResponse.code,
-        client_id:
-          "189496678458-fpihrhl6pae85mhtq0tsra89cpguccja.apps.googleusercontent.com",
-        client_secret: "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",
-        redirect_uri: "http://localhost:3000",
-        grant_type: "authorization_code",
-      }
-    );
-    console.log(data);
 
+    const url: string = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL || "";
+    console.log(url);
+    const { data } = await axios.post<any>(url, {
+      code: tokenResponse.code,
+      client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+      client_secret: process.env.NEXT_PUBLIC_GOOGLE_SECRET_KEY,
+      redirect_uri: process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI,
+      grant_type: "authorization_code",
+    });
     const response = await axios.post(
-      "http://localhost:8000/api/googleregister/",
+      `${process.env.NEXT_PUBLIC_BASE_URL}/googleregister/`,
       data
     );
-    console.log(response);
-    console.log(response.data);
+    // console.log(response);
+    // console.log(response.data);
 
     return [data, response.data];
     // } catch (e: any) {
@@ -60,7 +57,7 @@ export const UserFormLogin = createAsyncThunk(
   async (userLoginData: any, thunkAPI) => {
     const { email, password } = userLoginData;
     const response = await axios.post(
-      "http://127.0.0.1:8000/api/googlelogin/",
+      `${process.env.NEXT_PUBLIC_BASE_URL}/googlelogin/`,
       {
         email: email,
         password: password,
@@ -68,7 +65,7 @@ export const UserFormLogin = createAsyncThunk(
     );
 
     const response2 = await userloginapi({ email, password });
-    console.log(response2);
+    // console.log(response2);
     if (response2.status == 200 || response2.statusText == "OK") {
       return response.data;
     }
@@ -89,7 +86,7 @@ export const GetAccessTokenUsingRefreshToken = createAsyncThunk(
         }
       );
       const accessToken = response.data.access_token;
-      console.log(accessToken);
+      // console.log(accessToken);
       return accessToken;
     } catch (error: any) {
       console.error("Error refreshing access token:", error.response.data);
@@ -102,15 +99,18 @@ export const logoutUser = createAsyncThunk("user/logout", async () => {
   // console.log(headers);
 
   try {
-    const response = await axios.delete("http://localhost:8000/api/logout/", {
-      // headers,
-    });
-    console.log(response);
+    const response = await axios.delete(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/logout/`,
+      {
+        // headers,
+      }
+    );
+    // console.log(response);
     if (response.status == 200) await setCookies("isAuthenticated", "false");
 
     return response.status;
   } catch (error: any) {
-    console.log(error.response);
+    // console.log(error.response);
 
     return error.response;
   }

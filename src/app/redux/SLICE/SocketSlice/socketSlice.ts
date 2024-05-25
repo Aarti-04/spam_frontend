@@ -18,7 +18,7 @@ const socketSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(MailReadingService.fulfilled, (state, action: any) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.new_mail_count = action.payload;
     });
   },

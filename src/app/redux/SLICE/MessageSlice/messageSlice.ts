@@ -17,7 +17,7 @@ interface initialStateType {
   messageStatus: string;
   messageError: string;
   emailSend: boolean;
-  mailComposedOrNot: boolean;
+
   ComposeMailStatus: string;
   ComposeMailError: string;
   emailBodyValidation: boolean;
@@ -35,7 +35,6 @@ const initialState: initialStateType = {
   messageStatus: "idle",
   messageError: "",
   emailSend: false,
-  mailComposedOrNot: false,
   ComposeMailStatus: "",
   ComposeMailError: "",
   emailBodyValidation: false,
@@ -55,13 +54,15 @@ const messageSlice = createSlice({
     reportMail(state, action) {
       if (action.payload) state.spamMailFeedBack = "spam";
       else state.spamMailFeedBack = "ham";
-      console.log(state.spamMailFeedBack);
+      // console.log(state.spamMailFeedBack);
     },
     setPredictedStateToInitial(state) {
       state.predictedEmailStatus = "";
       state.predictedEmailIsSpamOrNot = "";
       state.predictedEmailError = "";
-      console.log("set all to initial");
+      state.ComposeMailStatus = "idel";
+      state.ComposeMailError = "";
+      // console.log("all set to initial");
     },
 
     // Add any additional reducers if needed
@@ -69,37 +70,36 @@ const messageSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(ComposeMail.pending, (state) => {
-        console.log("loading state");
+        // console.log("loading state");
         state.ComposeMailStatus = "loading";
-        state.mailComposedOrNot = false;
+
         state.ComposeMailError = "";
       })
       .addCase(ComposeMail.fulfilled, (state, action: any) => {
-        console.log(action.payload);
-        console.log(action.payload.status);
+        // console.log(action.payload);
+        // console.log(action.payload.status);
         if (action.payload.status == 200) {
           state.ComposeMailStatus = "success";
-          state.mailComposedOrNot = true;
+
           state.ComposeMailError = "";
         } else {
           state.ComposeMailStatus = "rejected";
-          state.mailComposedOrNot = false;
+
           state.ComposeMailError = action.payload.data.error;
         }
-        console.log("state.ComposeMailStatus", state.ComposeMailStatus);
+        // console.log("state.ComposeMailStatus", state.ComposeMailStatus);
       })
       .addCase(ComposeMail.rejected, (state, action: any) => {
         state.ComposeMailStatus = "rejected";
-        state.mailComposedOrNot = false;
         state.ComposeMailError = action.payload;
       })
       .addCase(fetchMessages.pending, (state) => {
-        console.log("loading state", state);
+        // console.log("loading state", state);
 
         state.messageStatus = "loading";
       })
       .addCase(fetchMessages.fulfilled, (state, action) => {
-        console.log("fulfilled state", action.payload.status);
+        // console.log("fulfilled state", action.payload.status);
         if (action.payload.status == 200) {
           state.messageStatus = "success";
           state.messages = action.payload.data.results;
@@ -115,39 +115,39 @@ const messageSlice = createSlice({
           state.messageStatus = "failed";
           state.messages = [];
         }
-        console.log(state.messages);
-        console.log(state.messageStatus);
+        // console.log(state.messages);
+        // console.log(state.messageStatus);
       })
       .addCase(fetchMessages.rejected, (state, action) => {
-        console.log("fetchMessages failed");
+        // console.log("fetchMessages failed");
         state.messageStatus = "failed";
         state.messageError = action.error.message || action.payload || "";
         state.messages = [];
       })
       .addCase(mailArchived.pending, (state, action: any) => {
-        console.log(action.payload);
+        // console.log(action.payload);
         state.isArchived = false;
       })
       .addCase(mailArchived.fulfilled, (state, action: any) => {
-        console.log(action.payload);
+        // console.log(action.payload);
         if (action.payload == 200) state.isArchived = true;
         else state.isArchived = false;
-        console.log("is archived", state.isArchived);
+        // console.log("is archived", state.isArchived);
       })
       .addCase(mailArchived.rejected, (state, action: any) => {
-        console.log(action.payload);
+        // console.log(action.payload);
         state.isArchived = false;
-        console.log("is archived", state.isArchived);
+        // console.log("is archived", state.isArchived);
       })
       .addCase(predictMail.pending, (state, action: any) => {
-        console.log("pending");
+        // console.log("pending");
 
-        console.log(action.payload);
+        // console.log(action.payload);
         state.predictedEmailStatus = "loading";
       })
       .addCase(predictMail.fulfilled, (state, action: any) => {
-        console.log(action.payload);
-        console.log("fulfilled");
+        // console.log(action.payload);
+        // console.log("fulfilled");
 
         if (action.payload.status == 200) {
           state.predictedEmailIsSpamOrNot = action.payload.data.is_spam;
@@ -158,25 +158,25 @@ const messageSlice = createSlice({
           state.predictedEmailStatus = "rejected";
           state.predictedEmailError = action.payload.data.error;
         }
-        console.log(state.predictedEmailStatus);
-        console.log(state.predictedEmailIsSpamOrNot);
+        // console.log(state.predictedEmailStatus);
+        // console.log(state.predictedEmailIsSpamOrNot);
       })
       .addCase(predictMail.rejected, (state, action: any) => {
-        console.log(action.payload);
-        console.log("rejected");
+        // console.log(action.payload);
+        // console.log("rejected");
 
         state.predictedEmailStatus = "rejected";
       })
       .addCase(reportSpam.fulfilled, (state, action: any) => {
-        console.log(action.payload);
-        console.log("fulfilled");
+        // console.log(action.payload);
+        // console.log("fulfilled");
 
         if (action.payload.status == 200) {
           state.spamReportStatus = "success";
         } else {
           state.spamReportStatus = "Failed";
         }
-        console.log(state.spamReportStatus);
+        // console.log(state.spamReportStatus);
       })
       .addCase(reportSpam.rejected, (state, action: any) => {
         state.spamReportStatus = "rejected";
