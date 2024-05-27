@@ -8,7 +8,7 @@ export function middleware(request: NextRequest) {
 
   // console.log("hello");
   const isAuthenticated = request.cookies.get("isAuthenticated")?.value;
-  // console.log("access token from middleware", isAuthenticated);
+  console.log("access token from middleware", isAuthenticated);
   if (isAuthenticated) {
     // console.log("true true");
 
@@ -21,5 +21,5 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ["/", "/mail"],
+  matcher: ["/"],
 };

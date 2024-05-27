@@ -1,17 +1,17 @@
-'use client';
-import React, { createContext, useEffect, useState } from 'react';
-import SideNav from '../SideAndTopBar/SideNav';
-import { getAuthCookies } from '../../../lib/CookiStore';
-import MyWebSocketComponent from '../Socket/WebsocketComponant';
-import SearchBar from '../SideAndTopBar/SearchBar';
-import GmailComponent from '../GmailComponant';
-import { Box } from '@mui/system';
-import Loader from '../Loader';
-import UnAuthenticateLayout from './UnAuthenticatLayout';
+"use client";
+import React, { createContext, useEffect, useState } from "react";
+import SideNav from "../SideAndTopBar/SideNav";
+import { getAuthCookies } from "../../../lib/CookiStore";
+import MyWebSocketComponent from "../Socket/WebsocketComponant";
+import SearchBar from "../SideAndTopBar/SearchBar";
+import GmailComponent from "../GmailComponant";
+import { Box } from "@mui/system";
+import Loader from "../Loader";
+import UnAuthenticateLayout from "./UnAuthenticatLayout";
 
 //layout styles
 const containerStyle = {
-  transition: 'margin-left 0.5s ease',
+  transition: "margin-left 0.5s ease",
   // marginttop: "20%",
 };
 const DefaultLayout = ({ children }: any) => {
@@ -24,13 +24,14 @@ const DefaultLayout = ({ children }: any) => {
   };
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const auth = async () => {
-    const authentication = await getAuthCookies('isAuthenticated');
+    const authentication = await getAuthCookies("isAuthenticated");
     setIsAuthenticated(authentication);
     setLoading(false);
   };
   useEffect(() => {
     auth();
-  }, []);
+    console.log("isAuthenticatedi", isAuthenticated);
+  }, [isAuthenticated]);
   if (loading) {
     return (
       <div>
@@ -46,7 +47,7 @@ const DefaultLayout = ({ children }: any) => {
         <>
           <SearchBar open={open} toggleDrawer={toggleDrawer}></SearchBar>
           <MyWebSocketComponent></MyWebSocketComponent>
-          <Box display="flex" sx={{ backgroundColor: '#f6f8fc' }}>
+          <Box display="flex" sx={{ backgroundColor: "#f6f8fc" }}>
             {open && <SideNav />}
             <Box flexGrow={1} sx={containerStyle} my={1} ml={open ? 2 : 0}>
               {children}

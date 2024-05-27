@@ -35,11 +35,17 @@ import React, { useEffect } from "react";
 import RouteLayoutProvider from "@/provider/routLayoutProvider";
 import DefaultLayout from "../../components/UserLayoutCompononets/DefaultLayout";
 import { getAuthCookies } from "../../../lib/CookiStore";
+import { theme } from "../theme/theme";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <DefaultLayout>{children}</DefaultLayout>;
+  return (
+     <ThemeProvider theme={theme}>
+      <DefaultLayout>{children}</DefaultLayout>
+    </ThemeProvider>
+  );
 }

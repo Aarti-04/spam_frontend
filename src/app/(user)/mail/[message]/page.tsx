@@ -13,10 +13,14 @@ const Page = () => {
     MailPageSection.split("/")[2] == "All%20Mail"
       ? setPageToCall("All Mail")
       : setPageToCall(MailPageSection.split("/")[2]);
-  }, [MailPageSection]);
+  }, [MailPageSection, pageToCall]);
   // console.log("pageToCall", pageToCall);
 
-  return <> {pageToCall && <Middle mailSectionLabel={pageToCall}></Middle>}</>;
+  return (
+    <>
+      <div>{pageToCall && <Middle mailSectionLabel={pageToCall}></Middle>}</div>
+    </>
+  );
 };
 
 export default Page;

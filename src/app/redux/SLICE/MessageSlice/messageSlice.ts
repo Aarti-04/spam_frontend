@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   ComposeMail,
+  FilterMessages,
   fetchMessages,
   mailArchived,
   predictMail,
@@ -100,6 +101,26 @@ const messageSlice = createSlice({
       })
       .addCase(fetchMessages.fulfilled, (state, action) => {
         // console.log("fulfilled state", action.payload.status);
+        if (action.payload.status == 200) {
+          state.messageStatus = "success";
+          state.messages = action.payload.data.results;
+          state.messageCount = action.payload.data.count;
+          state.messageError = "";
+        } else {
+          if (action.payload.status == 401) {
+            state.messageError = "Authentication failed please login";
+          } else {
+            state.messageError =
+              action.payload.error || action.payload || "something went wrong";
+          }
+          state.messageStatus = "failed";
+          state.messages = [];
+        }
+        // console.log(state.messages);
+        // console.log(state.messageStatus);
+      })
+      .addCase(FilterMessages.fulfilled, (state, action) => {
+        console.log("fulfilled state", action.payload.status);
         if (action.payload.status == 200) {
           state.messageStatus = "success";
           state.messages = action.payload.data.results;

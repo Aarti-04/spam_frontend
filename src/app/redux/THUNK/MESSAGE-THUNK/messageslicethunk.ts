@@ -1,46 +1,30 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ArchivedMail } from '../../../../../lib/all-api/all_api';
-import axios from 'axios';
-import { useAppSelector } from '../../STORE/store';
-import { json } from 'stream/consumers';
-import { headers } from 'next/headers';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { ArchivedMail } from "../../../../../lib/all-api/all_api";
+import axios from "axios";
+import { useAppSelector } from "../../STORE/store";
+import { json } from "stream/consumers";
+import { headers } from "next/headers";
 export const get_user_credentials_in_axios_header = () => {
-  let user_cred: any = localStorage.getItem('persist:user');
-  user_cred = JSON.parse(JSON.parse(user_cred || '')['user_token']);
+  let user_cred: any = localStorage.getItem("persist:user");
+  user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
   // console.log(user_cred["jwt_access_token"]);
   const headers = {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${user_cred['jwt_access_token']} `,
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${user_cred["jwt_access_token"]} `,
   };
   return headers;
 };
 export const fetchMessages: any = createAsyncThunk(
-  'messages/fetchMessages',
+  "messages/fetchMessages",
   async (args: any, thunkAPI) => {
     // console.log("slice called");
 
-    // const { user_token } = useAppSelector((state) => state.user);
-    // console.log(user_token);
-    // let user_cred: any = localStorage.getItem("persist:user");
-    // user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
-    // console.log(user_cred["jwt_access_token"]);
-    // const object1: any = new Object(user_cred);
-    // console.log(object1["jwt_access_token"]);
-
     try {
-      let { queryLabel, page, itemsPerPage }: any = args || '';
+      let { queryLabel, page, itemsPerPage }: any = args || "";
       // const { jwt_access_token } = user_token;
-      if(queryLabel)
-        queryLabel = queryLabel.replace(/%20/g, ' ') || '';
+      if (queryLabel) queryLabel = queryLabel.replace(/%20/g, " ") || "";
       // console.log(user_token, creds);
       const headers = get_user_credentials_in_axios_header();
-      // const headers = {
-      //   "Content-Type": "application/json",
-      //   Authorization: `Bearer ${jwt_access_token} `,
-      // };
-      // console.log(headers);
-      // console.log(process.env.NEXT_PUBLIC_BASE_URL);
-
       const url = `${process.env.NEXT_PUBLIC_BASE_URL}/mailreadfromdb/`;
       const response = await axios.get(url, {
         params: {
@@ -51,7 +35,6 @@ export const fetchMessages: any = createAsyncThunk(
         headers,
       });
       // console.log(response);
-      // console.log(response.data.results);
       return response;
       if (response.status == 200) {
         return [response.data.results, response.data.count];
@@ -59,6 +42,40 @@ export const fetchMessages: any = createAsyncThunk(
     } catch (e: any) {
       // console.log(e.respons);
       // console.log(e.message);
+      return e.response || e.message;
+      throw new Error(`${e.message})}`);
+    }
+  }
+);
+export const FilterMessages: any = createAsyncThunk(
+  "messages/filterMessage",
+  async (args: any, thunkAPI) => {
+    try {
+      let { search, query_type }: any = args || "";
+      if (query_type) query_type = query_type.replace(/%20/g, " ") || "";
+      const headers = get_user_credentials_in_axios_header();
+      const url = `${process.env.NEXT_PUBLIC_BASE_URL}/mailsearchfilter/`;
+      const response = await axios.get(url, {
+        params: {
+          search: search,
+
+          query_type: query_type,
+        },
+        headers,
+      });
+      // console.log(response);
+      // console.log(response.data.results);
+      // console.log("response", response);
+      // console.log(response.data);
+      console.log(response.data.results);
+      return response;
+      // return response.data;
+      if (response.status == 200) {
+        return [response.data.results, response.data.count];
+      }
+    } catch (e: any) {
+      // console.log(e.respons);
+      console.log("e.message", e.message);
 
       return e.response || e.message;
       throw new Error(`${e.message})}`);
@@ -67,7 +84,7 @@ export const fetchMessages: any = createAsyncThunk(
 );
 
 export const mailArchived = createAsyncThunk(
-  'messages/mailarchive',
+  "messages/mailarchive",
   async (message_id: string) => {
     // const res = await ArchivedMail(message_id);
     // console.log(res);
@@ -91,7 +108,7 @@ export const mailArchived = createAsyncThunk(
   }
 );
 export const mailDelete = createAsyncThunk(
-  'messages/mailDelete',
+  "messages/mailDelete",
   async (message_id: string) => {
     // let user_cred: any = localStorage.getItem("persist:user");
     // user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
@@ -114,7 +131,7 @@ export const mailDelete = createAsyncThunk(
   }
 );
 export const ComposeMail: any = createAsyncThunk(
-  'messages/composeMail',
+  "messages/composeMail",
   async (args: any, thunkAPI) => {
     // console.log("slice called");
     // let user_cred: any = localStorage.getItem("persist:user");
@@ -146,7 +163,7 @@ export const ComposeMail: any = createAsyncThunk(
   }
 );
 export const predictMail: any = createAsyncThunk(
-  'messages/predictMail',
+  "messages/predictMail",
   async (args: any, thunkAPI) => {
     // console.log("slice called");
     // let user_cred: any = localStorage.getItem("persist:user");
@@ -185,7 +202,7 @@ export const predictMail: any = createAsyncThunk(
   }
 );
 export const reportSpam: any = createAsyncThunk(
-  'messages/reportMail',
+  "messages/reportMail",
   async (args: any, thunkAPI) => {
     const { message_id, spamMailFeedBack, message_body } = args;
     // console.log(message_id);
