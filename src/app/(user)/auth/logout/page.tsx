@@ -1,13 +1,13 @@
-"use client";
-import React, { useEffect } from "react";
+'use client';
+import React, { useEffect } from 'react';
 // import {
 //   GetAccessTokenUsingRefreshToken,
 //   logoutUser,
 // } from "../../redux/SLICE/UserSlice/userSlice";
-import { useRouter } from "next/navigation";
-import { logoutUser } from "@/app/redux/THUNK/USER-THUNK/userslicethunk";
-import { useAppDispatch } from "@/app/redux/STORE/store";
-import Loader from "@/components/Loader";
+import { useRouter } from 'next/navigation';
+import { logoutUser } from '@/app/redux/THUNK/USER-THUNK/userslicethunk';
+import { useAppDispatch } from '@/app/redux/STORE/store';
+import Loader from '@/components/Loader';
 const Logout = () => {
   // const dispatch = useDispatch();
   // const { user_google_cred, status, error } = useSelector((state: any) => state.user);
@@ -17,15 +17,19 @@ const Logout = () => {
   //   dispatch(GetAccessTokenUsingRefreshToken(user_google_cred['refresh_token']));
   // }, []);
   const router = useRouter();
-  const dispatch: any = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(logoutUser());
     // console.log("logout called");
 
-    router.push("/");
-  }, []);
-  return <Loader open={true}></Loader>;
+    router.push('/');
+  }, [dispatch]);
+  return (
+    <div>
+      <Loader open={true}></Loader>
+    </div>
+  );
 };
 
 export default Logout;

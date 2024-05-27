@@ -1,73 +1,102 @@
-import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import Badge from "@mui/material/Badge";
-import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
-import { LogoutOutlined } from "@mui/icons-material";
-import Link from "next/link";
-import { useAppSelector } from "@/app/redux/STORE/store";
+import * as React from 'react';
+import { styled, alpha } from '@mui/material/styles';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import InputBase from '@mui/material/InputBase';
+import Badge from '@mui/material/Badge';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import SearchIcon from '@mui/icons-material/Search';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import { LogoutOutlined } from '@mui/icons-material';
+import Link from 'next/link';
+import { useAppDispatch, useAppSelector } from '@/app/redux/STORE/store';
+import { MailReadingService } from '@/app/redux/THUNK/SOCKET-EMAIL-THUNK/scoket';
+import { fetchMessages } from '@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk';
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
+  '&:hover': {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
     marginLeft: theme.spacing(3),
-    width: "auto",
+    width: 'auto',
   },
 }));
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
+const SearchIconWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
+  color: 'inherit',
+  '& .MuiInputBase-input': {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
     },
   },
 }));
 
 export default function SearchBar({ toggleDrawer }: any) {
-  const { new_mail_count } = useAppSelector((state) => state.socket);
+  // const { new_mail_count } = useAppSelector((state) => state.socket);
+  const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [new_mail_count, setNewMailCount] = React.useState<number>(0);
   // console.log(new_mail_count);
+  React.useEffect(() => {
+    try {
+      let user_cred: any = localStorage.getItem('persist:user');
+      user_cred = JSON.parse(JSON.parse(user_cred || '')['user_token']);
+      console.log(user_cred['jwt_access_token']);
+      const mailReadingSocket: any = new WebSocket(
+        `${process.env.NEXT_PUBLIC_SOCKET_URL}?access_token=${user_cred['jwt_access_token']}`
+      );
+
+      mailReadingSocket.onmessage = function (e: any) {
+        setNewMailCount(JSON.parse(e.data));
+        // new_mail_count = JSON.parse(e.data);
+        console.log('new_mail_count', new_mail_count);
+      };
+    } catch (e: any) {
+      console.log('Error');
+    }
+  }, [setNewMailCount]);
+  const badgeHandler = async () => {
+    console.log('badged clicked');
+
+    setNewMailCount(0);
+    await dispatch(fetchMessages());
+    
+  };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     // console.log("68", event.currentTarget);
@@ -88,50 +117,55 @@ export default function SearchBar({ toggleDrawer }: any) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const menuId = "primary-search-account-menu";
+  const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       id={menuId}
       keepMounted
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      <Link href={"/auth/logout"}>
+      <Link href={'/auth/logout'}>
         <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
       </Link>
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
+  const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       id={mobileMenuId}
       keepMounted
       transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
+        vertical: 'top',
+        horizontal: 'right',
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size="large" aria-label="show 2 new mails" color="inherit">
+        <IconButton
+          onClick={() => badgeHandler()}
+          size="large"
+          aria-label="show 2 new mails"
+          color="inherit"
+        >
           <Badge badgeContent={new_mail_count} color="error">
             <MailIcon />
           </Badge>
@@ -158,8 +192,8 @@ export default function SearchBar({ toggleDrawer }: any) {
       <AppBar
         position="static"
         sx={{
-          backgroundColor: "#ffffff",
-          color: "#2f2f2f",
+          backgroundColor: '#f6f8fc',
+          color: '#2f2f2f',
         }}
       >
         <Toolbar>
@@ -177,25 +211,37 @@ export default function SearchBar({ toggleDrawer }: any) {
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+            sx={{ display: { xs: 'none', sm: 'block' }, width: '150px' }}
           >
             GMAIL
           </Typography>
-          <Search>
+          <Search
+            sx={{
+              backgroundColor: '#eaf1fb',
+              borderRadius: '30px',
+              height: '50px',
+            }}
+          >
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
+              placeholder="Search In Email"
+              inputProps={{ 'aria-label': 'search' }}
+              fullWidth
+              sx={{
+                width: '700px',
+                fontSize: '20px',
+              }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton
               size="large"
               aria-label="show new mails"
               color="inherit"
+              onClick={() => badgeHandler()}
             >
               <Badge badgeContent={new_mail_count} color="error">
                 <MailIcon />
@@ -213,7 +259,7 @@ export default function SearchBar({ toggleDrawer }: any) {
               <AccountCircle />
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
               aria-label="show more"
