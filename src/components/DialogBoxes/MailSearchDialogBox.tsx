@@ -116,22 +116,22 @@
 //   );
 // }
 
-import * as React from "react";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import { Select, SelectChangeEvent } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import { Theme, useTheme } from "@mui/material/styles";
-import { theme } from "@/app/theme/theme";
-import { useAppDispatch } from "@/app/redux/STORE/store";
-import { FilterMessages } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { Select, SelectChangeEvent } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import { Theme, useTheme } from '@mui/material/styles';
+import { theme } from '@/app/theme/theme';
+import { useAppDispatch } from '@/app/redux/STORE/store';
+import { FilterMessages } from '@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -155,10 +155,10 @@ export default function MailSearchDialogBox({ open, setOpen }: any) {
   const [personName, setPersonName] = React.useState<string[]>([]);
   const dispatch = useAppDispatch();
   const [formValues, setFormValues] = React.useState({
-    query_type: "All Mail",
-    from: "",
-    header: "",
-    recipient: "",
+    query_type: 'All Mail',
+    sender: '',
+    header: '',
+    recipient: '',
   });
   const handleChange = (event: any) => {
     const { name, value } = event.target;
@@ -174,18 +174,18 @@ export default function MailSearchDialogBox({ open, setOpen }: any) {
         open={open}
         onClose={setOpen}
         PaperProps={{
-          component: "form",
+          component: 'form',
           onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             // const formData = new FormData(event.currentTarget);
             // const formJson = Object.fromEntries((formData as any).entries());
             console.log(formValues);
-            const search = formValues.from || formValues.recipient;
+            const { sender, recipient } = formValues;
+            console.log(sender, recipient);
 
             const query_type = formValues.query_type;
-            console.log("search", search);
-            console.log("query_type", query_type);
-            const res = await dispatch(FilterMessages({ search, query_type }));
+            console.log('query_type', query_type);
+            const res = await dispatch(FilterMessages(formValues));
             console.log(res);
 
             // setOpen();
@@ -197,14 +197,14 @@ export default function MailSearchDialogBox({ open, setOpen }: any) {
           <TextField
             autoFocus
             margin="dense"
-            id="From"
-            name="from"
+            id="sender"
+            name="sender"
             label="From"
             // type="email"
             fullWidth
             variant="standard"
             onChange={handleChange}
-            value={formValues.from}
+            value={formValues.sender}
           />
           <TextField
             autoFocus
@@ -245,7 +245,7 @@ export default function MailSearchDialogBox({ open, setOpen }: any) {
             value={formValues.query_type}
             onChange={handleChange}
           >
-            {["All Mail", "Inbox", "Sent"].map((name) => (
+            {['All Mail', 'Inbox', 'Sent'].map((name) => (
               <MenuItem key={name} value={name}>
                 {name}
               </MenuItem>
