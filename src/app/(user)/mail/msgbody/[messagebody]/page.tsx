@@ -32,13 +32,13 @@ function page() {
   );
   // console.log(message_body);
   // console.log(spamReportStatus);
-  useEffect(() => {
-    if (spamReportStatus === "Failed") {
-      toast.error("Something went wrong Please report again");
-    } else if (spamReportStatus === "success") {
-      toast.success("Thank you for feedback");
-    }
-  }, [spamReportStatus]);
+  // useEffect(() => {
+  //   if (spamReportStatus === "Failed") {
+  // toast.error("Something went wrong Please report again");
+  //   } else if (spamReportStatus === "success") {
+  //     toast.success("Thank you for feedback");
+  //   }
+  // }, [spamReportStatus]);
   return (
     <>
       <Box>

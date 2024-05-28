@@ -30,7 +30,7 @@ import ArchiveIcon from "@mui/icons-material/Archive";
 import Tooltip from "@mui/material/Tooltip";
 import ComposeButton from "../ComposeMail/ComposeButton";
 import { width } from "@mui/system";
-const drawerWidth = 240;
+const drawerWidth = 80;
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -107,7 +107,7 @@ export default function SideNav() {
   // const [open, setOpen] = useState(false);
   return (
     <>
-      <Box sx={{ backgroundColor: "#f6f8fc", width: 250 }} my={1}>
+      <Box sx={{ backgroundColor: "#f6f8fc", width: 200 }} my={1}>
         <List sx={{}}>
           <ComposeButton></ComposeButton>
           {["inbox", "sent", "starred"].map((setting) => {

@@ -57,12 +57,18 @@ const messageSlice = createSlice({
       else state.spamMailFeedBack = "ham";
       // console.log(state.spamMailFeedBack);
     },
-    setPredictedStateToInitial(state) {
+    setMailStateToInitial(state) {
       state.predictedEmailStatus = "";
       state.predictedEmailIsSpamOrNot = "";
       state.predictedEmailError = "";
       state.ComposeMailStatus = "idel";
       state.ComposeMailError = "";
+      state.ComposeMailStatus = "idle";
+      state.ComposeMailError = "";
+      state.spamMailFeedBack = "";
+      state.spamReportFeedBack = "";
+      state.spamReportStatus = "";
+
       // console.log("all set to initial");
     },
 
@@ -100,51 +106,54 @@ const messageSlice = createSlice({
         state.messageStatus = "loading";
       })
       .addCase(fetchMessages.fulfilled, (state, action) => {
-        // console.log("fulfilled state", action.payload.status);
-        if (action.payload.status == 200) {
+        console.log("fulfilled state", action.payload);
+        if (action.payload[2] == 200) {
           state.messageStatus = "success";
-          state.messages = action.payload.data.results;
-          state.messageCount = action.payload.data.count;
+          state.messages = action.payload[0];
+          state.messageCount = action.payload[1];
           state.messageError = "";
-        } else {
-          if (action.payload.status == 401) {
-            state.messageError = "Authentication failed please login";
-          } else {
-            state.messageError =
-              action.payload.error || action.payload || "something went wrong";
-          }
-          state.messageStatus = "failed";
-          state.messages = [];
         }
-        // console.log(state.messages);
-        // console.log(state.messageStatus);
-      })
-      .addCase(FilterMessages.fulfilled, (state, action) => {
-        console.log("fulfilled state", action.payload.status);
-        if (action.payload.status == 200) {
-          state.messageStatus = "success";
-          state.messages = action.payload.data.results;
-          state.messageCount = action.payload.data.count;
-          state.messageError = "";
-        } else {
-          if (action.payload.status == 401) {
-            state.messageError = "Authentication failed please login";
-          } else {
-            state.messageError =
-              action.payload.error || action.payload || "something went wrong";
-          }
-          state.messageStatus = "failed";
-          state.messages = [];
-        }
+
+        // if (action.payload.status == 401) {
+        //   state.messageError = "Authentication failed please login";
+        // } else {
+        //   state.messageError =
+        //     action.payload.error || action.payload || "something went wrong";
+        // }
+        // state.messageStatus = "failed";
+        // state.messages = [];
+
         // console.log(state.messages);
         // console.log(state.messageStatus);
       })
       .addCase(fetchMessages.rejected, (state, action) => {
-        // console.log("fetchMessages failed");
+        console.log("fetchMessages failed", action.payload);
         state.messageStatus = "failed";
-        state.messageError = action.error.message || action.payload || "";
         state.messages = [];
+        // state.messageError = action.error.message || action.payload || "";
+        // state.messages = [];
       })
+      .addCase(FilterMessages.fulfilled, (state, action) => {
+        console.log("fulfilled state", action.payload);
+        if (action.payload.status == 200) {
+          state.messageStatus = "success";
+          state.messages = action.payload.data.results;
+          state.messageCount = action.payload.data.count;
+          state.messageError = "";
+        } else {
+          if (action.payload.status == 401) {
+            state.messageError = "Authentication failed please login";
+          } else {
+            state.messageError =
+              action.payload.error || action.payload || "something went wrong";
+          }
+          state.messageStatus = "failed";
+          state.messages = [];
+        }
+        // console.log(state.messages);
+        // console.log(state.messageStatus);
+      })
+
       .addCase(mailArchived.pending, (state, action: any) => {
         // console.log(action.payload);
         state.isArchived = false;
@@ -209,6 +218,6 @@ const messageSlice = createSlice({
 export const {
   /* any additional reducers */
   reportMail,
-  setPredictedStateToInitial,
+  setMailStateToInitial,
 } = messageSlice.actions;
 export default messageSlice.reducer;

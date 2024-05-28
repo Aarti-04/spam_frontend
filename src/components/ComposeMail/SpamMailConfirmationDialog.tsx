@@ -16,6 +16,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import Loader from "../Loader";
 import { useRouter } from "next/navigation";
+import { setMailStateToInitial } from "@/app/redux/SLICE/MessageSlice/messageSlice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -34,7 +35,7 @@ export default function SpamMailConfirmationDialog({
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { ComposeMailStatus, ComposeMailError, spamReportStatus } =
-    useAppSelector((state) => state.message);
+    useAppSelector((state: any) => state.message);
   const teachSystemHandler = async () => {
     await dispatch(
       reportSpam({ spamMailFeedBack: "ham", message_body: emailData.body })
@@ -42,12 +43,12 @@ export default function SpamMailConfirmationDialog({
     // alert('Teach system');
   };
   useEffect(() => {
-    (async () => {
-      if (spamReportStatus == "success") {
-        toast.success("Thank you for feedback");
-        // await dispatch(ComposeMail(emailData));
-      }
-    })();
+    if (spamReportStatus == "success") {
+      toast.success("Thank you for feedback");
+      dispatch(setMailStateToInitial());
+      // setOpen(false);
+      // await dispatch(ComposeMail(emailData));
+    }
   }, [spamReportStatus]);
   // useEffect(() => {
   //   if (ComposeMailStatus == "success") {
@@ -104,7 +105,7 @@ export default function SpamMailConfirmationDialog({
           <Button color="error" onClick={() => setOpen(true)}>
             Send Anyway
           </Button>
-          <Button autoFocus onClick={setOpen}>
+          <Button autoFocus onClick={() => setOpen(false)}>
             Cancel
           </Button>
           {/* <Button onClick={setOpen}>Save changes</Button> */}

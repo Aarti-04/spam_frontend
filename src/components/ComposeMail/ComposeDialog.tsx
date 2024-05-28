@@ -15,7 +15,10 @@ import {
 import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { setPredictedStateToInitial } from "@/app/redux/SLICE/MessageSlice/messageSlice";
+import {
+  setMailStateToInitial,
+  setPredictedStateToInitial,
+} from "@/app/redux/SLICE/MessageSlice/messageSlice";
 import CloseIcon from "@mui/icons-material/Close";
 import SpamMailConfirmationDialog from "./SpamMailConfirmationDialog";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -40,7 +43,7 @@ interface ComposeMailInterface {
   body: string;
 }
 const ComposeDialog = ({ open, handleClose }: any) => {
-  const [recipient, setRecipient] = useState<string>("");
+  const [recipient, setRecipient] = useState<any>("");
   const [header, setHeader] = useState<any>("");
   const [alertOpen, setAlertOpen] = useState<boolean>(true);
   const [body, setBody] = useState<any>({ "": "" });
@@ -65,7 +68,10 @@ const ComposeDialog = ({ open, handleClose }: any) => {
   const SpamConfirmationHandler = (isSendAnyWayMail: boolean = false) => {
     console.log("send any way compose", isSendAnyWayMail);
 
-    if (isSendAnyWayMail) dispatch(ComposeMail(composeData));
+    if (isSendAnyWayMail == true) {
+      composeData["detected_as_spam"] = "true";
+      dispatch(ComposeMail(composeData));
+    }
     setSpamConfirmationOpen(!spamConfirmationOpen);
   };
   const handleFileChange = (e: any) => {
@@ -100,28 +106,19 @@ const ComposeDialog = ({ open, handleClose }: any) => {
   useEffect(() => {
     (async () => {
       console.log("mail compose toast use effect");
-
-      // if (predictedEmailStatus == 'success' && predictedEmailIsSpamOrNot) {
-      //   setSpamConfirmationOpen(true);
-      // } else {
-      //   // console.log("data to compose", composeData);
       if (confirmSendMail) {
         await dispatch(ComposeMail(composeData));
-        if (ComposeMailStatus == "success")
-          toast.success("Mail sent successfully");
-        else if (ComposeMailError) toast.error(ComposeMailError);
-        setConfirmSendMail(false);
+        console.log("ComposeMailStatus", ComposeMailStatus);
       }
-      //}
     })();
   }, [confirmSendMail]);
   useEffect(() => {
-    console.log("mail compose toast use effect");
-
     if (ComposeMailStatus == "success") toast.success("Mail sent successfully");
     else if (ComposeMailError) toast.error(ComposeMailError);
     setConfirmSendMail(false);
-  }, [confirmSendMail]);
+
+    dispatch(setMailStateToInitial());
+  }, [ComposeMailStatus]);
   const handleConfirmDialogClose = () => {
     setConfirmDialogOpen(false);
     setFormSubmitPending(null);
@@ -146,7 +143,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
   return (
     <>
       <ToastContainer />
-      {ComposeMailStatus == "loading" && <Loader> </Loader>}
+      {ComposeMailStatus == "loading" && <p>Composing mail</p>}
       <Modal
         open={open}
         onClose={handleClose}
@@ -157,7 +154,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
           <CloseIcon
             sx={{ alignItems: "right", marginLeft: "100%", marginTop: "0" }}
             onClick={() => {
-              dispatch(setPredictedStateToInitial());
+              dispatch(setMailStateToInitial());
               handleClose();
             }}
           ></CloseIcon>
@@ -174,7 +171,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
                 variant="outlined"
                 className="mb-2"
                 required
-                onChange={(e) =>
+                onChange={(e: any) =>
                   setRecipient({ [e.target.name]: e.target.value })
                 }
               />
@@ -228,7 +225,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
             {predictedEmailStatus == "success" && predictedEmailIsSpamOrNot && (
               <SpamMailConfirmationDialog
                 open={spamConfirmationOpen}
-                setOpen={() => SpamConfirmationHandler()}
+                setOpen={SpamConfirmationHandler}
                 emailData={composeData}
               ></SpamMailConfirmationDialog>
             )}

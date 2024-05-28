@@ -38,16 +38,18 @@ const page = () => {
       if (spamMailFeedBack !== "") {
         await dispatch(reportSpam({ message_id, spamMailFeedBack }));
       }
+      if (spamReportStatus == "success")
+        toast.success("Thank you for feedback");
     })();
   }, [spamMailFeedBack]);
   return (
     <>
+      <ToastContainer></ToastContainer>
       <ConfirmationDialogBox
         open={openSpamConfirmation}
         setOpen={SpamConfirmationHandler}
         message="Really want to report a mail as Spam Mail"
       ></ConfirmationDialogBox>
-      <ToastContainer />
     </>
   );
 };

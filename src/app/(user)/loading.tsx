@@ -7,7 +7,8 @@ export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
   return (
     <>
-      <Loader open={true} />
+      {/* <Loader open={true} /> */}
+      main loading
     </>
   );
 }

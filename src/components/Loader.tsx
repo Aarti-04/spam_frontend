@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 
 export default function Loader({ open }: any) {
   return (
-    <div>
+    <>
       {/* <Button onClick={handleOpen}>Show backdrop</Button> */}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -13,6 +13,6 @@ export default function Loader({ open }: any) {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-    </div>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 // import LoadingComponent from "@/components/LoadingComponent/LoadingComponent";
-import Loader from '../components/Loader';
+import Loader from "../components/Loader";
 // import styles from "./loading.module.css";
 export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
@@ -9,6 +9,7 @@ export default function Loading() {
       {/* <Loader /> */}
       {/* hello */}
       {/* </div> */}
+      src/app/loading
     </>
   );
 }

@@ -1,33 +1,24 @@
-'use client';
-import React, { useEffect } from 'react';
-// import {
-//   GetAccessTokenUsingRefreshToken,
-//   logoutUser,
-// } from "../../redux/SLICE/UserSlice/userSlice";
-import { useRouter } from 'next/navigation';
-import { logoutUser } from '@/app/redux/THUNK/USER-THUNK/userslicethunk';
-import { useAppDispatch } from '@/app/redux/STORE/store';
-import Loader from '@/components/Loader';
+"use client";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { logoutUser } from "@/app/redux/THUNK/USER-THUNK/userslicethunk";
+import { useAppDispatch } from "@/app/redux/STORE/store";
+import Loader from "@/components/Loader";
+import { useDispatch } from "react-redux";
 const Logout = () => {
-  // const dispatch = useDispatch();
-  // const { user_google_cred, status, error } = useSelector((state: any) => state.user);
-  // console.log(user_google_cred);
-
-  // useEffect(() => {
-  //   dispatch(GetAccessTokenUsingRefreshToken(user_google_cred['refresh_token']));
-  // }, []);
   const router = useRouter();
-  const dispatch = useAppDispatch();
+  const dispatch: any = useDispatch();
 
   useEffect(() => {
-    dispatch(logoutUser());
-    // console.log("logout called");
-
-    router.push('/auth/login');
-  }, []);
+    (async () => {
+      await dispatch(logoutUser());
+      router.push("/mail");
+    })();
+  }, [dispatch, router]);
   return (
     <div>
-      <Loader open={true}></Loader>
+      {/* <Loader open={true}></Loader> */}
+      {/* logout */}
     </div>
   );
 };

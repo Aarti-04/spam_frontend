@@ -69,7 +69,12 @@ const persistConfigMessage = {
     "emailBodyValidation",
     "",
   ],
-  whitelist: ["messages", "predictedEmailIsSpamOrNot"],
+  whitelist: [
+    "messages",
+    "predictedEmailIsSpamOrNot",
+    "messageStatus",
+    "messageError",
+  ],
 };
 
 const EmailSocket = {

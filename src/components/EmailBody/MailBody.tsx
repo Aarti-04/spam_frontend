@@ -69,13 +69,85 @@
 
 // export default MailBody;
 
+// import React from "react";
+// import he from "he";
+// import { Box } from "@mui/system";
+// import { ListItem, Paper, Toolbar, Typography } from "@mui/material";
+// import sanitizeHtml from "../../../lib/dompurify";
+// import BodyUpperSection from "./BodyUpperSection";
+// import parser from "html-react-parser";
+
+// interface propsTypeInterface {
+//   encodedHtml: string;
+//   header: string;
+//   message_id: string;
+//   sender: string;
+//   spamOrNot: boolean;
+// }
+
+// const MailBody = ({
+//   encodedHtml,
+//   header,
+//   message_id,
+//   sender,
+//   spamOrNot,
+// }: propsTypeInterface) => {
+//   const sanitizedHtml = sanitizeHtml(encodedHtml);
+
+//   return (
+//     <Box
+//       sx={{
+//         position: "fixed",
+//         top: "64px", // Adjust based on the height of your app bar
+//         bottom: 0,
+//         left: 20,
+//         right: 0,
+//         display: "flex",
+//         justifyContent: "center",
+//         alignItems: "center",
+//         backgroundColor: "transparent", // Set background color
+//       }}
+//     >
+//       <Box
+//         sx={{
+//           width: "80%", // Adjust width as needed
+//           maxHeight: "calc(100vh - 64px)", // Adjust max height accounting for app bar
+//           overflowY: "auto",
+//           backgroundColor: "white", // Set background color
+//           padding: "20px", // Add padding
+//           borderRadius: "8px", // Add border radius
+//           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Add box shadow
+//         }}
+//       >
+//         <Paper>
+//           <BodyUpperSection message_id={message_id}></BodyUpperSection>
+//         </Paper>
+//         <Paper elevation={2}>
+//           <Typography variant="body1" color="textPrimary">
+//             {header}
+//           </Typography>
+//           <Typography>{sender}</Typography>
+//           <Paper></Paper>
+//           {typeof encodedHtml === "string" && encodedHtml.startsWith("<") ? (
+//             <div
+//               style={{ maxWidth: "100%" }}
+//               dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
+//             />
+//           ) : (
+//             <Typography sx={{ maxWidth: "100%" }}>{encodedHtml}</Typography>
+//           )}
+//         </Paper>
+//       </Box>
+//     </Box>
+//   );
+// };
+
+// export default MailBody;
 import React from "react";
-import he from "he";
 import { Box } from "@mui/system";
-import { ListItem, Paper, Toolbar, Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import sanitizeHtml from "../../../lib/dompurify";
 import BodyUpperSection from "./BodyUpperSection";
-import parser from "html-react-parser";
 
 interface propsTypeInterface {
   encodedHtml: string;
@@ -93,14 +165,14 @@ const MailBody = ({
   spamOrNot,
 }: propsTypeInterface) => {
   const sanitizedHtml = sanitizeHtml(encodedHtml);
-
+  const sidebarWidth = 200;
   return (
     <Box
       sx={{
         position: "fixed",
         top: "64px", // Adjust based on the height of your app bar
         bottom: 0,
-        left: 20,
+        left: `${sidebarWidth / 2}px`,
         right: 0,
         display: "flex",
         justifyContent: "center",
@@ -111,32 +183,34 @@ const MailBody = ({
       <Box
         sx={{
           width: "80%", // Adjust width as needed
-          maxHeight: "calc(100vh - 64px)", // Adjust max height accounting for app bar
+          height: "calc(100vh - 64px)", // Full height minus the top offset
           overflowY: "auto",
           backgroundColor: "white", // Set background color
           padding: "20px", // Add padding
           borderRadius: "8px", // Add border radius
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Add box shadow
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <Paper>
-          <BodyUpperSection message_id={message_id}></BodyUpperSection>
+          <BodyUpperSection message_id={message_id} />
         </Paper>
-        <Paper elevation={2}>
+        <Paper elevation={2} sx={{ mt: 2, p: 2, flex: 1 }}>
           <Typography variant="body1" color="textPrimary">
             {header}
           </Typography>
           <Typography>{sender}</Typography>
-          <Paper></Paper>
-          {typeof encodedHtml === "string" &&
-          encodedHtml.startsWith("<") ? (
-            <div
-              style={{ maxWidth: "100%" }}
-              dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
-            />
-          ) : (
-            <Typography sx={{ maxWidth: "100%" }}>{encodedHtml}</Typography>
-          )}
+          <Box sx={{ mt: 2, flex: 1 }}>
+            {typeof encodedHtml === "string" && encodedHtml.startsWith("<") ? (
+              <div
+                style={{ maxWidth: "100%" }}
+                dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
+              />
+            ) : (
+              <Typography sx={{ maxWidth: "100%" }}>{encodedHtml}</Typography>
+            )}
+          </Box>
         </Paper>
       </Box>
     </Box>

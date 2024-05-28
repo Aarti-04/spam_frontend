@@ -100,10 +100,7 @@ export const logoutUser = createAsyncThunk("user/logout", async () => {
 
   try {
     const response = await axios.delete(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/logout/`,
-      {
-        // headers,
-      }
+      `${process.env.NEXT_PUBLIC_BASE_URL}/logout/`
     );
     // console.log(response);
     if (response.status == 200) await setCookies("isAuthenticated", "false");

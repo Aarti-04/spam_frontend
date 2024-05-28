@@ -1,6 +1,6 @@
 "use client";
 import { AppBar, IconButton, Toolbar } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box, positions } from "@mui/system";
 import React from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArchiveIcon from "@mui/icons-material/Archive";
@@ -16,7 +16,7 @@ const BodyUpperSection = ({ message_id = "" }: propsType) => {
   const router = useRouter();
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, positions: "fixed" }}>
       <AppBar
         position="static"
         sx={{

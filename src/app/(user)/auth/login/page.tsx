@@ -6,7 +6,12 @@ import React from "react";
 const LoginPage = () => {
   return (
     <main>
-      <UnAuthenticateLayout></UnAuthenticateLayout>
+      {/* <UnAuthenticateLayout></UnAuthenticateLayout> */}
+      <GoogleOAuthProvider
+        clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}
+      >
+        <Signin></Signin>
+      </GoogleOAuthProvider>
     </main>
   );
 };
