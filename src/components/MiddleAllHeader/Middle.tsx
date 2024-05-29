@@ -351,169 +351,168 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
         </>
       )}
       {messageStatus == "loading" && <p>Middle loading</p>}
-      {messageStatus == "failed" && (
+      {/* {messageStatus == "failed" && (
         <AlertButton
           open={alertOpen}
           setOpen={() => setAlertOpen(!alertOpen)}
           errorMessage={messageError}
         ></AlertButton>
-      )}
-      {messageStatus === "success" && (
+      )} */}
+
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "left",
+          overflowX: "hidden",
+          padding: "1.7rem",
+          backgroundColor: "white",
+          borderRadius: "20px",
+          margin: "10px",
+        }}
+      >
         <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "left",
-            overflowX: "hidden",
-            padding: "1.7rem",
-            backgroundColor: "white",
-            borderRadius: "20px",
-            margin: "10px",
-          }}
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          width="100%"
+          maxWidth="800px"
         >
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            width="100%"
-            maxWidth="800px"
-          >
-            <Box display="flex" alignItems="center">
-              <RefreshIcon
-                sx={{
-                  cursor: "pointer",
-                  marginRight: "1rem", // Adjust spacing as needed
-                }}
-                onClick={() => getMessageData(currentPage, itemsPerPage)}
-              />
-              <Checkbox
-                checked={checked}
-                onChange={(event) => setChecked(event.target.checked)}
-                inputProps={{ "aria-label": "controlled" }}
-              />
-            </Box>
-            <Box display="flex" alignItems="center">
-              <Pagination
-                count={pages}
-                page={currentPage}
-                onChange={handlePageChange}
-                shape="rounded"
-                showFirstButton
-                showLastButton
-              />
-              <FormControl variant="outlined" size="small">
-                <InputLabel id="items-per-page-select-label">
-                  Items per page
-                </InputLabel>
-                <Select
-                  labelId="items-per-page-select-label"
-                  value={itemsPerPage}
-                  onChange={handleItemsPerPageChange}
-                  label="Items per page"
-                >
-                  <MenuItem value={5}>5</MenuItem>
-                  <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={15}>15</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+          <Box display="flex" alignItems="center">
+            <RefreshIcon
+              sx={{
+                cursor: "pointer",
+                marginRight: "1rem", // Adjust spacing as needed
+              }}
+              onClick={() => getMessageData(currentPage, itemsPerPage)}
+            />
+            <Checkbox
+              checked={checked}
+              onChange={(event) => setChecked(event.target.checked)}
+              inputProps={{ "aria-label": "controlled" }}
+            />
           </Box>
-          {messages?.length > 0 &&
-            messages.map((message: any) => (
-              <Paper
-                elevation={0}
-                key={message.id}
-                sx={{
-                  width: "100%",
-                  maxWidth: "500rem",
-                  marginBottom: "0.2rem",
-                  padding: "0.2rem",
-                  borderTop: "1px solid #ccc",
-                  // height: "50px",
-                }}
+          <Box display="flex" alignItems="center">
+            <Pagination
+              count={pages}
+              page={currentPage}
+              onChange={handlePageChange}
+              shape="rounded"
+              showFirstButton
+              showLastButton
+            />
+            <FormControl variant="outlined" size="small">
+              <InputLabel id="items-per-page-select-label">
+                Items per page
+              </InputLabel>
+              <Select
+                labelId="items-per-page-select-label"
+                value={itemsPerPage}
+                onChange={handleItemsPerPageChange}
+                label="Items per page"
               >
-                <List>
-                  <ListItem>
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={15}>15</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
+        {messages?.length > 0 &&
+          messages.map((message: any) => (
+            <Paper
+              elevation={0}
+              key={message.id}
+              sx={{
+                width: "100%",
+                maxWidth: "500rem",
+                marginBottom: "0.2rem",
+                padding: "0.2rem",
+                borderTop: "1px solid #ccc",
+                // height: "50px",
+              }}
+            >
+              <List>
+                <ListItem>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
                     <Box
                       sx={{
                         display: "flex",
                         alignItems: "center",
-                        width: "100%",
+                        marginRight: "1rem",
+                      }}
+                    >
+                      <StarBorderOutlinedIcon sx={{ marginRight: "8px" }} />
+                      <Checkbox
+                        checked={checked}
+                        onChange={(event) => setChecked(event.target.checked)}
+                        inputProps={{ "aria-label": "controlled" }}
+                        sx={{ marginRight: "8px" }}
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flex: 1,
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        overflow: "hidden",
                       }}
                     >
                       <Box
                         sx={{
                           display: "flex",
-                          alignItems: "center",
-                          marginRight: "1rem",
-                        }}
-                      >
-                        <StarBorderOutlinedIcon sx={{ marginRight: "8px" }} />
-                        <Checkbox
-                          checked={checked}
-                          onChange={(event) => setChecked(event.target.checked)}
-                          inputProps={{ "aria-label": "controlled" }}
-                          sx={{ marginRight: "8px" }}
-                        />
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flex: 1,
-                          justifyContent: "space-between",
-                          alignItems: "center",
+                          flexDirection: "column",
                           overflow: "hidden",
                         }}
                       >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            overflow: "hidden",
-                          }}
+                        <Link
+                          href={`/mail/msgbody/${message.message_id}`}
+                          passHref
                         >
-                          <Link
-                            href={`/mail/msgbody/${message.message_id}`}
-                            passHref
+                          <Typography
+                            variant="body1"
+                            color="textPrimary"
+                            sx={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              cursor: "pointer",
+                            }}
                           >
-                            <Typography
-                              variant="body1"
-                              color="textPrimary"
-                              sx={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                cursor: "pointer",
-                              }}
-                            >
-                              {mailSectionLabel === "sent"
-                                ? `To: ${message?.recipient}`
-                                : message?.sender}{" "}
-                              -{" "}
-                              {message.header ? message.header : "(No Subject)"}{" "}
-                              - {message.snippet}
-                            </Typography>
-                          </Link>
-                        </Box>
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            textAlign: "right",
-                            marginLeft: "1rem",
-                          }}
-                        >
-                          {get_date_and_month(message.date)}
-                        </Typography>
+                            {mailSectionLabel === "sent"
+                              ? `To: ${message?.recipient}`
+                              : message?.sender}{" "}
+                            - {message.header ? message.header : "(No Subject)"}{" "}
+                            - {message.snippet}
+                          </Typography>
+                        </Link>
                       </Box>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          textAlign: "right",
+                          marginLeft: "1rem",
+                        }}
+                      >
+                        {get_date_and_month(message.date)}
+                      </Typography>
                     </Box>
-                  </ListItem>
-                </List>
-              </Paper>
-            ))}
-        </Box>
-      )}
+                  </Box>
+                </ListItem>
+              </List>
+            </Paper>
+          ))}
+      </Box>
+
       {messageStatus == "failed" && <Box>{messageError}</Box>}
     </>
   );

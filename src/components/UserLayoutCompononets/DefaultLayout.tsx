@@ -106,7 +106,7 @@ const DefaultLayout = ({ children }: any) => {
   return (
     <>
       {isAuthenticated == false ? (
-        <UnAuthenticateLayout />
+        <UnAuthenticateLayout>{children}</UnAuthenticateLayout>
       ) : (
         <>
           <SearchBar open={open} toggleDrawer={toggleDrawer} />

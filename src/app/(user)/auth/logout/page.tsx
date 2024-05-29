@@ -1,10 +1,10 @@
-'use client';
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { logoutUser } from '@/app/redux/THUNK/USER-THUNK/userslicethunk';
-import { useAppDispatch } from '@/app/redux/STORE/store';
-import Loader from '@/components/Loader';
-import { useDispatch } from 'react-redux';
+"use client";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { logoutUser } from "@/app/redux/THUNK/USER-THUNK/userslicethunk";
+import { useAppDispatch } from "@/app/redux/STORE/store";
+import Loader from "@/components/Loader";
+import { useDispatch } from "react-redux";
 const Logout = () => {
   const router = useRouter();
   const dispatch: any = useDispatch();
@@ -12,7 +12,7 @@ const Logout = () => {
   useEffect(() => {
     (async () => {
       await dispatch(logoutUser());
-      router.push('/mail');
+      router.push("/mail/inbox");
     })();
   }, [dispatch, router]);
   return (

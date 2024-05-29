@@ -1,23 +1,23 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { stat } from 'fs';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
+import { stat } from "fs";
 import {
   clearCookies,
   getAuthCookies,
   setCookies,
   setRoleCookie,
-} from '../../../../../lib/CookiStore';
+} from "../../../../../lib/CookiStore";
 import {
   UserFormLogin,
   TokenExchangeAndRegisterUser,
   GetAccessTokenUsingRefreshToken,
   logoutUser,
   UserFormSignIn,
-} from '../../THUNK/USER-THUNK/userslicethunk';
+} from "../../THUNK/USER-THUNK/userslicethunk";
 interface UserStateType {
   isAuthenticated: boolean;
   user_google_cred: any[]; // Adjust this type according to your data structure
-  userStatus: 'idle' | 'loading' | 'succeeded' | 'failed';
+  userStatus: "idle" | "loading" | "succeeded" | "failed";
   userError: string;
   user_token: any[];
 }
@@ -25,8 +25,8 @@ interface UserStateType {
 const initialState: UserStateType = {
   isAuthenticated: false,
   user_google_cred: [],
-  userStatus: 'idle',
-  userError: '',
+  userStatus: "idle",
+  userError: "",
   user_token: [],
 };
 // export const UserFormLogin = createAsyncThunk(
@@ -65,22 +65,17 @@ const initialState: UserStateType = {
 //   }
 // );
 const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setUserStateToInitial(state) {
+      state.userStatus = "idle";
+      state.userError = "";
+      // console.log("all set to initial");
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(UserFormLogin.fulfilled, (state: any, action: any) => {
-        // state.isAuthenticated = false;
-        // console.log("UserFormLogin", action.payload["access_token"]);
-        state.user_token = {
-          jwt_access_token: action.payload['access_token'],
-          jwt_refresh_token: action.payload['refresh_token'],
-        };
-        setCookies('isAuthenticated', 'true');
-        // console.log("set cookie");
-        setCookies('isAuthenticated', 'false');
-      })
       .addCase(logoutUser.fulfilled, (state, action) => {
         // console.log(action.payload);
 
@@ -88,12 +83,12 @@ const userSlice = createSlice({
           state.userError = action.payload.data?.detail;
         }
         state.isAuthenticated = false;
-        state.userStatus = 'idle';
+        state.userStatus = "idle";
         state.user_google_cred = [];
         state.user_token = [];
       })
       .addCase(TokenExchangeAndRegisterUser.pending, (state) => {
-        state.userStatus = 'loading';
+        state.userStatus = "loading";
       })
       .addCase(
         TokenExchangeAndRegisterUser.fulfilled,
@@ -105,37 +100,60 @@ const userSlice = createSlice({
           //   action.payload[1]["access_token"]["access_token"]
           // );
           state.user_token = {
-            jwt_access_token: action.payload[1]['access_token'],
-            jwt_refresh_token: action.payload[1]['refresh_token'],
+            jwt_access_token: action.payload[1]["access_token"],
+            jwt_refresh_token: action.payload[1]["refresh_token"],
           };
-          setCookies('isAuthenticated', 'true');
+          setCookies("isAuthenticated", "true");
           // console.log("set cookie");
-          state.userStatus = 'success';
+          state.userStatus = "success";
         }
       )
-      .addCase(UserFormSignIn.fulfilled, (state: any, action: any) => {
-        state.isAuthenticated = true;
-        state.user_google_cred = [];
-        // console.log(
-        //   "TokenExchangeAndRegisterUser",
-        //   action.payload[1]["access_token"]["access_token"]
-        // );
-        state.user_token = {
-          jwt_access_token: action.payload['access_token'],
-          jwt_refresh_token: action.payload['refresh_token'],
-        };
-        setCookies('isAuthenticated', 'true');
-        // console.log("set cookie");
-        state.userStatus = 'success';
-      })
       .addCase(TokenExchangeAndRegisterUser.rejected, (state, action) => {
-        state.userStatus = 'failed';
-        state.userError = action.error.message || 'An error occurred.';
+        state.userStatus = "failed";
+        state.userError = action.error.message || "An error occurred.";
         state.isAuthenticated = false;
-        setCookies('isAuthenticated', 'false');
+        setCookies("isAuthenticated", "false");
+      })
+      .addCase(UserFormSignIn.pending, (state) => {
+        state.userStatus = "loading";
+      })
+      .addCase(UserFormSignIn.fulfilled, (state: any, action: any) => {
+        console.log("fullfilled");
+        console.log(action.payload);
+
+        if (action.payload[0] == 200) {
+          state.isAuthenticated = true;
+          state.user_google_cred = [];
+          // console.log(
+          //   "TokenExchangeAndRegisterUser",
+          //   action.payload[1]["access_token"]["access_token"]
+          // );
+          state.user_token = {
+            jwt_access_token: action.payload[1]["access_token"],
+            jwt_refresh_token: action.payload[1]["refresh_token"],
+          };
+          setCookies("isAuthenticated", "true");
+          // console.log("set cookie");
+          state.userStatus = "success";
+          state.userError = "";
+        } else {
+          state.userStatus = "failed";
+          state.userError = action.payload[1];
+          setCookies("isAuthenticated", "false");
+        }
+        console.log(state.userStatus);
+        console.log(state.userError);
+      })
+      .addCase(UserFormSignIn.rejected, (state, action) => {
+        console.log("rejected");
+
+        state.userStatus = "failed";
+        state.userError = action.error.message || "An error occurred.";
+        state.isAuthenticated = false;
+        setCookies("isAuthenticated", "false");
       })
       .addCase(GetAccessTokenUsingRefreshToken.pending, (state) => {
-        state.userStatus = 'loading';
+        state.userStatus = "loading";
       })
       .addCase(GetAccessTokenUsingRefreshToken.fulfilled, (state, action) => {
         state.isAuthenticated = true;
@@ -143,10 +161,14 @@ const userSlice = createSlice({
       })
       .addCase(GetAccessTokenUsingRefreshToken.rejected, (state, action) => {
         state.isAuthenticated = false;
-        state.userStatus = 'failed';
-        state.userError = action.error.message || 'An error occurred.';
+        state.userStatus = "failed";
+        state.userError = action.error.message || "An error occurred.";
       });
   },
 });
+export const {
+  /* any additional reducers */
+  setUserStateToInitial,
+} = userSlice.actions;
 
 export default userSlice.reducer;

@@ -90,23 +90,25 @@
 // Signin.propTypes = {};
 
 // export default Signin;
-'use client';
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Button, Container, Grid, Typography } from '@mui/material';
-import axios from 'axios';
-import { useGoogleLogin } from '@react-oauth/google';
+"use client";
+import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { Button, Container, Grid, Typography } from "@mui/material";
+import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
 // import LoginhtmlForm from './LoginhtmlForm';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 // import {  } from "../../redux/SLICE/UserSlice/userSlice";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import {
   TokenExchangeAndRegisterUser,
   UserFormSignIn,
-} from '@/app/redux/THUNK/USER-THUNK/userslicethunk';
-import { useAppDispatch, useAppSelector } from '@/app/redux/STORE/store';
-import Loader from '../Loader';
-import Image from 'next/image';
+} from "@/app/redux/THUNK/USER-THUNK/userslicethunk";
+import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
+import Loader from "../Loader";
+import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+import { setUserStateToInitial } from "@/app/redux/SLICE/UserSlice/userSlice";
 // import { useCookies } from 'next-client-cookies';
 
 const Signin = () => {
@@ -122,19 +124,18 @@ const Signin = () => {
       // console.log(tokenResponse);
 
       await dispatch(TokenExchangeAndRegisterUser(tokenResponse));
-      router.push('/mail/inbox');
     },
     onError: () => {
-      console.error('Google login failed');
+      console.error("Google login failed");
     },
-    flow: 'auth-code',
+    flow: "auth-code",
     // scope: "https://www.googleapis.com/auth/gmail.send",
   });
   interface loginData {
     email: string;
     password: string;
   }
-  const initialLoginData: loginData = { email: '', password: '' };
+  const initialLoginData: loginData = { email: "", password: "" };
   const [loginFormData, setLoginFormData] =
     useState<loginData>(initialLoginData);
   const formDataChangeHandler = (e: any) => {
@@ -142,12 +143,41 @@ const Signin = () => {
   };
   const loginFormSubmitHandler = async (e: any) => {
     e.preventDefault();
-    console.log('loginFormData', loginFormData);
+    console.log("loginFormData", loginFormData);
+    dispatch(setUserStateToInitial());
     const res = await dispatch(UserFormSignIn(loginFormData));
     console.log(res);
   };
+  useEffect(() => {
+    console.log("userStatus", userStatus);
+    console.log("userError", userError);
+  }, []);
+  useEffect(() => {
+    // if (userStatus == "failed") toast.error(userError);
+    console.log("userStatus", userStatus);
+    console.log("userError", userError);
+
+    if (userStatus === "success") toast.success("login successfully");
+    if (userStatus === "success") {
+      // setTimeout(() => {
+      router.push("/mail/inbox");
+      // }, 3000);
+      console.log("hello");
+    }
+    if (userStatus == "failed") {
+      setTimeout(() => {
+        dispatch(setUserStateToInitial());
+      }, 4000);
+      toast.error(userError);
+    }
+    // dispatch(setUserStateToInitial());
+  }, [userStatus]);
   return (
     <>
+      <ToastContainer></ToastContainer>
+      {userStatus == "loading" && <p>User login loading</p>}
+      {/* <ToastContainer></ToastContainer> */}
+
       <section className="bg-white-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <a
@@ -228,7 +258,7 @@ const Signin = () => {
                     href="#"
                     className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
-                    Forgot password?
+                    Reset password?
                   </a>
                 </div>
                 <button

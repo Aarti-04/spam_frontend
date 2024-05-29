@@ -57,7 +57,7 @@ const storage = createPersistStorage();
 const persistConfigUser = {
   key: "user",
   storage,
-  // blacklist: ["userStatus", "userError", "user_google_cred"],
+  blacklist: ["userStatus"],
 };
 
 const persistConfigMessage = {
