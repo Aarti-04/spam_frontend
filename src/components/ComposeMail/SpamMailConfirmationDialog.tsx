@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
-import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
+import React, { useEffect, useState } from 'react';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
+import { useAppDispatch, useAppSelector } from '@/app/redux/STORE/store';
 import {
   ComposeMail,
   reportSpam,
-} from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
-import { ToastContainer, toast } from "react-toastify";
-import Loader from "../Loader";
-import { useRouter } from "next/navigation";
-import { setMailStateToInitial } from "@/app/redux/SLICE/MessageSlice/messageSlice";
+} from '@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk';
+import { ToastContainer, toast } from 'react-toastify';
+import Loader from '../Loader';
+import { useRouter } from 'next/navigation';
+import { setMailStateToInitial } from '@/app/redux/SLICE/MessageSlice/messageSlice';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
+  '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
   },
-  "& .MuiDialogActions-root": {
+  '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
   },
 }));
@@ -38,13 +38,13 @@ export default function SpamMailConfirmationDialog({
     useAppSelector((state: any) => state.message);
   const teachSystemHandler = async () => {
     await dispatch(
-      reportSpam({ spamMailFeedBack: "ham", message_body: emailData.body })
+      reportSpam({ spamMailFeedBack: 'ham', message_body: emailData.body })
     );
     // alert('Teach system');
   };
   useEffect(() => {
-    if (spamReportStatus == "success") {
-      toast.success("Thank you for feedback");
+    if (spamReportStatus == 'success') {
+      toast.success('Thank you for feedback');
       dispatch(setMailStateToInitial());
       // setOpen(false);
       // await dispatch(ComposeMail(emailData));
@@ -64,7 +64,7 @@ export default function SpamMailConfirmationDialog({
   // };
   return (
     <>
-      {ComposeMailStatus == "loading" && <Loader></Loader>}
+      {ComposeMailStatus == 'loading' && <p>Compose mail loader</p>}
       <ToastContainer />
       <BootstrapDialog
         onClose={setOpen}
@@ -78,7 +78,7 @@ export default function SpamMailConfirmationDialog({
           aria-label="close"
           onClick={setOpen}
           sx={{
-            position: "absolute",
+            position: 'absolute',
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
@@ -88,7 +88,7 @@ export default function SpamMailConfirmationDialog({
         </IconButton>
         <DialogContent dividers>
           <Typography gutterBottom>
-            System has detected this mail as{" "}
+            System has detected this mail as{' '}
             <span className="text-red-700 font-bold">Spam Mail.</span>
           </Typography>
           <Typography gutterBottom>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from 'react';
 import {
   Modal,
   Box,
@@ -7,33 +7,33 @@ import {
   TextareaAutosize,
   IconButton,
   Tooltip,
-} from "@mui/material";
+} from '@mui/material';
 import {
   ComposeMail,
   predictMail,
-} from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
-import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+} from '@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk';
+import { useAppDispatch, useAppSelector } from '@/app/redux/STORE/store';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   setMailStateToInitial,
   setPredictedStateToInitial,
-} from "@/app/redux/SLICE/MessageSlice/messageSlice";
-import CloseIcon from "@mui/icons-material/Close";
-import SpamMailConfirmationDialog from "./SpamMailConfirmationDialog";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { useRouter } from "next/navigation";
-import MailDataConfirmationDialog from "./MailDataConfirmationDialog";
-import AlertButton from "../Alert";
-import Loader from "../Loader";
+} from '@/app/redux/SLICE/MessageSlice/messageSlice';
+import CloseIcon from '@mui/icons-material/Close';
+import SpamMailConfirmationDialog from './SpamMailConfirmationDialog';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { useRouter } from 'next/navigation';
+import MailDataConfirmationDialog from './MailDataConfirmationDialog';
+import AlertButton from '../Alert';
+import Loader from '../Loader';
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 500,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   p: 5,
 };
@@ -43,10 +43,10 @@ interface ComposeMailInterface {
   body: string;
 }
 const ComposeDialog = ({ open, handleClose }: any) => {
-  const [recipient, setRecipient] = useState<any>("");
-  const [header, setHeader] = useState<any>("");
+  const [recipient, setRecipient] = useState<any>('');
+  const [header, setHeader] = useState<any>('');
   const [alertOpen, setAlertOpen] = useState<boolean>(true);
-  const [body, setBody] = useState<any>({ "": "" });
+  const [body, setBody] = useState<any>({ '': '' });
   const [composeData, setComposeData] = useState<any>();
   const [spamConfirmationOpen, setSpamConfirmationOpen] = useState(true);
   const [attachment, setAttachment] = useState(null);
@@ -66,10 +66,10 @@ const ComposeDialog = ({ open, handleClose }: any) => {
     predictedEmailIsSpamOrNot,
   } = useAppSelector((state) => state.message);
   const SpamConfirmationHandler = (isSendAnyWayMail: boolean = false) => {
-    console.log("send any way compose", isSendAnyWayMail);
+    console.log('send any way compose', isSendAnyWayMail);
 
     if (isSendAnyWayMail == true) {
-      composeData["detected_as_spam"] = "true";
+      composeData['detected_as_spam'] = 'true';
       dispatch(ComposeMail(composeData));
     }
     setSpamConfirmationOpen(!spamConfirmationOpen);
@@ -86,13 +86,13 @@ const ComposeDialog = ({ open, handleClose }: any) => {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
     setComposeData(data);
-    if (!data["header"] || !data["body"]) {
+    if (!data['header'] || !data['body']) {
       setConfirmDialogOpen(true);
       setFormSubmitPending(data);
     } else {
-      const body = data["body"] ? data["body"] : data["header"];
+      const body = data['body'] ? data['body'] : data['header'];
       const res = await dispatch(predictMail({ body: body }));
-      if (predictedEmailStatus == "success" && !predictedEmailIsSpamOrNot) {
+      if (predictedEmailStatus == 'success' && !predictedEmailIsSpamOrNot) {
         setConfirmSendMail(true);
       } else {
         setSpamConfirmationOpen(true);
@@ -105,20 +105,20 @@ const ComposeDialog = ({ open, handleClose }: any) => {
   console.log(predictedEmailStatus);
   useEffect(() => {
     (async () => {
-      console.log("mail compose toast use effect");
+      console.log('mail compose toast use effect');
       if (confirmSendMail) {
         await dispatch(ComposeMail(composeData));
-        console.log("ComposeMailStatus", ComposeMailStatus);
+        console.log('ComposeMailStatus', ComposeMailStatus);
       }
     })();
   }, [confirmSendMail]);
   useEffect(() => {
-    if (ComposeMailStatus == "success") toast.success("Mail sent successfully");
+    if (ComposeMailStatus == 'success') toast.success('Mail sent successfully');
     else if (ComposeMailError) toast.error(ComposeMailError);
     setConfirmSendMail(false);
 
     dispatch(setMailStateToInitial());
-  }, [ComposeMailStatus]);
+  }, [ComposeMailStatus, spamConfirmationOpen]);
   const handleConfirmDialogClose = () => {
     setConfirmDialogOpen(false);
     setFormSubmitPending(null);
@@ -128,9 +128,9 @@ const ComposeDialog = ({ open, handleClose }: any) => {
     if (formSubmitPending) {
       const res = await dispatch(
         predictMail({
-          body: formSubmitPending["body"]
-            ? formSubmitPending["body"]
-            : formSubmitPending["header"],
+          body: formSubmitPending['body']
+            ? formSubmitPending['body']
+            : formSubmitPending['header'],
         })
       );
     }
@@ -143,7 +143,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
   return (
     <>
       <ToastContainer />
-      {ComposeMailStatus == "loading" && <p>Composing mail</p>}
+      {ComposeMailStatus == 'loading' && <p>Composing mail</p>}
       <Modal
         open={open}
         onClose={handleClose}
@@ -152,7 +152,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
       >
         <Box sx={style}>
           <CloseIcon
-            sx={{ alignItems: "right", marginLeft: "100%", marginTop: "0" }}
+            sx={{ alignItems: 'right', marginLeft: '100%', marginTop: '0' }}
             onClick={() => {
               dispatch(setMailStateToInitial());
               handleClose();
@@ -190,9 +190,9 @@ const ComposeDialog = ({ open, handleClose }: any) => {
                 placeholder="body"
                 name="body"
                 style={{
-                  border: "solid 1px",
-                  padding: "5px",
-                  margin: "2px",
+                  border: 'solid 1px',
+                  padding: '5px',
+                  margin: '2px',
                 }}
                 cols={38}
                 onChange={(e) => setBody({ [e.target.name]: e.target.value })}
@@ -203,7 +203,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
               <input
                 type="file"
                 ref={fileInputRef}
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
                 onChange={handleFileChange}
               />
 
@@ -220,16 +220,16 @@ const ComposeDialog = ({ open, handleClose }: any) => {
             </div>
           </form>
           <Box>
-            {ComposeMailStatus == "error" &&
-              toast.success("Error while composing a mail")}
-            {predictedEmailStatus == "success" && predictedEmailIsSpamOrNot && (
+            {ComposeMailStatus == 'error' &&
+              toast.success('Error while composing a mail')}
+            {predictedEmailStatus == 'success' && predictedEmailIsSpamOrNot && (
               <SpamMailConfirmationDialog
                 open={spamConfirmationOpen}
                 setOpen={SpamConfirmationHandler}
                 emailData={composeData}
               ></SpamMailConfirmationDialog>
             )}
-            {predictedEmailStatus == "successwithError" && (
+            {predictedEmailStatus == 'successwithError' && (
               <AlertButton
                 open={alertOpen}
                 setOpen={() => alertHandler()}
