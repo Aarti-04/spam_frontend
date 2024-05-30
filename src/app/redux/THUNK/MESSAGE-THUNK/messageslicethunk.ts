@@ -1,33 +1,33 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { ArchivedMail } from "../../../../../lib/all-api/all_api";
-import axios from "axios";
-import { useAppSelector } from "../../STORE/store";
-import { json } from "stream/consumers";
-import { headers } from "next/headers";
-import { Search } from "@mui/icons-material";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { ArchivedMail } from '../../../../../lib/all-api/all_api';
+import axios from 'axios';
+import { useAppSelector } from '../../STORE/store';
+import { json } from 'stream/consumers';
+import { headers } from 'next/headers';
+import { Search } from '@mui/icons-material';
 export const get_user_credentials_in_axios_header = () => {
-  let user_cred: any = localStorage.getItem("persist:user");
-  user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
+  let user_cred: any = localStorage.getItem('persist:user');
+  user_cred = JSON.parse(JSON.parse(user_cred || '')['user_token']);
   // console.log(user_cred["jwt_access_token"]);
   const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${user_cred["jwt_access_token"]} `,
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${user_cred['jwt_access_token']} `,
   };
   return headers;
 };
 export const fetchMessages: any = createAsyncThunk(
-  "messages/fetchMessages",
+  'messages/fetchMessages',
   async (args: any, thunkAPI) => {
     // console.log("slice called");
 
     try {
-      console.log("fetch message called");
+      console.log('fetch message called');
 
-      let { queryLabel, page, itemsPerPage }: any = args || "";
+      let { queryLabel, page, itemsPerPage }: any = args || '';
       console.log(queryLabel, page, itemsPerPage);
 
       // const { jwt_access_token } = user_token;
-      if (queryLabel) queryLabel = queryLabel.replace(/%20/g, " ") || "";
+      if (queryLabel) queryLabel = queryLabel.replace(/%20/g, ' ') || '';
       // console.log(user_token, creds);
       const headers = get_user_credentials_in_axios_header();
       const url = `${process.env.NEXT_PUBLIC_BASE_URL}/mailreadfromdb/`;
@@ -39,28 +39,35 @@ export const fetchMessages: any = createAsyncThunk(
         },
         headers,
       });
-      console.log("response", response);
+      console.log('response', response);
       // return response;
       if (response.status == 200) {
-        return [response.data.results, response.data.count, response.status];
+        return {
+          status: response.status,
+          data: response.data.results,
+          count: response.data.count,
+        };
       }
     } catch (e: any) {
       console.log(e);
       // console.log(e.response.status);
 
-      console.log("e.message", e.message);
-      console.log("e.response", e.respons);
-      return e.response || e.message;
+      console.log('e.message', e.message);
+      console.log('e.response', e.respons);
+      return {
+        status: e.response.status,
+        data: e.response?.data || e.message || 'fetch failed',
+      };
       throw new Error(`${e.message})}`);
     }
   }
 );
 export const FilterMessages: any = createAsyncThunk(
-  "messages/filterMessage",
+  'messages/filterMessage',
   async (args: any, thunkAPI) => {
     try {
       console.log(args);
-      let dataTosearch = "";
+      let dataTosearch = '';
       // let search = '';
       const headers = get_user_credentials_in_axios_header();
       const url = `${process.env.NEXT_PUBLIC_BASE_URL}/mailsearchfilter/`;
@@ -86,7 +93,7 @@ export const FilterMessages: any = createAsyncThunk(
       }
     } catch (e: any) {
       // console.log(e.respons);
-      console.log("e.message", e.message);
+      console.log('e.message', e.message);
 
       return e.response || e.message;
       throw new Error(`${e.message})}`);
@@ -95,7 +102,7 @@ export const FilterMessages: any = createAsyncThunk(
 );
 
 export const mailArchived = createAsyncThunk(
-  "messages/mailarchive",
+  'messages/mailarchive',
   async (message_id: string) => {
     // const res = await ArchivedMail(message_id);
     // console.log(res);
@@ -119,7 +126,7 @@ export const mailArchived = createAsyncThunk(
   }
 );
 export const mailDelete = createAsyncThunk(
-  "messages/mailDelete",
+  'messages/mailDelete',
   async (message_id: string) => {
     // let user_cred: any = localStorage.getItem("persist:user");
     // user_cred = JSON.parse(JSON.parse(user_cred || "")["user_token"]);
@@ -142,7 +149,7 @@ export const mailDelete = createAsyncThunk(
   }
 );
 export const ComposeMail: any = createAsyncThunk(
-  "messages/composeMail",
+  'messages/composeMail',
   async (args: any, thunkAPI) => {
     // console.log("slice called");
     // let user_cred: any = localStorage.getItem("persist:user");
@@ -159,12 +166,19 @@ export const ComposeMail: any = createAsyncThunk(
       });
       // console.log("response", response.data);
       // console.log(response);
-      return response;
+      // return [response.status, response.data];
+      return {
+        status: response.status,
+        data: response?.data,
+      };
     } catch (e: any) {
       // console.log(e.message);
       // console.log(e.response);
       // console.log(e.response);
-      return e.response.status;
+      return {
+        status: e.response.status,
+        data: e.response?.data || 'Compose mail failed',
+      };
 
       // console.log(e.message.code);
       // console.log(e.message.response);
@@ -174,7 +188,7 @@ export const ComposeMail: any = createAsyncThunk(
   }
 );
 export const predictMail: any = createAsyncThunk(
-  "messages/predictMail",
+  'messages/predictMail',
   async (args: any, thunkAPI) => {
     // console.log("slice called");
     // let user_cred: any = localStorage.getItem("persist:user");
@@ -213,7 +227,7 @@ export const predictMail: any = createAsyncThunk(
   }
 );
 export const reportSpam: any = createAsyncThunk(
-  "messages/reportMail",
+  'messages/reportMail',
   async (args: any, thunkAPI) => {
     const { message_id, spamMailFeedBack, message_body } = args;
     // console.log(message_id);

@@ -62,21 +62,21 @@
 
 // export default DefaultLayout;
 
-"use client";
-import React, { useEffect, useState } from "react";
-import SideNav from "../SideAndTopBar/SideNav";
-import { getAuthCookies } from "../../../lib/CookiStore";
-import MyWebSocketComponent from "../Socket/WebsocketComponant";
-import SearchBar from "../SideAndTopBar/SearchBar";
-import { Box } from "@mui/system";
-import Loader from "../Loader";
-import UnAuthenticateLayout from "./UnAuthenticatLayout";
+'use client';
+import React, { useEffect, useState } from 'react';
+import SideNav from '../SideAndTopBar/SideNav';
+import { getAuthCookies } from '../../../lib/CookiStore';
+import MyWebSocketComponent from '../Socket/WebsocketComponant';
+import SearchBar from '../SideAndTopBar/SearchBar';
+import { Box } from '@mui/system';
+import Loader from '../Loader';
+import UnAuthenticateLayout from './UnAuthenticatLayout';
 
 // Fixed width for the sidebar
 const drawerWidth = 80;
 
 const containerStyle = {
-  transition: "margin-left 0.5s ease",
+  transition: 'margin-left 0.5s ease',
 };
 
 const DefaultLayout = ({ children }: any) => {
@@ -90,13 +90,15 @@ const DefaultLayout = ({ children }: any) => {
   };
 
   const auth = async () => {
-    const authentication = await getAuthCookies("isAuthenticated");
+    const authentication = await getAuthCookies('isAuthenticated');
     setIsAuthenticated(authentication);
     setLoading(false);
   };
 
   useEffect(() => {
-    auth();
+    (async () => {
+      await auth();
+    })();
   }, []);
 
   if (loading) {
@@ -111,7 +113,7 @@ const DefaultLayout = ({ children }: any) => {
         <>
           <SearchBar open={open} toggleDrawer={toggleDrawer} />
           <MyWebSocketComponent />
-          <Box display="flex" sx={{ backgroundColor: "#f6f8fc" }}>
+          <Box display="flex" sx={{ backgroundColor: '#f6f8fc' }}>
             {open && <SideNav />}
             {/* Ensure SideNav is always rendered with a fixed width */}
             <Box
@@ -120,7 +122,7 @@ const DefaultLayout = ({ children }: any) => {
                 flexGrow: 1,
                 p: 1,
                 marginLeft: open ? `${drawerWidth / 2}px` : `10px`,
-                transition: "margin-left 0.5s ease",
+                transition: 'margin-left 0.5s ease',
               }}
             >
               {children}
