@@ -65,24 +65,26 @@ const ComposeDialog = ({ open, handleClose }: any) => {
     predictedEmailError,
     predictedEmailIsSpamOrNot,
   } = useAppSelector((state) => state.message);
-  const SpamConfirmationHandler = (isSendAnyWayMail: boolean = false) => {
+  const SpamConfirmationHandler = async (isSendAnyWayMail: boolean = false) => {
     console.log('send any way compose', isSendAnyWayMail);
 
     if (isSendAnyWayMail == true) {
+      console.log('sendany called');
+
       composeData['detected_as_spam'] = 'true';
-      dispatch(ComposeMail(composeData));
+      await dispatch(ComposeMail(composeData));
+      console.log(ComposeMailStatus);
+
+      if (ComposeMailStatus === 'success')
+        toast.success('Mail Sent successfully');
     }
-    setSpamConfirmationOpen(!spamConfirmationOpen);
+    // setSpamConfirmationOpen(!spamConfirmationOpen);
   };
   const handleFileChange = (e: any) => {
     setAttachment(e.target.files[0]);
   };
   const handleEmailFormSubmit = async (e: any) => {
-    console.log(ComposeMailStatus);
-    console.log(predictedEmailIsSpamOrNot);
-    console.log(predictedEmailStatus);
-
-    e.preventDefault();
+    await e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
     setComposeData(data);
@@ -93,28 +95,18 @@ const ComposeDialog = ({ open, handleClose }: any) => {
       const body = data['body'] ? data['body'] : data['header'];
       const res = await dispatch(predictMail({ body: body }));
       if (predictedEmailStatus == 'success' && !predictedEmailIsSpamOrNot) {
-        setConfirmSendMail(true);
+        await dispatch(ComposeMail(composeData));
+        toast.success('Mail sent successfully');
       } else {
         setSpamConfirmationOpen(true);
       }
-      // console.log(res.payload.data);
     }
   };
   console.log(ComposeMailStatus);
   console.log(predictedEmailIsSpamOrNot);
   console.log(predictedEmailStatus);
   useEffect(() => {
-    (async () => {
-      console.log('mail compose toast use effect');
-      if (confirmSendMail) {
-        await dispatch(ComposeMail(composeData));
-        console.log('ComposeMailStatus', ComposeMailStatus);
-      }
-    })();
-  }, [confirmSendMail]);
-  useEffect(() => {
-    if (ComposeMailStatus == 'success') toast.success('Mail sent successfully');
-    else if (ComposeMailError) toast.error(ComposeMailError);
+    if (ComposeMailError) toast.error(ComposeMailError);
     setConfirmSendMail(false);
 
     dispatch(setMailStateToInitial());
@@ -143,7 +135,6 @@ const ComposeDialog = ({ open, handleClose }: any) => {
   return (
     <>
       <ToastContainer />
-      {ComposeMailStatus == 'loading' && <p>Composing mail</p>}
       <Modal
         open={open}
         onClose={handleClose}
@@ -158,6 +149,7 @@ const ComposeDialog = ({ open, handleClose }: any) => {
               handleClose();
             }}
           ></CloseIcon>
+
           <h2 className="mb-5" id="compose-dialog-title">
             New Message
           </h2>
@@ -218,6 +210,9 @@ const ComposeDialog = ({ open, handleClose }: any) => {
                 </Tooltip>
               </IconButton> */}
             </div>
+            {ComposeMailStatus === 'loading' && (
+              <p style={{ backgroundColor: 'blue' }}>Composing mail</p>
+            )}
           </form>
           <Box>
             {ComposeMailStatus == 'error' &&

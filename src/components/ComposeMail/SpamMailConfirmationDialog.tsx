@@ -40,16 +40,17 @@ export default function SpamMailConfirmationDialog({
     await dispatch(
       reportSpam({ spamMailFeedBack: 'ham', message_body: emailData.body })
     );
+    if (spamReportStatus == 'success') toast.success('Thank you for feedback');
     // alert('Teach system');
   };
-  useEffect(() => {
-    if (spamReportStatus == 'success') {
-      toast.success('Thank you for feedback');
-      dispatch(setMailStateToInitial());
-      // setOpen(false);
-      // await dispatch(ComposeMail(emailData));
-    }
-  }, [spamReportStatus]);
+  // useEffect(() => {
+  //   if (spamReportStatus == 'success') {
+  //     toast.success('Thank you for feedback');
+  // dispatch(setMailStateToInitial());
+  //     // setOpen(false);
+  //     // await dispatch(ComposeMail(emailData));
+  //   }
+  // }, [spamReportStatus]);
   // useEffect(() => {
   //   if (ComposeMailStatus == "success") {
   //     toast.success("Email send Successfully");
@@ -64,8 +65,8 @@ export default function SpamMailConfirmationDialog({
   // };
   return (
     <>
-      {ComposeMailStatus == 'loading' && <p>Compose mail loader</p>}
       <ToastContainer />
+      {ComposeMailStatus == 'loading' && <p>Compose mail loader</p>}
       <BootstrapDialog
         onClose={setOpen}
         aria-labelledby="customized-dialog-title"

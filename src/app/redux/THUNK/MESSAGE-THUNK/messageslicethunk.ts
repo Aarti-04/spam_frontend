@@ -86,7 +86,10 @@ export const FilterMessages: any = createAsyncThunk(
       // console.log("response", response);
       // console.log(response.data);
       console.log(response.data.results);
-      return response;
+      return {
+        status: response.status,
+        data: response.data,
+      };
       // return response.data;
       if (response.status == 200) {
         return [response.data.results, response.data.count];
@@ -95,7 +98,7 @@ export const FilterMessages: any = createAsyncThunk(
       // console.log(e.respons);
       console.log('e.message', e.message);
 
-      return e.response || e.message;
+      return { status:e.response.status,data: e.response || e.message || 'Filter failed' };
       throw new Error(`${e.message})}`);
     }
   }
@@ -165,7 +168,7 @@ export const ComposeMail: any = createAsyncThunk(
         headers,
       });
       // console.log("response", response.data);
-      // console.log(response);
+      console.log(response);
       // return [response.status, response.data];
       return {
         status: response.status,
@@ -211,7 +214,7 @@ export const predictMail: any = createAsyncThunk(
       // console.log("main response", response);
       // console.log("response", response.data);
       // console.log(response.status);
-      return response;
+      return { status: response.status, data: response.data };
       // const res =
       //   response.status == 200 && "error" in response.data
       //     ? { bodyValidation: false }
@@ -220,9 +223,7 @@ export const predictMail: any = createAsyncThunk(
     } catch (e: any) {
       // console.log(e.message);
       // console.log(e.response);
-      return e.response;
-
-      throw new Error(`${e.message})}`);
+      return { status: e.message || e.response || 'failed to predict' };
     }
   }
 );
@@ -230,9 +231,9 @@ export const reportSpam: any = createAsyncThunk(
   'messages/reportMail',
   async (args: any, thunkAPI) => {
     const { message_id, spamMailFeedBack, message_body } = args;
-    // console.log(message_id);
-    // console.log("spam_label", spamMailFeedBack);
-    // console.log("message_body", message_body);
+    console.log(message_id);
+    console.log('spam_label', spamMailFeedBack);
+    console.log('message_body', message_body);
 
     // return 0;
 
@@ -245,8 +246,8 @@ export const reportSpam: any = createAsyncThunk(
     };
     try {
       const response = await axios.post(url, spamDataToPost, { headers });
-      // console.log(response);
-      return response;
+      console.log(response);
+      return { status: response.status, data: response.data };
     } catch (error: any) {
       return error.response.status;
     }

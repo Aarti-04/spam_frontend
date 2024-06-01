@@ -12,8 +12,8 @@ const Logout = () => {
   useEffect(() => {
     (async () => {
       await dispatch(logoutUser());
-      router.push('/mail/inbox');
     })();
+    router.push('/mail/inbox');
   }, [dispatch, router]);
   return (
     <div>

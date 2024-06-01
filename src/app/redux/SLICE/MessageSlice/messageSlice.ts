@@ -77,7 +77,7 @@ const messageSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(ComposeMail.pending, (state) => {
-        // console.log("loading state");
+        console.log('loading state');
         state.ComposeMailStatus = 'loading';
 
         state.ComposeMailError = '';
@@ -150,8 +150,8 @@ const messageSlice = createSlice({
           if (action.payload.status == 401) {
             state.messageError = 'Authentication failed please login';
           } else {
-            state.messageError =
-              action.payload.error || action.payload || 'something went wrong';
+            state.messageError = action.payload.data;
+            state.messages = [];
           }
           state.messageStatus = 'failed';
           state.messages = [];
@@ -192,10 +192,10 @@ const messageSlice = createSlice({
           // state.spamMailFeedBack = action.payload.data.is_spam;
         } else {
           state.predictedEmailStatus = 'rejected';
-          state.predictedEmailError = action.payload.data.error;
+          state.predictedEmailError = action.payload.data;
         }
-        // console.log(state.predictedEmailStatus);
-        // console.log(state.predictedEmailIsSpamOrNot);
+        console.log(state.predictedEmailStatus);
+        console.log(state.predictedEmailIsSpamOrNot);
       })
       .addCase(predictMail.rejected, (state, action: any) => {
         // console.log(action.payload);
@@ -212,7 +212,7 @@ const messageSlice = createSlice({
         } else {
           state.spamReportStatus = 'Failed';
         }
-        // console.log(state.spamReportStatus);
+        console.log(state.spamReportStatus);
       })
       .addCase(reportSpam.rejected, (state, action: any) => {
         state.spamReportStatus = 'rejected';
