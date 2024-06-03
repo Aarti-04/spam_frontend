@@ -143,11 +143,12 @@
 // };
 
 // export default MailBody;
-import React from "react";
-import { Box } from "@mui/system";
-import { Paper, Typography } from "@mui/material";
-import sanitizeHtml from "../../../lib/dompurify";
-import BodyUpperSection from "./BodyUpperSection";
+import React from 'react';
+import { Box } from '@mui/system';
+import { Paper, Typography } from '@mui/material';
+import sanitizeHtml from '../../../lib/dompurify';
+import BodyUpperSection from './BodyUpperSection';
+import './mailbody.css';
 
 interface propsTypeInterface {
   encodedHtml: string;
@@ -169,46 +170,61 @@ const MailBody = ({
   return (
     <Box
       sx={{
-        position: "fixed",
-        top: "64px", // Adjust based on the height of your app bar
+        position: 'fixed',
+        top: '64px', // Adjust based on the height of your app bar
         bottom: 0,
         left: `${sidebarWidth / 2}px`,
         right: 0,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "transparent", // Set background color
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'transparent', // Set background color
       }}
     >
       <Box
         sx={{
-          width: "80%", // Adjust width as needed
-          height: "calc(100vh - 64px)", // Full height minus the top offset
-          overflowY: "auto",
-          backgroundColor: "white", // Set background color
-          padding: "20px", // Add padding
-          borderRadius: "8px", // Add border radius
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Add box shadow
-          display: "flex",
-          flexDirection: "column",
+          width: '80%', // Adjust width as needed
+          height: 'calc(100vh - 64px)', // Full height minus the top offset
+          overflowY: 'auto',
+          backgroundColor: 'white', // Set background color
+          padding: '20px', // Add padding
+          borderRadius: '8px', // Add border radius
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Add box shadow
+          display: 'flex',
+          flexDirection: 'column',
+          transition: 'transform 0.3s ease-in-out',
+          transform: spamOrNot ? 'scale(1.05)' : 'scale(1)', // Scale up if spam
         }}
       >
         <Paper>
           <BodyUpperSection message_id={message_id} />
         </Paper>
-        <Paper elevation={2} sx={{ mt: 2, p: 2, flex: 1 }}>
+        <Paper
+          elevation={2}
+          className={spamOrNot ? 'spam-alert' : ''}
+          sx={{
+            mt: 2,
+            p: 2,
+            flex: 1,
+            backgroundColor: spamOrNot ? '#ffebee' : 'white', // Change background color if spam
+            border: spamOrNot ? '1px solid #f44336' : 'none', // Add border if spam
+            transition: 'background-color 0.5s, border 0.5s', // Add transition
+          }}
+        >
+          <Typography>{spamOrNot && 'Mail is spam'}</Typography>
+
           <Typography variant="body1" color="textPrimary">
             {header}
           </Typography>
           <Typography>{sender}</Typography>
           <Box sx={{ mt: 2, flex: 1 }}>
-            {typeof encodedHtml === "string" && encodedHtml.startsWith("<") ? (
+            {typeof encodedHtml === 'string' && encodedHtml.startsWith('<') ? (
               <div
-                style={{ maxWidth: "100%" }}
+                style={{ maxWidth: '100%' }}
                 dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
               />
             ) : (
-              <Typography sx={{ maxWidth: "100%" }}>{encodedHtml}</Typography>
+              <Typography sx={{ maxWidth: '100%' }}>{encodedHtml}</Typography>
             )}
           </Box>
         </Paper>

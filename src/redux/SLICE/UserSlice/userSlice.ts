@@ -6,7 +6,7 @@ import {
   getAuthCookies,
   setCookies,
   setRoleCookie,
-} from '../../../../../lib/CookiStore';
+} from '../../../../lib/CookiStore';
 import {
   UserFormLogin,
   TokenExchangeAndRegisterUser,
@@ -80,13 +80,12 @@ const userSlice = createSlice({
         console.log(action.payload);
 
         if (action.payload.status !== 200) {
-          state.userError = action.payload.data;
+          state.userError = action.payload.data || action.payload.detail;
         }
         state.isAuthenticated = false;
         state.userStatus = 'idle';
         state.user_google_cred = [];
         state.user_token = [];
-        setCookies('isAuthenticated', 'false');
       })
       .addCase(TokenExchangeAndRegisterUser.pending, (state) => {
         state.userStatus = 'loading';

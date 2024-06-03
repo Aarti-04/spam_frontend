@@ -267,19 +267,19 @@ import {
   IconButton,
   Menu,
   Grid,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { fetchMessages } from "@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../Loader";
-import AlertButton from "../Alert";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { useAppDispatch, useAppSelector } from "@/app/redux/STORE/store";
-import BodyUpperSection from "../EmailBody/BodyUpperSection";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { fetchMessages } from '@/app/redux/THUNK/MESSAGE-THUNK/messageslicethunk';
+import { useDispatch, useSelector } from 'react-redux';
+import Loader from '../Loader';
+import AlertButton from '../Alert';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useAppDispatch, useAppSelector } from '@/app/redux/STORE/store';
+import BodyUpperSection from '../EmailBody/BodyUpperSection';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 interface mailSectionLabelType {
   mailSectionLabel: string;
@@ -311,10 +311,11 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
   };
 
   useEffect(() => {
-    console.log("use effect called");
-    console.log("hey inbox");
-
-    getMessageData(currentPage, itemsPerPage);
+    console.log('use effect called');
+    console.log('hey inbox');
+    (async () => {
+      await getMessageData(currentPage, itemsPerPage);
+    })();
   }, [mailSectionLabel, currentPage, itemsPerPage]);
 
   const handlePageChange = (
@@ -334,23 +335,23 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
   const get_date_and_month = (date: any) => {
     const dt = new Date(date);
     const options = {
-      day: "2-digit",
-      month: "long",
+      day: '2-digit',
+      month: 'long',
     } as Intl.DateTimeFormatOptions;
-    const formattedDate = dt.toLocaleDateString("en-US", options);
+    const formattedDate = dt.toLocaleDateString('en-US', options);
     return formattedDate;
   };
 
   return (
     <>
       {/* {messageStatus === "loading" && <Loader open={loaderOpen}></Loader>} */}
-      {userStatus == "loading" && (
+      {userStatus == 'loading' && (
         <>
           {/* <Loader open={true}></Loader> */}
           sign in loading
         </>
       )}
-      {messageStatus == "loading" && <p>Middle loading</p>}
+      {messageStatus == 'loading' && <p>Middle loading</p>}
       {/* {messageStatus == "failed" && (
         <AlertButton
           open={alertOpen}
@@ -361,14 +362,14 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
 
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "left",
-          overflowX: "hidden",
-          padding: "1.7rem",
-          backgroundColor: "white",
-          borderRadius: "20px",
-          margin: "10px",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'left',
+          overflowX: 'hidden',
+          padding: '1.7rem',
+          backgroundColor: 'white',
+          borderRadius: '20px',
+          margin: '10px',
         }}
       >
         <Box
@@ -381,15 +382,15 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
           <Box display="flex" alignItems="center">
             <RefreshIcon
               sx={{
-                cursor: "pointer",
-                marginRight: "1rem", // Adjust spacing as needed
+                cursor: 'pointer',
+                marginRight: '1rem', // Adjust spacing as needed
               }}
               onClick={() => getMessageData(currentPage, itemsPerPage)}
             />
             <Checkbox
               checked={checked}
               onChange={(event) => setChecked(event.target.checked)}
-              inputProps={{ "aria-label": "controlled" }}
+              inputProps={{ 'aria-label': 'controlled' }}
             />
           </Box>
           <Box display="flex" alignItems="center">
@@ -424,11 +425,11 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
               elevation={0}
               key={message.id}
               sx={{
-                width: "100%",
-                maxWidth: "500rem",
-                marginBottom: "0.2rem",
-                padding: "0.2rem",
-                borderTop: "1px solid #ccc",
+                width: '100%',
+                maxWidth: '500rem',
+                marginBottom: '0.2rem',
+                padding: '0.2rem',
+                borderTop: '1px solid #ccc',
                 // height: "50px",
               }}
             >
@@ -436,40 +437,40 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
                 <ListItem>
                   <Box
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
+                      display: 'flex',
+                      alignItems: 'center',
+                      width: '100%',
                     }}
                   >
                     <Box
                       sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginRight: "1rem",
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginRight: '1rem',
                       }}
                     >
-                      <StarBorderOutlinedIcon sx={{ marginRight: "8px" }} />
+                      <StarBorderOutlinedIcon sx={{ marginRight: '8px' }} />
                       <Checkbox
                         checked={checked}
                         onChange={(event) => setChecked(event.target.checked)}
-                        inputProps={{ "aria-label": "controlled" }}
-                        sx={{ marginRight: "8px" }}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                        sx={{ marginRight: '8px' }}
                       />
                     </Box>
                     <Box
                       sx={{
-                        display: "flex",
+                        display: 'flex',
                         flex: 1,
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        overflow: "hidden",
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        overflow: 'hidden',
                       }}
                     >
                       <Box
                         sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          overflow: "hidden",
+                          display: 'flex',
+                          flexDirection: 'column',
+                          overflow: 'hidden',
                         }}
                       >
                         <Link
@@ -480,15 +481,15 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
                             variant="body1"
                             color="textPrimary"
                             sx={{
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              cursor: "pointer",
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              cursor: 'pointer',
                             }}
                           >
-                            {mailSectionLabel === "sent"
+                            {mailSectionLabel === 'sent'
                               ? `To: ${message?.recipient}`
-                              : message?.sender}{" "}
-                            - {message.header ? message.header : "(No Subject)"}{" "}
+                              : message?.sender}{' '}
+                            - {message.header ? message.header : '(No Subject)'}{' '}
                             - {message.snippet}
                           </Typography>
                         </Link>
@@ -496,11 +497,11 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
                       <Typography
                         variant="body1"
                         sx={{
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          textAlign: "right",
-                          marginLeft: "1rem",
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          textAlign: 'right',
+                          marginLeft: '1rem',
                         }}
                       >
                         {get_date_and_month(message.date)}
@@ -513,7 +514,7 @@ const Middle = ({ mailSectionLabel }: mailSectionLabelType) => {
           ))}
       </Box>
 
-      {messageStatus == "failed" && <Box>{messageError}</Box>}
+      {messageStatus == 'failed' && <Box>{messageError}</Box>}
     </>
   );
 };

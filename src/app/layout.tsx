@@ -1,10 +1,10 @@
-import { Inter } from "next/font/google";
-import "./globals.css";
-// import RouteLayoutProvider from "./provider/routLayoutProvider";
+import { Inter } from 'next/font/google';
+import './globals.css';
+import React from 'react';
+import RouteLayoutProvider from '@/provider/routLayoutProvider';
 
-import React from "react";
-import RouteLayoutProvider from "@/provider/routLayoutProvider";
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -13,7 +13,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="/scam1_icon.webp"></link>
+        <link rel="icon" href="/scam1_icon.webp" />
         <title>Spam detector</title>
       </head>
       <body className={inter.className}>

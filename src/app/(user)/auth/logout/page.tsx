@@ -13,7 +13,9 @@ const Logout = () => {
     (async () => {
       await dispatch(logoutUser());
     })();
-    router.push('/mail/inbox');
+    console.log('logged out');
+
+    router.push('/');
   }, [dispatch, router]);
   return (
     <div>

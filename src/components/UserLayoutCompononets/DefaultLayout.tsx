@@ -71,6 +71,7 @@ import SearchBar from '../SideAndTopBar/SearchBar';
 import { Box } from '@mui/system';
 import Loader from '../Loader';
 import UnAuthenticateLayout from './UnAuthenticatLayout';
+import MainApplicationLoader from '../loaders/MainApplicationLoader';
 
 // Fixed width for the sidebar
 const drawerWidth = 80;
@@ -82,7 +83,7 @@ const containerStyle = {
 const DefaultLayout = ({ children }: any) => {
   const [open, setOpen] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(true);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   // Handler to toggle the drawer open/close state
   const toggleDrawer = () => {
@@ -96,13 +97,26 @@ const DefaultLayout = ({ children }: any) => {
   };
 
   useEffect(() => {
-    (async () => {
+    console.log('default called');
+
+    const checkAuth = async () => {
+      setLoading(true);
       await auth();
-    })();
-  }, []);
+    };
+    checkAuth();
+  }, [isAuthenticated]);
 
   if (loading) {
-    return <div>loading</div>;
+    return (
+      <div>
+        {' '}
+        <section className="bg-white-50 dark:bg-gray-900">
+          <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <MainApplicationLoader></MainApplicationLoader>
+          </div>
+        </section>
+      </div>
+    );
   }
 
   return (

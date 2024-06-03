@@ -30,7 +30,7 @@ interface initialStateType {
   spamReportStatus: string;
 }
 const initialState: initialStateType = {
-  messages: [],
+  messages: [] || null,
   isArchived: false,
   messageCount: 0,
   messageStatus: 'idle',
@@ -117,6 +117,10 @@ const messageSlice = createSlice({
           state.messages = action.payload.data;
           state.messageCount = action.payload.count;
           state.messageError = '';
+        } else {
+          state.messageStatus = 'failed';
+          state.messageError = action.payload.data;
+          state.messages = [];
         }
 
         // if (action.payload.status == 401) {
@@ -129,7 +133,7 @@ const messageSlice = createSlice({
         // state.messages = [];
 
         // console.log(state.messages);
-        // console.log(state.messageStatus);
+        console.log(state.messageStatus);
       })
       .addCase(fetchMessages.rejected, (state, action) => {
         console.log('fetchMessages failed', action.payload);
@@ -204,7 +208,7 @@ const messageSlice = createSlice({
         state.predictedEmailStatus = 'rejected';
       })
       .addCase(reportSpam.fulfilled, (state, action: any) => {
-        console.log(action.payload);
+        // console.log(action.payload);
         // console.log("fulfilled");
 
         if (action.payload.status == 200) {

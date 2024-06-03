@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { userloginapi } from '../../../../../lib/all-api/all_api';
+import { userloginapi } from '../../../../lib/all-api/all_api';
 import { get_user_credentials_in_axios_header } from '../MESSAGE-THUNK/messageslicethunk';
-import { setCookies } from '../../../../../lib/CookiStore';
+import { setCookies } from '../../../../lib/CookiStore';
 import { json } from 'stream/consumers';
 
 interface tokenResponseType {
@@ -34,6 +34,7 @@ export const TokenExchangeAndRegisterUser = createAsyncThunk(
   async (tokenResponse: any) => {
     // const payload={}
     // try {
+    console.log('hello...');
 
     const url: string = process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL || '';
     console.log(url);
@@ -154,9 +155,6 @@ export const logoutUser = createAsyncThunk('user/logout', async () => {
   } catch (error: any) {
     // console.log(error.response);
 
-    return {
-      status: error.status,
-      data: error.response.data || 'logout failed',
-    };
+    return error.response?.data;
   }
 });
